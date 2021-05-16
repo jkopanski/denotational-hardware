@@ -1,0 +1,3 @@
+name: hardware
+depend: standard-library
+include: .

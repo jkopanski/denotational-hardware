@@ -1,0 +1,9 @@
+*.agdai
+MAlonzo
+Figures/*.dot
+Figures/*.pdf
+Figures/*.jpg
+Figures/*.png
+Figures/*.svg
+html
+Test
