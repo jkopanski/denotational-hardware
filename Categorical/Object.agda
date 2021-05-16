@@ -1,0 +1,53 @@
+{-# OPTIONS --safe --without-K #-}
+
+module Categorical.Object where
+
+open import Level using (Level; lift; _⊔_) renaming (suc to lsuc)
+open import Function using (_∘′_) renaming (id to id′)
+
+open import Data.Nat hiding (_⊔_)
+
+private
+  variable
+    o : Level
+    obj : Set o
+
+
+-- Trick to use "tt" as a pattern and value
+import Data.Unit as U
+pattern tt = lift U.tt
+
+private
+  -- Iterated composition
+  infixr 8 _↑_
+  _↑_ : ∀ {a}{A : Set a} → (A → A) → ℕ → (A → A)
+  f ↑ zero  = id′
+  f ↑ suc n = f ∘′ (f ↑ n)
+
+record Products (obj : Set o) : Set (lsuc o) where
+  infixr 2 _×_
+  field
+    ⊤ : obj
+    _×_ : obj → obj → obj
+
+  V T : obj → ℕ → obj
+  V A n = ((A ×_) ↑ n) ⊤
+  T A n = ((λ z → z × z) ↑ n) A
+
+  -- TODO: redefine via fold etc
+
+record Exponentials (obj : Set o) : Set (lsuc o) where
+  infixr 1 _⇛_
+  field
+    _⇛_ : obj → obj → obj
+
+open Exponentials ⦃ … ⦄ public
+
+open Products ⦃ … ⦄ public
+
+
+record Boolean (obj : Set o) : Set (lsuc o) where
+  field
+    Bool : obj
+
+open Boolean ⦃ … ⦄ public
