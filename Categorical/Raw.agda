@@ -36,16 +36,6 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
     _▵_ : ∀ {a c d} → a ⇨ c → (a ⇨ d) → (a ⇨ c × d)
     ! : a ⇨ ⊤
 
-open Cartesian ⦃ … ⦄ public
-
--- Monoidal and braided operations defined via Cartesian.
--- TODO: replace with Monoidal and Braided classes, as in agda-machines.
-module _ {obj : Set o} ⦃ _ : Products obj ⦄
-         {_⇨_ : obj → obj → Set ℓ} (let infix 0 _⇨_; _⇨_ = _⇨_) -- Note
-         ⦃ _ : Cartesian _⇨_ ⦄ where
-
-  -- Note: fixity hack. See https://github.com/agda/agda/issues/1235
-
   infixr 7 _⊗_
   _⊗_ : (a ⇨ c) → (b ⇨ d) → (a × b ⇨ c × d)
   f ⊗ g = (f ∘ exl) ▵ (g ∘ exr)
@@ -94,6 +84,8 @@ module _ {obj : Set o} ⦃ _ : Products obj ⦄
   _⦂_ : (⊤ ⇨ a) → (⊤ ⇨ b) → (⊤ ⇨ a × b)
   a ⦂ b = (a ⊗ b) ∘ unitorⁱˡ
 
+
+open Cartesian ⦃ … ⦄ public
 
 record CartesianClosed {obj : Set o}
          ⦃ _ : Products obj ⦄ ⦃ _ : Exponentials obj ⦄
