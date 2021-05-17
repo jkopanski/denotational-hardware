@@ -13,7 +13,7 @@ open import Categorical.Equiv
 open import Functions.Type 0ℓ
 open import Ty
 
-private variable a : Ty
+private variable a b : Ty
 
 Log : Ty → Set
 Log `⊤ = ⊥
@@ -24,15 +24,14 @@ Log (a `⇛ b) = Fₒ a × Log b
 open import Data.Product using (_,_; curry; uncurry)
 open import Function using (_∘_)
 
+lookup : Fₒ a → (Log a → Bool)
+lookup {`Bool} b tt     = b
+lookup {a `× b} (x , y) = [ lookup x , lookup y ]′
+lookup {a `⇛ b} f       = uncurry (lookup ∘ f)
+                          -- λ (x , j) → lookup (f x) j
+
 tabulate : (Log a → Bool) → Fₒ a
-tabulate {  `⊤  } f = tt
-tabulate {`Bool } f = f tt
+tabulate {`⊤}     f = tt
+tabulate {`Bool}  f = f tt
 tabulate {a `× b} f = tabulate (f ∘ inj₁) , tabulate (f ∘ inj₂)
 tabulate {a `⇛ b} f = tabulate ∘ curry f
-
-index : Fₒ a → (Log a → Bool)
-index {  `⊤  }    tt   = λ ()
-index {`Bool }    b    = λ { tt → b }
-index {a `× b} (x , y) = [ index x , index y ]
-index {a `⇛ b}    f    = uncurry (index ∘ f)
-                         -- λ (x , j) → index (f x) j
