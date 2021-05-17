@@ -1,3 +1,5 @@
+{-# OPTIONS --safe --without-K #-}
+
 -- Symbolic logic primitives with mapping to another category
 
 open import Level

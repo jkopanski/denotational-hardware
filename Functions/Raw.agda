@@ -1,3 +1,5 @@
+{-# OPTIONS --safe --without-K #-}
+
 open import Level
 
 module Functions.Raw (o : Level) where

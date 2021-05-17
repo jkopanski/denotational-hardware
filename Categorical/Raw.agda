@@ -1,3 +1,5 @@
+{-# OPTIONS --safe --without-K #-}
+
 module Categorical.Raw where
 
 open import Level

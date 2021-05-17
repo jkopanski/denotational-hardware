@@ -1,3 +1,4 @@
+{-# OPTIONS --safe --without-K #-}
 -- Showable types
 
 module Show where

@@ -1,3 +1,5 @@
+{-# OPTIONS --safe --without-K #-}
+
 -- Symbolic/initial logic primitives with the unique Logic homomorphism to any
 -- other Logic instance.
 

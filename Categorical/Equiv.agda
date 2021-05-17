@@ -1,3 +1,5 @@
+{-# OPTIONS --safe --without-K #-}
+
 module Categorical.Equiv where
 
 open import Level

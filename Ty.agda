@@ -1,8 +1,7 @@
+{-# OPTIONS --safe --without-K #-}
 -- Simple type/object encodings
 
 module Ty where
-
-open import Data.Nat
 
 infixr 2 _`×_
 infixr 0 _`⇛_
@@ -13,9 +12,11 @@ data Ty : Set where
   _`⇛_  : Ty → Ty → Ty
 
 
+open import Categorical.Object
+open import Categorical.Equiv
+
 module ty-instances where
 
-  open import Categorical.Raw
   instance
 
     products : Products Ty
@@ -37,3 +38,19 @@ module ty-instances where
        h `Bool = Bool
        h (a `× b) = h a × h b
        h (a `⇛ b) = h a ⇛ h b
+
+
+module _ where
+
+  open import Level
+  open import Data.Empty
+  open import Data.Sum
+
+  open import Functions.Type 0ℓ
+
+  Log : Ty → Set
+  Log `⊤ = ⊥
+  Log `Bool = ⊤
+  Log (a `× b) = Log a ⊎ Log b
+  Log (a `⇛ b) = Fₒ a × Log b
+
