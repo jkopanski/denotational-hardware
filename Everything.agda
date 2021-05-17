@@ -12,8 +12,7 @@ import Ty
 import Typed
 import Primitive
 import Routing
-
--- import Linearize
+import Linearize
 -- import Dot
 
 -- import Examples.Add
