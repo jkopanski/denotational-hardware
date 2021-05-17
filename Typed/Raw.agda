@@ -22,10 +22,10 @@ module typed-instances where
     category = record { id = mk id ; _∘_ = λ (mk g) (mk f) → mk (g ∘ f) }
 
     cartesian : ⦃ _ : Cartesian _↠_ ⦄ → Cartesian _⇨_
-    cartesian = record { exl = mk exl
+    cartesian = record { !   = mk !
+                       ; exl = mk exl
                        ; exr = mk exr
                        ; _▵_ = λ (mk f) (mk g) → mk (f ▵ g)
-                       ; !   = mk !
                        }
 
     cartesianClosed : ⦃ _ : CartesianClosed _↠_ ⦄ → CartesianClosed _⇨_

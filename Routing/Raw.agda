@@ -23,10 +23,10 @@ instance
   category = record { id = mk id ; _∘_ = λ (mk g) (mk f) → mk (f ∘ g) }
 
   cartesian : Cartesian _⇨_
-  cartesian = record { exl = mk inj₁
+  cartesian = record { !   = mk λ ()
+                     ; exl = mk inj₁
                      ; exr = mk inj₂
                      ; _▵_ = λ (mk f) (mk g) → mk [ f , g ]
-                     ; !   = mk λ ()
                      }
 
   -- I think _⇨_ is closed but not cartesian closed, i.e., we can define the hom

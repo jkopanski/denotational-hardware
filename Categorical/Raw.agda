@@ -31,10 +31,10 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   infixr 7 _▵_
   field
     ⦃ ⇨Category ⦄ : Category _⇨_
+    !   : a ⇨ ⊤
     exl : a × b ⇨ a
     exr : a × b ⇨ b
     _▵_ : ∀ {a c d} → a ⇨ c → (a ⇨ d) → (a ⇨ c × d)
-    ! : a ⇨ ⊤
 
   infixr 7 _⊗_
   _⊗_ : (a ⇨ c) → (b ⇨ d) → (a × b ⇨ c × d)
