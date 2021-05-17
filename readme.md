@@ -1,1 +1,1 @@
-## Denotationally designed hardware in Agda
+## Denotational hardware design in Agda
