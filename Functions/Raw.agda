@@ -10,7 +10,7 @@ import Data.Bool as B
 
 open import Categorical.Raw
 
-open import Functions.Type o
+open import Functions.Type o public
 
 private
 
