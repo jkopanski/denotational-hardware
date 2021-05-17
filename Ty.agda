@@ -15,7 +15,6 @@ data Ty : Set where
 
 module ty-instances where
 
-  open import Categorical.Equiv
   open import Categorical.Raw
   instance
 
