@@ -1,11 +1,10 @@
-{-# OPTIONS --safe --without-K #-}
-
 module Categorical.Raw where
 
 open import Level
 open import Function using (_∘′_)
 
 open import Categorical.Object public
+open import Categorical.Equiv  public
 
 private
   variable
