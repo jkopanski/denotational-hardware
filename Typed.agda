@@ -14,5 +14,4 @@ module Typed
 
 open import Typed.Raw          _↠_    public  -- exports Typed.Type
 
--- open import Typed.Homomorphism _↠_ q  public
 -- open import Typed.Laws         _↠_ q  public
