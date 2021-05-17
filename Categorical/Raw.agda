@@ -24,6 +24,40 @@ record Category {obj : Set o} (_⇨_ : obj → obj → Set ℓ) : Set (o ⊔ ℓ
 open Category ⦃ … ⦄ public
 
 
+-- Category homomorphism (functor)
+record CategoryH {obj₁ : Set o₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁)
+                 {obj₂ : Set o₂} (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂)
+                 q ⦃ _ : Equivalent q _⇨₂_ ⦄
+                 ⦃ _ : Category _⇨₁_ ⦄
+                 ⦃ _ : Category _⇨₂_ ⦄
+                 ⦃ _ : Homomorphismₒ obj₁ obj₂ ⦄
+                 ⦃ H : Homomorphism _⇨₁_ _⇨₂_ ⦄
+       : Set (o₁ ⊔ ℓ₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
+  field
+    F-id : Fₘ (id {_⇨_ = _⇨₁_}{a = a}) ≈ id
+    F-∘  : ∀ (g : b ⇨₁ c) (f : a ⇨₁ b) → Fₘ (g ∘ f) ≈ Fₘ g ∘ Fₘ f
+
+open CategoryH ⦃ … ⦄ public
+
+
+
+record ProductsH
+    (obj₁ : Set o₁) ⦃ _ : Products obj₁ ⦄
+    {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
+    ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
+    : Set (o₁ ⊔ o₂ ⊔ ℓ₂) where
+  private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
+  field
+    -- https://ncatlab.org/nlab/show/monoidal+functor
+    ε : ⊤ ⇨₂ Fₒ ⊤
+    μ : {a b : obj₁} → Fₒ a × Fₒ b ⇨₂ Fₒ (a × b)
+
+    -- *Strong*
+    ε⁻¹ : Fₒ ⊤ ⇨₂ ⊤
+    μ⁻¹ : {a b : obj₁} → Fₒ (a × b) ⇨₂ Fₒ a × Fₒ b
+
+open ProductsH ⦃ … ⦄ public
+
 
 record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
          (_⇨′_ : obj → obj → Set ℓ) : Set (o ⊔ ℓ) where
