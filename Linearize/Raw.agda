@@ -9,11 +9,20 @@ module Linearize.Raw {ℓₘ}{objₘ : Set ℓₘ} ⦃ _ : Products objₘ ⦄
              (_⇨ᵣ_ : obj → obj → Set ℓ) (let infix 0 _⇨ᵣ_; _⇨ᵣ_ = _⇨ᵣ_)
              ⦃ _ : Cartesian _⇨ₘ_ ⦄   -- monoidal suffices?
              ⦃ _ : Cartesian _⇨ᵣ_ ⦄   -- braided suffices
+             -- The rest are for ⟦_⟧ₖ
+             ⦃ Hₒ : Homomorphismₒ obj objₘ ⦄
+             ⦃ Hₚ : Homomorphism _⇨ₚ_ _⇨ₘ_ ⦄
+             ⦃ Hᵣ : Homomorphism _⇨ᵣ_ _⇨ₘ_ ⦄
+             ⦃ _ : ProductsH obj _⇨ₘ_ ⦄
   where
 
-private variable a b c d z : obj
+private variable a b c d : obj
 
 open import Linearize.Type _⇨ₘ_ _⇨ₚ_ _⇨ᵣ_ public
+
+⟦_⟧ₖ : (a ⇨ b) → (Fₒ a ⇨ₘ Fₒ b)
+⟦ ⌞ r ⌟ ⟧ₖ = Fₘ r
+⟦ f ∘·first p ∘ r ⟧ₖ = ⟦ f ⟧ₖ ∘ μ ∘ first (Fₘ p) ∘ μ⁻¹ ∘ Fₘ r
 
 route : (a ⇨ᵣ b) → (a ⇨ b)
 route = ⌞_⌟
@@ -72,3 +81,6 @@ instance
             ; xor   = prim xor
             ; cond  = prim cond
             }
+
+  homomorphism : Homomorphism _⇨_ _⇨ₘ_
+  homomorphism = record { Fₘ = ⟦_⟧ₖ }
