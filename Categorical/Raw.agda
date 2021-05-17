@@ -38,6 +38,62 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
 
 open Cartesian ⦃ … ⦄ public
 
+-- Monoidal and braided operations defined via Cartesian.
+-- TODO: replace with Monoidal and Braided classes, as in agda-machines.
+module _ {obj : Set o} ⦃ _ : Products obj ⦄
+         {_⇨_ : obj → obj → Set ℓ} (let infix 0 _⇨_; _⇨_ = _⇨_) -- Note
+         ⦃ _ : Cartesian _⇨_ ⦄ where
+
+  -- Note: fixity hack. See https://github.com/agda/agda/issues/1235
+
+  infixr 7 _⊗_
+  _⊗_ : (a ⇨ c) → (b ⇨ d) → (a × b ⇨ c × d)
+  f ⊗ g = (f ∘ exl) ▵ (g ∘ exr)
+
+  first : a ⇨ c → a × b ⇨ c × b
+  first f = f ⊗ id
+
+  second : b ⇨ d → a × b ⇨ a × d
+  second g = id ⊗ g
+
+  unitorᵉˡ : ⊤ × a ⇨ a
+  unitorᵉˡ = exr
+
+  unitorᵉʳ : a × ⊤ ⇨ a
+  unitorᵉʳ = exl
+
+  unitorⁱˡ : a ⇨ ⊤ × a
+  unitorⁱˡ = ! ▵ id
+
+  unitorⁱʳ : a ⇨ a × ⊤
+  unitorⁱʳ = id ▵ !
+
+  assocˡ : a × (b × c) ⇨ (a × b) × c
+  assocˡ = second exl ▵ exr ∘ exr
+
+  assocʳ : (a × b) × c ⇨ a × (b × c)
+  assocʳ = exl ∘ exl ▵ first exr
+
+  inAssocˡ : ((a × b) × c ⇨ (a′ × b′) × c′) → (a × (b × c) ⇨ a′ × (b′ × c′))
+  inAssocˡ f = assocʳ ∘ f ∘ assocˡ
+
+  inAssocˡ′ : (a × b ⇨ a′ × b′) → (a × (b × c) ⇨ a′ × (b′ × c))
+  inAssocˡ′ = inAssocˡ ∘′ first
+
+  inAssocʳ : (a × (b × c) ⇨ a′ × (b′ × c′)) → ((a × b) × c ⇨ (a′ × b′) × c′)
+  inAssocʳ f = assocˡ ∘ f ∘ assocʳ
+
+  inAssocʳ′ : (b × c ⇨ b′ × c′) → ((a × b) × c ⇨ (a × b′) × c′)
+  inAssocʳ′ = inAssocʳ ∘′ second
+
+  swap : a × b ⇨ b × a
+  swap = exr ▵ exl
+
+  infixr 4 _⦂_
+  -- _⦂_ : ⌞ a ⌟ → ⌞ b ⌟ → ⌞ a × b ⌟
+  _⦂_ : (⊤ ⇨ a) → (⊤ ⇨ b) → (⊤ ⇨ a × b)
+  a ⦂ b = (a ⊗ b) ∘ unitorⁱˡ
+
 
 record CartesianClosed {obj : Set o}
          ⦃ _ : Products obj ⦄ ⦃ _ : Exponentials obj ⦄
