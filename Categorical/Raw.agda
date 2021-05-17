@@ -36,6 +36,9 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
     exr : a × b ⇨ b
     _▵_ : ∀ {a c d} → a ⇨ c → (a ⇨ d) → (a ⇨ c × d)
 
+  dup : a ⇨ a × a
+  dup = id ▵ id
+
   infixr 7 _⊗_
   _⊗_ : (a ⇨ c) → (b ⇨ d) → (a × b ⇨ c × d)
   f ⊗ g = (f ∘ exl) ▵ (g ∘ exr)
