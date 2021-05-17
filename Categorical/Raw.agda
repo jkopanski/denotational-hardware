@@ -34,6 +34,7 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
     exl : a × b ⇨ a
     exr : a × b ⇨ b
     _▵_ : ∀ {a c d} → a ⇨ c → (a ⇨ d) → (a ⇨ c × d)
+    ! : a ⇨ ⊤
 
 open Cartesian ⦃ … ⦄ public
 
