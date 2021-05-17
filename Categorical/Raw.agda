@@ -27,12 +27,12 @@ open Category ⦃ … ⦄ public
 record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
          (_⇨′_ : obj → obj → Set ℓ) : Set (o ⊔ ℓ) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
-  infixr 7 _△_
+  infixr 7 _▵_
   field
     ⦃ ⇨Category ⦄ : Category _⇨_
     exl : a × b ⇨ a
     exr : a × b ⇨ b
-    _△_ : ∀ {a c d} → a ⇨ c → (a ⇨ d) → (a ⇨ c × d)
+    _▵_ : ∀ {a c d} → a ⇨ c → (a ⇨ d) → (a ⇨ c × d)
 
 open Cartesian ⦃ … ⦄ public
 
