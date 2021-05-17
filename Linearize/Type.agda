@@ -1,7 +1,8 @@
 {-# OPTIONS --safe --without-K #-}
 
--- A linearizing category, parametrized by primitives. This category embodies a
--- normal form for monoidal formulas as a strictly linear composition of form:
+-- A linearizing category, parametrized by routings and primitives. This
+-- category embodies a normal form for monoidal formulas as a strictly linear
+-- composition of form:
 --
 --     rₙ ∘ first pₙ₋₁ ∘ rₙ₋₁ ⋯ ∘ first p₀ ∘ r₀
 --  

@@ -2,6 +2,5 @@
 
 module Linearize where
 
-open import Linearize.Raw          public  -- exports Linearize.Type
--- open import Linearize.Homomorphism public
+open import Linearize.Homomorphism public  -- exports Type & Raw
 -- open import Linearize.Laws         public
