@@ -10,7 +10,7 @@ open import Data.Nat
 
 open import Ty
 
-open import Typed.Type _↠_
+open import Typed.Type _↠_ public
 
 private variable a b c d : Ty
 
