@@ -35,3 +35,23 @@ tabulate {`⊤}     f = tt
 tabulate {`Bool}  f = f tt
 tabulate {a `× b} f = tabulate (f ∘ inj₁) , tabulate (f ∘ inj₂)
 tabulate {a `⇛ b} f = tabulate ∘ curry f
+
+-- TODO: move lookup & tabulate into 
+
+-- open import Data.Fin
+
+-- logFin : Log a → Fin (size a)
+-- logFin {  `⊤  } = λ ()
+-- logFin {`Bool } = λ { tt → Fin.zero }
+-- logFin {a `× b} = [ inject+ _ ∘ logFin , raise _ ∘ logFin ]
+-- logFin {a `⇛ b} = λ (x , j) → {!!}
+
+-- Goal : Fin (size b * card a)
+
+-- x : Fₒ a
+-- j : Log b
+
+
+-- logFin j : Fin (size b)
+-- toFin : Fₒ a → Fin (card a)
+
