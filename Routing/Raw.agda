@@ -31,4 +31,9 @@ instance
 
   -- I think _⇨_ is closed but not cartesian closed, i.e., we can define the hom
   -- functor but not curry & apply. A consequence is that curry f and apply must
-  -- be treated similarly to primitives when linearizing.
+  -- be treated similarly to primitives when linearizing in order to get a
+  -- CartesianClosed instance.
+
+  -- TODO: Define Routing as the dual of a cocartesian category. Maybe even the
+  -- dual of a sub-category.
+
