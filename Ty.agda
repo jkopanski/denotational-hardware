@@ -38,3 +38,45 @@ module ty-instances where
        h `Bool = Bool
        h (a `× b) = h a × h b
        h (a `⇛ b) = h a ⇛ h b
+
+
+open import Data.Nat
+
+-- Cardinality of a type
+card : Ty → ℕ
+card `⊤ = 1
+card `Bool = 2
+card (a `× b) = card a * card b
+card (a `⇛ b) = card b ^ card a
+
+{-
+open import Level using (0ℓ)
+open import Data.Fin as F hiding (_+_)
+open import Functions.Type 0ℓ
+open import Data.Product using (_,_)
+
+-- Defined somewhere?
+mulFin : ∀ {m n} → Fin m → Fin n → Fin (n * m)
+mulFin i  zero   = inject+ _ i
+mulFin i (suc j) = raise _ (mulFin i j)
+
+toFin : ∀ a → Fₒ a → Fin (card a)
+toFin `⊤ tt = zero
+toFin `Bool 𝕗 = zero
+toFin `Bool 𝕥 = suc zero
+toFin (a `× b) (x , y) = mulFin (toFin b y) (toFin a x)
+toFin (a `⇛ b) f = {!!}
+
+-- TODO: Define an isomorphism, including proofs.
+
+-}
+
+-- # of bits in a value of a given type (maybe rename to "#bits").
+-- Log₂ of cardinality.
+size : Ty → ℕ
+size `⊤       = 0
+size `Bool    = 1
+size (a `× b) = size a + size b
+size (a `⇛ b) = size b * card a
+
+-- See Ty.Properties for proof of ∀ a → card a ≡ 2 ^ size a
