@@ -2,10 +2,9 @@
 
 module Fun.Type where
 
-open import Data.Unit
-open import Data.Product
-open import Data.Bool
+open import Categorical.Object
 
+open import Functions.Type
 open import Ty
 
 ⟦_⟧ : Ty → Set
@@ -21,7 +20,7 @@ record _⇨_ (a b : Ty) : Set where
     f : ⟦ a ⟧ → ⟦ b ⟧  -- or ⟦ a ⇛ b ⟧
 
 
-module →-instances where
+module fun-instances where
 
   open import Categorical.Object
 
