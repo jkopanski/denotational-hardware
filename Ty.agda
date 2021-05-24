@@ -80,3 +80,26 @@ size (a `× b) = size a + size b
 size (a `⇛ b) = size b * card a
 
 -- See Ty.Properties for proof of ∀ a → card a ≡ 2 ^ size a
+
+module _ where
+
+  open import Level
+  open import Relation.Binary using (Rel)
+  open import Relation.Binary.PropositionalEquality
+  open import Data.Bool
+  open import Data.Product using (_,_)
+
+  open import Functions.Type 0ℓ
+
+  eqₜ : ∀ (a : Ty) → Rel (Fₒ a) 0ℓ
+  eqₜ `⊤ tt tt = ⊤
+  eqₜ `Bool  b₁ b₂ = b₁ ≡ b₂
+  eqₜ (a `× b) (u₁ , u₂) (v₁ , v₂) = eqₜ a u₁ v₁ × eqₜ b u₂ v₂
+  eqₜ (a `⇛ b) f g = ∀ {x : Fₒ a} → eqₜ b (f x) (g x)
+
+  -- I think the explicit Ty arguments are needed due to lack of Fₒ injectivity
+  -- See if the following infix version is useful elsewhere.
+
+  infix 4 _≡ₜ_
+  _≡ₜ_ : ∀ {a : Ty} → Rel (Fₒ a) 0ℓ
+  _≡ₜ_ {a} = eqₜ a
