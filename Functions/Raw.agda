@@ -48,4 +48,3 @@ module →-raw-instances where
               ; false = lift→₀ B.false
               ; cond  = λ (lift c , (a , b)) → B.if c then b else a
               }
-
