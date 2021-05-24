@@ -2,6 +2,6 @@
 
 open import Level
 
-module Functions (o : Level) where
+module Functions where
 
-open import Functions.Raw  o public  -- exports Functions.Type
+open import Functions.Raw public  -- exports Functions.Type
