@@ -40,7 +40,6 @@ record CategoryH {obj₁ : Set o₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ�
 open CategoryH ⦃ … ⦄ public
 
 
-
 record ProductsH
     (obj₁ : Set o₁) ⦃ _ : Products obj₁ ⦄
     {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
@@ -75,7 +74,7 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
 
   infixr 7 _⊗_
   _⊗_ : (a ⇨ c) → (b ⇨ d) → (a × b ⇨ c × d)
-  f ⊗ g = (f ∘ exl) ▵ (g ∘ exr)
+  f ⊗ g = f ∘ exl ▵ g ∘ exr
 
   first : a ⇨ c → a × b ⇨ c × b
   first f = f ⊗ id
@@ -129,6 +128,7 @@ record CartesianClosed {obj : Set o}
          (_⇨′_ : obj → obj → Set ℓ) : Set (o ⊔ ℓ) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
+    ⦃ ⇨Cartesian ⦄ : Cartesian _⇨_
     curry : (a × b ⇨ c) → (a ⇨ (b ⇛ c))
     apply : (a ⇛ b) × a ⇨ b
 
