@@ -35,12 +35,10 @@ record Equivalent q {obj : Set o} (_⇨_ : obj → obj → Set ℓ)
   _•_ : {f g h : a ⇨ b} (g≈h : g ≈ h) (f≈g : f ≈ g) → f ≈ h
   g≈h • f≈g = trans f≈g g≈h
 
-  -- Conflicts with other instances
+open Equivalent ⦃ … ⦄ public
 
 -- TODO: Replace Equivalent by Setoid?
 -- I think we need _⇨_ as an argument rather than field.
-
-open Equivalent ⦃ … ⦄ public
 
 -- TODO: consider moving to Categorical.Homomorphism.
 record Homomorphismₒ (obj₁ : Set o₁) (obj₂ : Set o₂) : Set (o₁ ⊔ o₂) where
