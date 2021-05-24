@@ -2,7 +2,7 @@
 
 open import Level
 
-module Functions.Raw (o : Level) where
+module Functions.Raw where
 
 import Function as F
 open import Data.Product as × using (_,_; proj₁; proj₂; <_,_>)
@@ -10,20 +10,7 @@ import Data.Bool as B
 
 open import Categorical.Raw
 
-open import Functions.Type o public
-
-private
-
-  variable A B C : Set
-
-  lift→₀ : A → (⊤ → Lift o A)
-  lift→₀ a tt = lift a
-
-  lift→₁ : (A → B) → (Lift o A → Lift o B)
-  lift→₁ f (lift x) = lift (f x)
-
-  lift→₂ : (A → B → C) → (Lift o A × Lift o B → Lift o C)
-  lift→₂ f (lift x , lift y) = lift (f x y)
+open import Functions.Type public
 
 module →-raw-instances where
 
@@ -36,27 +23,27 @@ module →-raw-instances where
     cartesian = record { exl = proj₁ ; exr = proj₂ ; _▵_ = <_,_> }
 
     cartesianClosed : CartesianClosed Function
-    cartesianClosed = record { curry = ×.curry ; apply = λ (f , a) → f a }
+    cartesianClosed = record { curry = ×.curry ; apply = ×.uncurry id }
 
     logic : Logic Function
     logic = record
-              { ∧     = lift→₂ B._∧_
-              ; ∨     = lift→₂ B._∨_
-              ; xor   = lift→₂ B._xor_
-              ; not   = lift→₁ B.not
-              ; true  = lift→₀ B.true
-              ; false = lift→₀ B.false
-              ; cond  = λ (lift c , (a , b)) → B.if c then b else a
+              { false = λ tt → 𝕗
+              ; true  = λ tt → 𝕥
+              ; not   = B.not
+              ; ∧     = uncurry B._∧_
+              ; ∨     = uncurry B._∨_
+              ; xor   = uncurry B._xor_
+              ; cond  = λ (c , t , e) → B.if c then t else e
               }
 
     open import Relation.Binary.PropositionalEquality as ≡ using (_≗_; cong)
 
-    equivalent : Equivalent o Function
+    equivalent : Equivalent 0ℓ Function
     equivalent = record
       { _≈_ = _≗_
       ; equiv = λ {a}{b} → record
-          { refl  = λ x → ≡.refl
-          ; sym   = λ f∼g x → ≡.sym (f∼g x)
+          { refl  = λ x         → ≡.refl
+          ; sym   = λ f∼g x     → ≡.sym (f∼g x)
           ; trans = λ f∼g g∼h x → ≡.trans (f∼g x) (g∼h x)
           }
       }
