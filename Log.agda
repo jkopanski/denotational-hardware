@@ -25,18 +25,16 @@ open import Data.Product using (_,_; curry; uncurry)
 open import Function using (_∘_)
 
 lookup : Fₒ a → (Log a → Bool)
-lookup {`Bool} b tt     = b
+lookup {`Bool } b tt    = b
 lookup {a `× b} (x , y) = [ lookup x , lookup y ]′
 lookup {a `⇛ b} f       = uncurry (lookup ∘ f)
                           -- λ (x , j) → lookup (f x) j
 
 tabulate : (Log a → Bool) → Fₒ a
-tabulate {`⊤}     f = tt
-tabulate {`Bool}  f = f tt
+tabulate {  `⊤  } f = tt
+tabulate {`Bool } f = f tt
 tabulate {a `× b} f = tabulate (f ∘ inj₁) , tabulate (f ∘ inj₂)
 tabulate {a `⇛ b} f = tabulate ∘ curry f
-
--- TODO: move lookup & tabulate into 
 
 -- open import Data.Fin
 
