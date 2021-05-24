@@ -12,12 +12,6 @@ private
     o : Level
     obj : Set o
 
-
--- Trick to use "tt" as a pattern and value
-import Data.Unit as U
-pattern tt = lift U.tt
-
-private
   -- Iterated composition
   infixr 8 _↑_
   _↑_ : ∀ {a}{A : Set a} → (A → A) → ℕ → (A → A)
