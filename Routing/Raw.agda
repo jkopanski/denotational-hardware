@@ -8,14 +8,11 @@ import Data.Sum as ⊎
 open ⊎
 
 open import Categorical.Raw
-open import Functions.Type 0ℓ
-open import Functions.Raw  0ℓ
+open import Functions.Raw
 
-open import Ty
-open import Log
+import Ty  -- For Products Ty
+open import Index
 open import Routing.Type public
-
-private variable a b c d : Ty
 
 instance
 
@@ -23,17 +20,12 @@ instance
   category = record { id = mk id ; _∘_ = λ (mk g) (mk f) → mk (f ∘ g) }
 
   cartesian : Cartesian _⇨_
-  cartesian = record { !   = mk λ ()
-                     ; exl = mk inj₁
-                     ; exr = mk inj₂
-                     ; _▵_ = λ (mk f) (mk g) → mk [ f , g ]
-                     }
+  cartesian = record
+    { !   = mk λ ()
+    ; exl = mk left
+    ; exr = mk right
+    ; _▵_ = λ (mk f) (mk g) → mk λ { (left i) → f i ; (right j) → g j }
+    }
 
-  -- I think _⇨_ is closed but not cartesian closed, i.e., we can define the hom
-  -- functor but not curry & apply. A consequence is that curry f and apply must
-  -- be treated similarly to primitives when linearizing in order to get a
-  -- CartesianClosed instance.
-
-  -- TODO: Define Routing as the dual of a cocartesian category. Maybe even the
-  -- dual of a sub-category.
-
+  -- categoryH : CategoryH _⇨_ Function 0ℓ
+  -- categoryH = ?
