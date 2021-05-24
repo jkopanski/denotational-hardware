@@ -132,6 +132,9 @@ record CartesianClosed {obj : Set o}
     curry : (a × b ⇨ c) → (a ⇨ (b ⇛ c))
     apply : (a ⇛ b) × a ⇨ b
 
+  uncurry : (a ⇨ (b ⇛ c)) → (a × b ⇨ c)
+  uncurry f = apply ∘ first f
+
 open CartesianClosed ⦃ … ⦄ public
 
 
