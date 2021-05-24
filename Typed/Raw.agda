@@ -32,10 +32,7 @@ module typed-instances where
     cartesianClosed = record { curry = λ (mk f) → mk (curry f)
                              ; apply = mk apply }
 
-    boolean : Boolean Ty
-    boolean = record { Bool = `Bool }
-
-    logic : ⦃ _ : Logic _↠_ ⦄ → Logic ⦃ boolean = boolean ⦄ _⇨_
+    logic : ⦃ _ : Logic _↠_ ⦄ → Logic _⇨_
     logic = record { false = mk false ; true = mk true
                    ; ∧ = mk ∧ ; ∨ = mk ∨ ; xor = mk xor ; not = mk not
                    ; cond = mk cond
