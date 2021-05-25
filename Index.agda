@@ -25,13 +25,16 @@ data Index : Ty → Ty → Set where
   left  : Index z a → Index z (a × b)
   right : Index z b → Index z (a × b)
 
-lookup : Fₒ a → (∀ {z : Ty} → Index z a → Fₒ z)
+Indexer : Ty → Set
+Indexer a = ∀ {z : Ty} → Index z a → Fₒ z
+
+lookup : Fₒ a → Indexer a
 lookup b          bit    = b
 lookup f          fun    = f
 lookup (x , _) (left  i) = lookup x i
 lookup (_ , y) (right j) = lookup y j
 
-tabulate : (∀ {z : Ty} → Index z a → Fₒ z) → Fₒ a
+tabulate : Indexer a → Fₒ a
 tabulate {  `⊤  } f = tt
 tabulate {`Bool } f = f bit
 tabulate {_ `× _} f = tabulate (f ∘ left) , tabulate (f ∘ right)

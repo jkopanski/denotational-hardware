@@ -34,8 +34,8 @@ module ty-instances where
     homomorphismₒ {obj = obj} = record { Fₒ = h }
      where
        h : Ty → obj
-       h `⊤ = ⊤
-       h `Bool = Bool
+       h   `⊤     = ⊤
+       h  `Bool   = Bool
        h (a `× b) = h a × h b
        h (a `⇛ b) = h a ⇛ h b
 
@@ -81,25 +81,45 @@ size (a `⇛ b) = size b * card a
 
 -- See Ty.Properties for proof of ∀ a → card a ≡ 2 ^ size a
 
+{-
+
 module _ where
 
   open import Level
-  open import Relation.Binary using (Rel)
-  open import Relation.Binary.PropositionalEquality
+  open import Relation.Binary
+  open import Relation.Binary.PropositionalEquality hiding (refl)
   open import Data.Bool
   open import Data.Product using (_,_)
 
-  open import Functions.Type 0ℓ
+  open import Functions.Type
 
   eqₜ : ∀ (a : Ty) → Rel (Fₒ a) 0ℓ
   eqₜ `⊤ tt tt = ⊤
   eqₜ `Bool  b₁ b₂ = b₁ ≡ b₂
   eqₜ (a `× b) (u₁ , u₂) (v₁ , v₂) = eqₜ a u₁ v₁ × eqₜ b u₂ v₂
-  eqₜ (a `⇛ b) f g = ∀ {x : Fₒ a} → eqₜ b (f x) (g x)
+  eqₜ (a `⇛ b) f g = -- ∀ {x y : Fₒ a} → eqₜ a x y → eqₜ b (f x) (g y)
+                    ∀ {x : Fₒ a} → eqₜ b (f x) (g x)
 
   -- I think the explicit Ty arguments are needed due to lack of Fₒ injectivity
   -- See if the following infix version is useful elsewhere.
 
-  infix 4 _≡ₜ_
-  _≡ₜ_ : ∀ {a : Ty} → Rel (Fₒ a) 0ℓ
-  _≡ₜ_ {a} = eqₜ a
+  -- infix 4 _≡ₜ_
+  -- _≡ₜ_ : ∀ {a : Ty} → Rel (Fₒ a) 0ℓ
+  -- _≡ₜ_ {a} = eqₜ a
+
+  open import Data.Unit
+  -- import Relation.Binary.PropositionalEquality.Properties as ≡
+  open import Data.Product.Relation.Binary.Pointwise.NonDependent
+
+  isEquivₜ : ∀ {a} → IsEquivalence (eqₜ a)
+  isEquivₜ {  `⊤  } = _
+  isEquivₜ {`Bool } = isEquivalence
+  isEquivₜ {a `× b} = ×-isEquivalence isEquivₜ isEquivₜ
+  isEquivₜ {a `⇛ b} = record
+    { refl  = b.refl
+    ; sym   = λ f≈g → b.sym f≈g
+    ; trans = λ f≈g g≈h → b.trans f≈g g≈h
+    }
+   where module b = IsEquivalence (isEquivₜ {b})
+
+-}

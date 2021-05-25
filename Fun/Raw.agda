@@ -5,6 +5,7 @@ module Fun.Raw where
 open import Level
 
 open import Categorical.Raw
+open import Categorical.Equiv
 
 open import Functions.Raw
 open import Ty
@@ -13,6 +14,15 @@ open import Fun.Type public
 module typed-instances where
 
   instance
+
+    open import Function using (_on_)
+    import Relation.Binary.Construct.On as On
+
+    equivalent : Equivalent 0ℓ _⇨_
+    equivalent = record { equiv = On.isEquivalence unMk equiv }
+
+    -- equivalent =
+    --   record { equiv = λ {a b} → On.isEquivalence unMk (isEquivₜ {a ⇛ b}) }
 
     category : Category _⇨_
     category = record { id = mk id ; _∘_ = λ (mk g) (mk f) → mk (g ∘ f) }

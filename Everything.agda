@@ -9,10 +9,11 @@ import Categorical.Raw
 
 import Functions
 import Ty
-import Typed
+import Fun
 import Primitive
 import Routing
-import Linearize
+
+-- import Linearize
 -- import Dot
 
 -- import Examples.Add

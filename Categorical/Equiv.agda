@@ -13,6 +13,8 @@ private
     obj : Set o
     a b : obj
 
+-- TODO: move a and b arguments from methods to record.
+
 record Equivalent q {obj : Set o} (_⇨_ : obj → obj → Set ℓ)
        : Set (o ⊔ ℓ ⊔ suc q) where
   infix 4 _≈_
