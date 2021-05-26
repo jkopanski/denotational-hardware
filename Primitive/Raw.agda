@@ -4,7 +4,9 @@
 -- other Logic instance.
 
 open import Level
+
 open import Categorical.Raw
+open import Ty
 
 module Primitive.Raw
     {o ℓ} {obj : Set o}
@@ -15,7 +17,6 @@ module Primitive.Raw
 
 open import Categorical.Equiv
 
-open import Ty
 open import Primitive.Type public
 
 private variable a b : Ty
