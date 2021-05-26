@@ -18,7 +18,7 @@ Swizzle : Ty → Ty → Set  -- Rel Ty 0ℓ
 Swizzle a b = ∀ {z} → Index z b → Index z a
 
 swizzle : ∀ {a b} → Swizzle a b → (Fₒ a → Fₒ b)
-swizzle r a = tabulate (lookup a ∘ r)
+swizzle r x = tabulate (lookup x ∘ r)
 
 infix 0 _⇨_
 record _⇨_ (a b : Ty) : Set where
