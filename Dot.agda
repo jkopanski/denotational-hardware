@@ -71,4 +71,3 @@ private
 dot : SSA a b → String
 dot {a} (mk ss return) =
   (package ∘ concatᴸ ∘ mapℕ comp) (mk "In" · a ∷ ss ∷ʳ mk "Out" return ⊤)
-
