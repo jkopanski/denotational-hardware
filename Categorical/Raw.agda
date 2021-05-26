@@ -57,6 +57,10 @@ record ProductsH
 
 open ProductsH ⦃ … ⦄ public
 
+id-ProductsH : ∀ {obj : Set o} ⦃ _ : Products obj ⦄
+                 {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
+             → ProductsH obj _⇨_ ⦃ Hₒ = id-Hₒ ⦄
+id-ProductsH = record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id }
 
 record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
          (_⇨′_ : obj → obj → Set ℓ) : Set (o ⊔ ℓ) where
