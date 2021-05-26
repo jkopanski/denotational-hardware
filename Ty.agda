@@ -42,22 +42,12 @@ module ty-instances where
 
 open import Data.Nat
 
--- Cardinality of a type
-card : Ty → ℕ
-card `⊤ = 1
-card `Bool = 2
-card (a `× b) = card a * card b
-card (a `⇛ b) = card b ^ card a
-
--- # of bits in a value of a given type (maybe rename to "#bits").
--- Log₂ of cardinality.
-size : Ty → ℕ
-size `⊤       = 0
-size `Bool    = 1
-size (a `× b) = size a + size b
-size (a `⇛ b) = size b * card a
-
--- See Ty.Properties for proof of ∀ a → card a ≡ 2 ^ size a
+-- # of atomic values (bits or functions) in each value of a given type
+#atoms : Ty → ℕ
+#atoms `⊤       = 0
+#atoms `Bool    = 1
+#atoms (a `× b) = #atoms a + #atoms b
+#atoms (a `⇛ b) = 1
 
 {-
 
