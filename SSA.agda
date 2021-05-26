@@ -24,7 +24,6 @@ open import Index
 open import Fun.Type renaming (_⇨_ to _⇨ₜ_)
 open import Primitive.Type renaming (_⇨_ to _⇨ₚ_)
 open import Routing.Type renaming (_⇨_ to _⇨ᵣ_)
--- open import Routing.Functor renaming (map to mapᵀ)
 
 open import Linearize.Type _⇨ₜ_ _⇨ₚ_ _⇨ᵣ_ renaming (_⇨_ to _⇨ₖ_)
 
@@ -56,14 +55,12 @@ record SSA (i o : Ty) : Set where
     return : Ref o
 
 refs : ℕ → Ref b
-refs comp# i = mk comp# i
-
--- TODO: either replace refs by mk or memoize Indexed
+refs comp# = tabulate′ (mk comp#)
 
 ssaᵏ : {i : Ty} → ℕ → Ref a → (a ⇨ₖ b) → List Statement → SSA i b
-ssaᵏ _ ins ⌞ mk r ⌟ ss = mk (reverse ss) (ins ∘ r)
-ssaᵏ comp# ins (f ∘·first p ∘ mk r) ss with splitᵢ (ins ∘ r) ; ... | x , y =
-  ssaᵏ (suc comp#) (refs comp# ,ᵢ y) f (mk p x ∷ ss)
+ssaᵏ _ ins ⌞ r ⌟ ss = mk (reverse ss) (⟦ r ⟧′ ins)
+ssaᵏ i ins (f ∘·first p ∘ r) ss with ⟦ r ⟧′ ins ; ... | x ､ y =
+  ssaᵏ (suc i) (refs i ､ y) f (mk p x ∷ ss)
 
 ssa : (a ⇨ₖ b) → SSA a b
 ssa {a} f = ssaᵏ 1 (refs 0) f []
@@ -82,13 +79,13 @@ instance
   Show-Stmt : Show (ℕ × Statement)
   Show-Stmt = record { show = 
     λ (comp# , mk {o = o} prim ins) →
-         show-indexed (refs {o} comp#)
+         show (refs {o} comp#)
       ++ " = "
-      ++ show prim ++ parens (show-indexed ins)
+      ++ show prim ++ parens (show ins)
    }
 
   Show-SSA : Show (SSA a b)
   Show-SSA = record { show = λ (mk ss ret) →
-    unlines (mapℕ (curry show) ss ∷ʳ ("return " ++ show-indexed ret)) }
+    unlines (mapℕ (curry show) ss ∷ʳ ("return " ++ show ret)) }
 
 -- TODO: sort out what to make private.

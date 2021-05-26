@@ -5,7 +5,7 @@
 module Index where
 
 open import Level
-open import Data.Unit
+open import Data.Unit using (tt)
 open import Data.Sum hiding (map)
 open import Data.Product using (_,_)
 open import Function using (_∘_)
@@ -25,16 +25,16 @@ data Index : Ty → Ty → Set where
   left  : Index z a → Index z (a × b)
   right : Index z b → Index z (a × b)
 
-Indexer : Ty → Set
-Indexer a = ∀ {z : Ty} → Index z a → Fₒ z
+Indexer : (Ty → Set) → Ty → Set
+Indexer h a = ∀ {z : Ty} → Index z a → h z
 
-lookup : Fₒ a → Indexer a
+lookup : Fₒ a → Indexer Fₒ a
 lookup b          bit    = b
 lookup f          fun    = f
 lookup (x , _) (left  i) = lookup x i
 lookup (_ , y) (right j) = lookup y j
 
-tabulate : Indexer a → Fₒ a
+tabulate : Indexer Fₒ a → Fₒ a
 tabulate {  `⊤  } f = tt
 tabulate {`Bool } f = f bit
 tabulate {_ `× _} f = tabulate (f ∘ left) , tabulate (f ∘ right)
@@ -54,43 +54,44 @@ open import Data.String hiding (show) renaming (_++_ to _++ᴸ_)
 name : Index z a → String
 name = fromList ∘ map (bool 'l' 'r') ∘ path
 
-Indexed : (Ty → Set) → Ty → Set
-Indexed h a = ∀ {z} → Index z a → h z
+infixr 4 _､_
+data Indexed (h : Ty → Set) : Ty → Set where
+  · : Indexed h ⊤
+  [_]b : h Bool → Indexed h Bool
+  _､_ : Indexed h a → Indexed h b → Indexed h (a × b)
+  [_]f : h (a ⇛ b) → Indexed h (a ⇛ b)
 
 private variable h : Ty → Set
 
-infixr 2 _,ᵢ_
-_,ᵢ_ : Indexed h a → Indexed h b → Indexed h (a × b)
-(f ,ᵢ g) (left  i) = f i
-(f ,ᵢ g) (right j) = g j
+lookup′ : Indexed h a → Indexer h a
+lookup′ [ x ]b   bit      = x
+lookup′ (u ､ v) (left  i) = lookup′ u i
+lookup′ (u ､ v) (right i) = lookup′ v i
+lookup′ [ f ]f  fun       = f
 
-exlᵢ : Indexed h (a × b) → Indexed h a
-exlᵢ f = f ∘ left
+tabulate′ : ∀ {a h} → Indexer h a → Indexed h a
+tabulate′ {  `⊤  } f = ·
+tabulate′ {`Bool } f = [ f bit ]b
+tabulate′ {_ `× _} f = tabulate′ (f ∘ left) ､ tabulate′ (f ∘ right)
+tabulate′ {_ `⇛ _} f = [ f fun ]f
 
-exrᵢ : Indexed h (a × b) → Indexed h b
-exrᵢ f = f ∘ right
+swizzle′ : (∀ {z} → Index z b → Index z a) → (Indexed h a → Indexed h b)
+swizzle′ r a = tabulate′ (lookup′ a ∘ r)
 
-splitᵢ : Indexed h (a × b) → Indexed h a × Indexed h b
-splitᵢ f = exlᵢ f , exrᵢ f
--- splitᵢ f = f ∘ left , f ∘ right
+-- TODO: Tabulate and indexed are very similar. Reconcile?
 
-
-open import Data.Bool using (if_then_else_)
-open import Function using (id)
-open import Show
-
-show-indexed : ⦃ _ : ∀ {z : Ty} → Show (h z) ⦄ → Indexed h a → String
-show-indexed {h = h} = go 𝕗 
- where
-   -- Flag says we're in the left part of a pair
-   go : Bool → Indexed h a → String
-   go {a = `⊤} _ _ = "tt"
-   go {a = `Bool} _ w = parensIfSpace (show (w bit))
-   go {a = a `× b} p w = (if p then parens else id)
-                         (go 𝕥 (exlᵢ w) ++ᴸ " , " ++ᴸ go 𝕗 (exrᵢ w))
-   go {a = a `⇛ b} p w = parensIfSpace (show (w fun))
-
--- TODO: Consider turning Indexed into a data type, for pattern matching and
--- memoization. Then match on w instead of a in go, and eliminate _,ᵢ_, exlᵢ,
--- etc. Also, make show-indexed into an instance.
-
+module index-instances where
+  instance
+    open import Data.Bool using (if_then_else_)
+    open import Function using (id)
+    open import Show
+     
+    show-indexed : ∀ {h} ⦃ _ : ∀ {z} → Show (h z) ⦄ → Show (Indexed h a)
+    show-indexed {h = h} = record { show = go 𝕗 }
+     where
+       -- Flag says we're in the left part of a pair
+       go : Bool → Indexed h a → String
+       go p · = "tt"
+       go p [ b ]b = parensIfSpace (show b)
+       go p (u ､ v) = (if p then parens else id) (go 𝕥 u ++ᴸ " , " ++ᴸ go 𝕗 v)
+       go p [ f ]f = parensIfSpace (show f)
