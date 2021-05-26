@@ -6,14 +6,11 @@
 
 module SSA where
 
-open import Level using (Level; 0ℓ)
 open import Data.Product using (_,_)
-open import Data.Fin using (Fin; toℕ; suc; zero)
-open import Data.Nat using (ℕ; suc; zero; _+_)
+open import Data.Nat using (ℕ; suc; zero)
 open import Data.String hiding (toList; show)
 open import Data.List using (List; []; _∷_; upTo; reverse; _∷ʳ_)
-       renaming (map to mapᴸ; length to lengthᴸ; zipWith to zipWithᴸ)
-open import Data.Bool using (if_then_else_)
+       renaming (length to lengthᴸ; zipWith to zipWithᴸ)
 
 open import Categorical.Raw
 open import Functions.Raw
@@ -23,7 +20,6 @@ open import Index
 open import Fun.Type renaming (_⇨_ to _⇨ₜ_)
 open import Primitive.Type renaming (_⇨_ to _⇨ₚ_)
 open import Routing.Type renaming (_⇨_ to _⇨ᵣ_)
-
 open import Linearize.Type _⇨ₜ_ _⇨ₚ_ _⇨ᵣ_ renaming (_⇨_ to _⇨ₖ_)
 
 private variable a b z : Ty
