@@ -1,3 +1,5 @@
+{-# OPTIONS --safe --without-K #-}
+
 open import Level using (0ℓ)
 open import Data.Nat
 
