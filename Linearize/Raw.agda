@@ -84,3 +84,6 @@ instance
 
   homomorphism : Homomorphism _⇨_ _⇨ₘ_
   homomorphism = record { Fₘ = ⟦_⟧ₖ }
+
+  -- TODO: CategoryH, CartesianH, etc.
+
