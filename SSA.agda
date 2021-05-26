@@ -14,6 +14,7 @@ open import Data.List using (List; []; _∷_; upTo; reverse; _∷ʳ_)
 
 open import Categorical.Raw
 open import Functions.Raw
+open import Show
 
 open import Ty
 open import Index
@@ -40,8 +41,11 @@ record Statement : Set where
   constructor mk
   field
     {i o} : Ty
-    prim  : i ⇨ₚ o
+    prim  : String
     ins   : Ref i
+
+mk′ : ∀ {i o} → (i ⇨ₚ o) → Ref i → Statement
+mk′ {i} {o} p r = mk {i} {o} (show p) r
 
 record SSA (i o : Ty) : Set where
   constructor mk
@@ -55,7 +59,7 @@ refs comp# = tabulate′ (mk comp#)
 ssaᵏ : {i : Ty} → ℕ → Ref a → (a ⇨ₖ b) → List Statement → SSA i b
 ssaᵏ _ ins ⌞ r ⌟ ss = mk (reverse ss) (⟦ r ⟧′ ins)
 ssaᵏ i ins (f ∘·first p ∘ r) ss with ⟦ r ⟧′ ins ; ... | x ､ y =
-  ssaᵏ (suc i) (refs i ､ y) f (mk p x ∷ ss)
+  ssaᵏ (suc i) (refs i ､ y) f (mk′ p x ∷ ss)
 
 ssa : (a ⇨ₖ b) → SSA a b
 ssa {a} f = ssaᵏ 1 (refs 0) f []
@@ -65,11 +69,8 @@ mapℕ f as = zipWithᴸ f (upTo (lengthᴸ as)) as
 
 instance
 
-  open import Show
-
   Show-Id : ∀ {z} → Show (Id z)
-  Show-Id = record { show =
-    λ (mk comp# j) → "x" ++ show comp# ++ "_" ++ show j }
+  Show-Id = record {show = λ (mk comp# j) → "x" ++ show comp# ++ "_" ++ show j}
 
   Show-Stmt : Show (ℕ × Statement)
   Show-Stmt = record { show = 
