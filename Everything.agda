@@ -12,8 +12,8 @@ import Ty
 import Fun
 import Primitive
 import Routing
-
--- import Linearize
+import Linearize
+import SSA
 -- import Dot
 
 -- import Examples.Add
