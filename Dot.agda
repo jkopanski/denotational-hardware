@@ -59,7 +59,7 @@ private
   wire src dst = port "Out" src ++ " -> " ++  port "In" dst
 
   comp : ℕ → Statement → List String
-  comp comp# (mk {i} o op ins) with #atoms i | #atoms o
+  comp comp# (mk op {i} ins o) with #atoms i | #atoms o
   ... | zero | zero = []  -- drop disconnected components
   ... | #i   | #j    =
     (show comp# ++
@@ -70,5 +70,5 @@ private
 
 dot : SSA a b → String
 dot {a} (mk ss return) =
-  (package ∘ concatᴸ ∘ mapℕ comp) (mk a "In" · ∷ ss ∷ʳ mk ⊤ "Out" return)
+  (package ∘ concatᴸ ∘ mapℕ comp) (mk "In" · a ∷ ss ∷ʳ mk "Out" return ⊤)
 

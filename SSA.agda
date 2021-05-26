@@ -40,12 +40,13 @@ Ref = Indexed Id
 record Statement : Set where
   constructor mk
   field
-    {i} o : Ty
-    prim  : String
-    ins   : Ref i
+    prim : String
+    {i}  : Ty
+    ins  : Ref i
+    o    : Ty
 
 mk′ : ∀ {i}{o} → (i ⇨ₚ o) → Ref i → Statement
-mk′ {o} p r = mk o (show p) r
+mk′ {o} p r = mk (show p) r o
 
 record SSA (i o : Ty) : Set where
   constructor mk
@@ -74,10 +75,8 @@ instance
 
   Show-Stmt : Show (ℕ × Statement)
   Show-Stmt = record { show = 
-    λ (comp# , mk o prim ins) →
-         show (refs {o} comp#)
-      ++ " = "
-      ++ show prim ++ parens (show ins)
+    λ (comp# , mk prim ins o) →
+      show (refs {o} comp#) ++ " = " ++ show prim ++ parens (show ins)
    }
 
   Show-SSA : Show (SSA a b)
