@@ -11,9 +11,8 @@ open import Data.Product using (_,_)
 open import Data.Fin using (Fin; toℕ; suc; zero)
 open import Data.Nat using (ℕ; suc; zero; _+_)
 open import Data.String hiding (toList; show)
-open import Data.List using
-      (List; []; _∷_; upTo; zip; zipWith; reverse; _∷ʳ_)
-             renaming (map to mapᴸ; length to lengthᴸ)
+open import Data.List using (List; []; _∷_; upTo; reverse; _∷ʳ_)
+       renaming (map to mapᴸ; length to lengthᴸ; zipWith to zipWithᴸ)
 open import Data.Bool using (if_then_else_)
 
 open import Categorical.Raw
@@ -66,7 +65,7 @@ ssa : (a ⇨ₖ b) → SSA a b
 ssa {a} f = ssaᵏ 1 (refs 0) f []
 
 mapℕ : {A B : Set} → (ℕ → A → B) → List A → List B
-mapℕ f as = zipWith f (upTo (lengthᴸ as)) as
+mapℕ f as = zipWithᴸ f (upTo (lengthᴸ as)) as
 
 instance
 
@@ -74,7 +73,7 @@ instance
 
   Show-Id : ∀ {z} → Show (Id z)
   Show-Id = record { show =
-    λ (mk comp#  out#) → "x" ++ show comp# ++ "_" ++ name out# }
+    λ (mk comp# j) → "x" ++ show comp# ++ "_" ++ show j }
 
   Show-Stmt : Show (ℕ × Statement)
   Show-Stmt = record { show = 

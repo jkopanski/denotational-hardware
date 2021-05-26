@@ -14,7 +14,7 @@ import Primitive
 import Routing
 import Linearize
 import SSA
--- import Dot
+import Dot
 
 -- import Examples.Add
 
