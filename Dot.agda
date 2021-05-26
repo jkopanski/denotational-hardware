@@ -11,6 +11,7 @@ open import Data.List renaming (_++_ to _++ᴸ_; concat to concatᴸ; map to map
 open import Data.Nat
 
 open import Show
+open import Categorical.Object
 open import Ty
 open import Primitive.Type
 open import Index
@@ -63,12 +64,11 @@ private
   ... | #i   | #j    =
     (show comp# ++
      " [label=\"" ++
-     braces (labelsⁱ #i ++ show op ++ labelsᵒ #j) ++
+     braces (labelsⁱ #i ++ op ++ labelsᵒ #j) ++
      "\"]")
     ∷ toList (zipWith (λ x i → wire x (mk comp# i)) ins indices)
 
--- dot : SSA a b → String
--- dot (mk ss return) = (package ∘ concatᴸ ∘ mapℕ comp) {!!}
-  
--- WORKING HERE. I think I need to add In and Out components.
+dot : SSA a b → String
+dot {a}{b} (mk ss return) = (package ∘ concatᴸ ∘ mapℕ comp)
+  (mk {o = a} "In" · ∷ ss ∷ʳ mk {o = ⊤} "Out" return)
 
