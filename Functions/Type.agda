@@ -15,6 +15,9 @@ Function a b = a → b
 pattern 𝕗 = B.false
 pattern 𝕥 = B.true
 
+bool : ∀ {ℓ}{σ : Set ℓ} → σ → σ → B.Bool → σ
+bool e t c = B.if_then_else_ c t e
+
 module →-instances where
 
   instance
