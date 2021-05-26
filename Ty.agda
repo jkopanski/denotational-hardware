@@ -11,9 +11,7 @@ data Ty : Set where
   _`×_  : Ty → Ty → Ty
   _`⇛_  : Ty → Ty → Ty
 
-
-open import Categorical.Object
-open import Categorical.Equiv
+open import Categorical.Raw
 
 module ty-instances where
 
@@ -39,6 +37,11 @@ module ty-instances where
        h (a `× b) = h a × h b
        h (a `⇛ b) = h a ⇛ h b
 
+    productsH : ∀ {ℓ o}{obj : Set o} ⦃ _ : Products obj ⦄
+                  ⦃ _ : Boolean obj ⦄ ⦃ _ : Exponentials obj ⦄
+                  {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
+             → ProductsH Ty _⇨_
+    productsH = record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id }
 
 open import Data.Nat
 
