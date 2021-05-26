@@ -15,7 +15,6 @@ open import Categorical.Equiv
 open import Ty
 open import Functions.Type
 open import Fun.Type
-open import Fun.Raw
 
 private variable a b z : Ty
 
@@ -43,7 +42,7 @@ tabulate {_ `⇛ _} f = f fun
 Swizzle : Ty → Ty → Set  -- Rel Ty 0ℓ
 Swizzle a b = ∀ {z} → Index z b → Index z a
 
-swizzle : ∀ {a b} → Swizzle a b → (Fₒ a → Fₒ b)
+swizzle : Swizzle a b → (Fₒ a → Fₒ b)
 swizzle r x = tabulate (lookup x ∘ r)
 
 open import Data.List renaming (map to mapᴸ) hiding (zip; zipWith)
