@@ -10,7 +10,7 @@ open import Level using (0ℓ) -- temp?
 open import Data.Product using (_,_)
 open import Data.Nat using (ℕ; suc; zero)
 open import Data.String hiding (toList; show)
-open import Data.List using (List; []; _∷_; upTo; reverse; _∷ʳ_)
+open import Data.List using (List; []; [_]; _∷_; upTo; reverse; _∷ʳ_)
        renaming (length to lengthᴸ; zipWith to zipWithᴸ)
 
 open import Categorical.Raw
@@ -46,24 +46,26 @@ record Statement : Set where
     o    : Ty
 
 mk′ : ∀ {i}{o} → (i ⇨ₚ o) → Ref i → Statement
-mk′ {o} p r = mk (show p) r o
+mk′ {o = o} p r = mk (show p) r o
 
-record SSA (i o : Ty) : Set where
-  constructor mk
-  field
-    ss : List Statement
-    return : Ref o
+SSA : Set
+SSA = List Statement
+
+-- record SSA : Set where
+--   constructor mk
+--   field
+--     ss : List Statement
 
 refs : ℕ → Ref b
 refs comp# = tabulate′ (mk comp#)
 
-ssaᵏ : {i : Ty} → ℕ → Ref a → (a ⇨ₖ b) → List Statement → SSA i b
-ssaᵏ _ ins ⌞ r ⌟ ss = mk (reverse ss) (⟦ r ⟧′ ins)
-ssaᵏ i ins (f ∘·first p ∘ r) ss with ⟦ r ⟧′ ins ; ... | x ､ y =
-  ssaᵏ (suc i) (refs i ､ y) f (mk′ p x ∷ ss)
+ssaᵏ : ℕ → Ref a → (a ⇨ₖ b) → List Statement → SSA
+ssaᵏ _ ins ⌞ r ⌟ ss = reverse (mk "Out" (⟦ r ⟧′ ins) ⊤ ∷ ss)
+ssaᵏ comp# ins (f ∘·first p ∘ r) ss with ⟦ r ⟧′ ins ; ... | x ､ y =
+  ssaᵏ (suc comp#) (refs comp# ､ y) f (mk′ p x ∷ ss)
 
-ssa : (a ⇨ₖ b) → SSA a b
-ssa {a} f = ssaᵏ 1 (refs 0) f []
+ssa : (a ⇨ₖ b) → SSA
+ssa {a} f = ssaᵏ 1 (refs 0) f [ mk "In" · a ]
 
 mapℕ : {A B : Set} → (ℕ → A → B) → List A → List B
 mapℕ f as = zipWithᴸ f (upTo (lengthᴸ as)) as
@@ -71,16 +73,15 @@ mapℕ f as = zipWithᴸ f (upTo (lengthᴸ as)) as
 instance
 
   Show-Id : ∀ {z} → Show (Id z)
-  Show-Id = record {show = λ (mk comp# j) → "x" ++ show comp# ++ "_" ++ show j}
+  Show-Id = record {show = λ (mk comp# j) → "x" ++ show comp# ++ show j}
 
   Show-Stmt : Show (ℕ × Statement)
   Show-Stmt = record { show = 
     λ (comp# , mk prim ins o) →
-      show (refs {o} comp#) ++ " = " ++ show prim ++ parens (show ins)
+      show (refs {o} comp#) ++ " = " ++ prim ++ " " ++ parensIfSpace (show ins)
    }
 
-  Show-SSA : Show (SSA a b)
-  Show-SSA = record { show = λ (mk ss ret) →
-    unlines (mapℕ (curry show) ss ∷ʳ ("return " ++ show ret ++ "\n")) }
+  Show-SSA : Show SSA
+  Show-SSA = record { show = unlines ∘ mapℕ (curry show) }
 
 -- TODO: sort out what to make private.

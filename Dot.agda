@@ -40,20 +40,20 @@ private
   -- 0:Out1 -> 0:In0;
   -- 0:Out2 -> 0:In1;
 
-  labels : String → (String → String) → ℕ → String
-  labels tag f n with n
+  labels : String → (String → String) → Ty → String
+  labels tag f a with #atoms a
   ... | zero = ""   -- No braces or "|", to avoid port appearance
-  ... | suc _ = f (braces (
-   intersperse "|" (mapᴸ (λ i → "<" ++ tag ++ show i ++ ">") (upTo n))))
+  ... | suc _ = f (braces (intersperse "|" (toList (
+          map (λ i → "<" ++ tag ++ show i ++ ">") (indices {a})))))
 
-  labelsⁱ : ℕ → String
+  labelsⁱ : Ty → String
   labelsⁱ = labels "In" (_++ "|")
 
-  labelsᵒ : ℕ → String
+  labelsᵒ : Ty → String
   labelsᵒ = labels "Out" ("|" ++_)
 
   port : String → Id z → String
-  port dir (mk comp port) = show comp ++ ":" ++ dir ++ show port
+  port dir (mk comp i) = show comp ++ ":" ++ dir ++ show i
 
   wire : Id z → Id z → String
   wire src dst = port "Out" src ++ " -> " ++  port "In" dst
@@ -61,13 +61,12 @@ private
   comp : ℕ → Statement → List String
   comp comp# (mk op {i} ins o) with #atoms i | #atoms o
   ... | zero | zero = []  -- drop disconnected components
-  ... | #i   | #j    =
+  ... | _    | _    =
     (show comp# ++
      " [label=\"" ++
-     braces (labelsⁱ #i ++ op ++ labelsᵒ #j) ++
+     braces (labelsⁱ i ++ op ++ labelsᵒ o) ++
      "\"]")
     ∷ toList (zipWith (λ x i → wire x (mk comp# i)) ins indices)
 
-dot : SSA a b → String
-dot {a} (mk ss return) =
-  (package ∘ concatᴸ ∘ mapℕ comp) (mk "In" · a ∷ ss ∷ʳ mk "Out" return ⊤)
+dot : SSA → String
+dot = package ∘ concatᴸ ∘ mapℕ comp
