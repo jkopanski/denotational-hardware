@@ -16,8 +16,8 @@
 open import Categorical.Raw
 
 module Linearize.Type
-         {ℓₘ}{objₘ : Set ℓₘ}
-         (_⇨ₘ_ : objₘ → objₘ → Set ℓₘ)
+         {o}{objₘ : Set o}
+         {ℓₘ}(_⇨ₘ_ : objₘ → objₘ → Set ℓₘ)
          {ℓ}{obj : Set ℓ} ⦃ _ : Products obj ⦄
          (_⇨ₚ_ : obj → obj → Set ℓ)
          (_⇨ᵣ_ : obj → obj → Set ℓ) (let infix 0 _⇨ᵣ_; _⇨ᵣ_ = _⇨ᵣ_)

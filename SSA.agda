@@ -6,6 +6,7 @@
 
 module SSA where
 
+open import Level using (0ℓ) -- temp?
 open import Data.Product using (_,_)
 open import Data.Nat using (ℕ; suc; zero)
 open import Data.String hiding (toList; show)
@@ -18,10 +19,9 @@ open import Show
 
 open import Ty
 open import Index
-open import Fun.Type renaming (_⇨_ to _⇨ₜ_)
 open import Primitive.Type renaming (_⇨_ to _⇨ₚ_)
 open import Routing.Type renaming (_⇨_ to _⇨ᵣ_)
-open import Linearize.Type _⇨ₜ_ _⇨ₚ_ _⇨ᵣ_ renaming (_⇨_ to _⇨ₖ_)
+open import Linearize.Type {objₘ = Set} Function _⇨ₚ_ _⇨ᵣ_ renaming (_⇨_ to _⇨ₖ_)
 
 private variable a b z : Ty
 
@@ -81,6 +81,6 @@ instance
 
   Show-SSA : Show (SSA a b)
   Show-SSA = record { show = λ (mk ss ret) →
-    unlines (mapℕ (curry show) ss ∷ʳ ("return " ++ show ret)) }
+    unlines (mapℕ (curry show) ss ∷ʳ ("return " ++ show ret ++ "\n")) }
 
 -- TODO: sort out what to make private.

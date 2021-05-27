@@ -9,7 +9,7 @@ open import Data.Product using (_,_)
 
 open import Categorical.Raw
 open import Functions.Raw
-open import Fun.Type renaming (_⇨_ to _⇨ₜ_)
+-- open import Fun.Type renaming (_⇨_ to _⇨ₜ_)
 
 open import Ty
 open import Index
@@ -33,10 +33,9 @@ open _⇨_ public
 
 instance
 
-  homomorphism : Homomorphism _⇨_ _⇨ₜ_ ⦃ Hₒ = id-Hₒ ⦄
-  homomorphism = record { Fₘ = λ (mk r) → mk (swizzle r) }
-
-  -- TODO: I think we'll want to use inductive extensional equality
+  homomorphism : Homomorphism _⇨_ Function
+  homomorphism = record { Fₘ = swizzle ∘ unMk }
+  -- homomorphism = record { Fₘ = λ (mk r) → swizzle r }
 
   -- TODO: Generalize routing to any target category with Ty as objects. Later
   -- to any Cartesian category.

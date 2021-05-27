@@ -9,7 +9,6 @@ import Categorical.Raw
 
 import Functions
 import Ty
-import Fun
 import Primitive
 import Routing
 import Linearize
@@ -18,4 +17,4 @@ import Dot
 
 import Examples.Add
 
--- import Test
+import Test

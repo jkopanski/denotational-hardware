@@ -14,7 +14,6 @@ open import Categorical.Object
 open import Categorical.Equiv
 open import Ty
 open import Functions.Type
-open import Fun.Type
 
 private variable a b z : Ty
 

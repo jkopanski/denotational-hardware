@@ -13,7 +13,6 @@ open import Functions.Raw
 
 open import Ty
 open import Index
-open import Fun.Raw renaming (_⇨_ to _⇨ₜ_)
 open import Routing.Type public
 
 instance
@@ -35,7 +34,7 @@ instance
 
 instance
 
-  categoryH : CategoryH _⇨_ _⇨ₜ_ 0ℓ ⦃ Hₒ = id-Hₒ ⦄
+  categoryH : CategoryH _⇨_ Function 0ℓ
   categoryH = {!!}
 
   -- Also CartesianH, CartesianClosedH, and LogicH
