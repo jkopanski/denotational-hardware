@@ -2,8 +2,12 @@
 
 module Test where
 
-open import Level
+open import Level using (0ℓ)
+open import Data.Unit using (tt)
+open import Data.Product using (_,_)
 open import Data.String hiding (show)
+open import Data.Nat
+import Data.Bool as B
 open import IO
 
 open import Show
@@ -13,16 +17,35 @@ open import Ty
 open import Index
 open import Primitive.Raw Function renaming (_⇨_ to _⇨ₚ_)
 open import Routing.Raw renaming (_⇨_ to _⇨ᵣ_)
-open import Linearize.Raw Function _⇨ₚ_ _⇨ᵣ_ renaming (_⇨_ to _⇨ₖ_)
+open import Linearize.Raw Function _⇨ₚ_ _⇨ᵣ_
 
 open import SSA
 open import Dot
 
 -- TODO: trim imports
 
+open import Ty.Utils
 open import Examples.Add
 
-example : ∀ {i o : Ty} → String → (i ⇨ₖ o) → IO {0ℓ} _
+shiftR-swap : ∀ {n} → Bool × V Bool n ⇨ Bool × V Bool n
+shiftR-swap = swap ∘ shiftR
+
+-- General feedback right-shift register
+fsr : ∀ n → (V Bool n ⇨ Bool) → (V Bool n ⇨ V Bool n)
+fsr _ f = shiftR⇃ ∘ (f ▵ id)
+
+linear : ∀ n → V Bool (suc n) → V Bool (suc n) ⇨ Bool
+linear zero (c , tt) = unitorᵉʳ
+linear (suc n) (c , cs) = (B.if c then xor else exr) ∘ second (linear n cs)
+
+lfsr : ∀ n → V Bool (suc n) → V Bool (suc n) ⇨ V Bool (suc n)
+lfsr n cs = fsr (suc n) (linear n cs)
+
+lfsr₅ : V Bool 6 ⇨ V Bool 6
+lfsr₅ = lfsr 5 (𝕥 , 𝕗 , 𝕗 , 𝕥 , 𝕗 , 𝕥 , tt)
+
+
+example : ∀ {i o : Ty} → String → (i ⇨ o) → IO {0ℓ} _
 example name f =
   do putStrLn name
      save ".ssa" (show s)
@@ -35,22 +58,22 @@ example name f =
 
 main = run do
 
-  example "id-Bool"   (id {a = Bool})
-  example "id-Bool2"  (id {a = Bool × Bool})
-  example "not"       not
-  example "and"       ∧
-  example "nand"      (not ∘ ∧)
-  example "first-not" (first {b = V Bool 2} not)
+  -- example "id-Bool"   (id {a = Bool})
+  -- example "id-Bool2"  (id {a = Bool × Bool})
+  -- example "not"       not
+  -- example "and"       ∧
+  -- example "nand"      (not ∘ ∧)
+  -- example "first-not" (first {b = V Bool 2} not)
 
-  -- example "shiftR-swap-c5" (ce.shiftR-swap {5})
-  -- example "lfsr-c5"  ce.lfsr₅
+  example "shiftR-swap-c5" (shiftR-swap {5})
+  example "lfsr-c5"  lfsr₅
 
-  example "half-add"     halfAdd
-  example "full-add"     fullAdd
-  example "ripple-add-4" (rippleAdd 4)
-  example "ripple-add-8" (rippleAdd 8)
+  -- example "half-add"     halfAdd
+  -- example "full-add"     fullAdd
+  -- example "ripple-add-4" (rippleAdd 4)
+  -- example "ripple-add-8" (rippleAdd 8)
 
-  example "carry-select-3x5" (carrySelect 3 5)
-  example "carry-select-4x4" (carrySelect 4 4)
-  example "carry-select-8x8" (carrySelect 8 8)
-  example "carry-select-16x16" (carrySelect 16 16)
+  -- example "carry-select-3x5" (carrySelect 3 5)
+  -- example "carry-select-4x4" (carrySelect 4 4)
+  -- example "carry-select-8x8" (carrySelect 8 8)
+  -- example "carry-select-16x16" (carrySelect 16 16)
