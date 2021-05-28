@@ -11,11 +11,8 @@ open import Data.List renaming (_++_ to _++ᴸ_; concat to concatᴸ; map to map
 open import Data.Nat
 
 open import Show
-open import Categorical.Object
 open import Ty
-open import Primitive.Type
 open import Index
--- open import Routing.Functor renaming (map to mapᵀ)
 open import SSA
 
 private variable a b z : Ty
