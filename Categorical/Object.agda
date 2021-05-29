@@ -30,14 +30,14 @@ record Products (obj : Set o) : Set (lsuc o) where
 
   -- TODO: redefine via fold etc
 
+open Products ⦃ … ⦄ public
+
 record Exponentials (obj : Set o) : Set (lsuc o) where
   infixr 1 _⇛_
   field
     _⇛_ : obj → obj → obj
 
 open Exponentials ⦃ … ⦄ public
-
-open Products ⦃ … ⦄ public
 
 
 record Boolean (obj : Set o) : Set (lsuc o) where
