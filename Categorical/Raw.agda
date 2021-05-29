@@ -127,8 +127,21 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   _⦂_ : (⊤ ⇨ a) → (⊤ ⇨ b) → (⊤ ⇨ a × b)
   a ⦂ b = (a ⊗ b) ∘ unitorⁱˡ
 
-
 open Cartesian ⦃ … ⦄ public
+
+record ExponentialsH
+    (obj₁ : Set o₁) ⦃ _ : Exponentials obj₁ ⦄
+    {obj₂ : Set o₂} ⦃ _ : Exponentials obj₂ ⦄ (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
+    ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
+    : Set (o₁ ⊔ o₂ ⊔ ℓ₂) where
+  private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
+  field
+    ν : {a b : obj₁} → (Fₒ a ⇛ Fₒ b) ⇨₂ Fₒ (a ⇛ b)
+
+    -- *Strong*?
+    ν⁻¹ : {a b : obj₁} → Fₒ (a ⇛ b) ⇨₂ (Fₒ a ⇛ Fₒ b)
+
+open ExponentialsH ⦃ … ⦄ public
 
 record CartesianClosed {obj : Set o}
          ⦃ _ : Products obj ⦄ ⦃ _ : Exponentials obj ⦄
