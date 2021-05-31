@@ -6,7 +6,6 @@ open import Level
 open import Function using (_∘′_)
 
 open import Categorical.Object public
-open import Categorical.Equiv  public
 
 private
   variable
@@ -23,44 +22,6 @@ record Category {obj : Set o} (_⇨_ : obj → obj → Set ℓ) : Set (o ⊔ ℓ
 
 open Category ⦃ … ⦄ public
 
-
--- Category homomorphism (functor)
-record CategoryH {obj₁ : Set o₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁)
-                 {obj₂ : Set o₂} (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂)
-                 q ⦃ _ : Equivalent q _⇨₂_ ⦄
-                 ⦃ _ : Category _⇨₁_ ⦄
-                 ⦃ _ : Category _⇨₂_ ⦄
-                 ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
-                 ⦃ H : Homomorphism _⇨₁_ _⇨₂_ ⦄
-       : Set (o₁ ⊔ ℓ₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
-  field
-    F-id : Fₘ (id {_⇨_ = _⇨₁_}{a = a}) ≈ id
-    F-∘  : ∀ (g : b ⇨₁ c) (f : a ⇨₁ b) → Fₘ (g ∘ f) ≈ Fₘ g ∘ Fₘ f
-
-open CategoryH ⦃ … ⦄ public
-
-
-record ProductsH
-    (obj₁ : Set o₁) ⦃ _ : Products obj₁ ⦄
-    {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
-    ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
-    : Set (o₁ ⊔ o₂ ⊔ ℓ₂) where
-  private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
-  field
-    -- https://ncatlab.org/nlab/show/monoidal+functor
-    ε : ⊤ ⇨₂ Fₒ ⊤
-    μ : {a b : obj₁} → Fₒ a × Fₒ b ⇨₂ Fₒ (a × b)
-
-    -- *Strong*
-    ε⁻¹ : Fₒ ⊤ ⇨₂ ⊤
-    μ⁻¹ : {a b : obj₁} → Fₒ (a × b) ⇨₂ Fₒ a × Fₒ b
-
-open ProductsH ⦃ … ⦄ public
-
-id-ProductsH : ∀ {obj : Set o} ⦃ _ : Products obj ⦄
-                 {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
-             → ProductsH obj _⇨_ ⦃ Hₒ = id-Hₒ ⦄
-id-ProductsH = record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id }
 
 record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
          (_⇨′_ : obj → obj → Set ℓ) : Set (o ⊔ ℓ) where
@@ -129,19 +90,6 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
 
 open Cartesian ⦃ … ⦄ public
 
-record ExponentialsH
-    (obj₁ : Set o₁) ⦃ _ : Exponentials obj₁ ⦄
-    {obj₂ : Set o₂} ⦃ _ : Exponentials obj₂ ⦄ (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
-    ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
-    : Set (o₁ ⊔ o₂ ⊔ ℓ₂) where
-  private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
-  field
-    ν : {a b : obj₁} → (Fₒ a ⇛ Fₒ b) ⇨₂ Fₒ (a ⇛ b)
-
-    -- *Strong*?
-    ν⁻¹ : {a b : obj₁} → Fₒ (a ⇛ b) ⇨₂ (Fₒ a ⇛ Fₒ b)
-
-open ExponentialsH ⦃ … ⦄ public
 
 record CartesianClosed {obj : Set o}
          ⦃ _ : Products obj ⦄ ⦃ _ : Exponentials obj ⦄
@@ -168,3 +116,64 @@ record Logic {obj : Set o} ⦃ products : Products obj ⦄ ⦃ boolean : Boolean
     cond : Bool × (a × a) ⇨ a
 
 open Logic ⦃ … ⦄ public
+
+
+-- Homomorphisms. Maybe move to a new module.
+
+open import Categorical.Equiv  public
+
+-- Category homomorphism (functor)
+record CategoryH {obj₁ : Set o₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁)
+                 {obj₂ : Set o₂} (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂)
+                 q ⦃ _ : Equivalent q _⇨₂_ ⦄
+                 ⦃ _ : Category _⇨₁_ ⦄
+                 ⦃ _ : Category _⇨₂_ ⦄
+                 ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
+                 ⦃ H : Homomorphism _⇨₁_ _⇨₂_ ⦄
+       : Set (o₁ ⊔ ℓ₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
+  field
+    F-id : Fₘ (id {_⇨_ = _⇨₁_}{a = a}) ≈ id
+    F-∘  : ∀ (g : b ⇨₁ c) (f : a ⇨₁ b) → Fₘ (g ∘ f) ≈ Fₘ g ∘ Fₘ f
+
+open CategoryH ⦃ … ⦄ public
+
+record ProductsH
+    (obj₁ : Set o₁) ⦃ _ : Products obj₁ ⦄
+    {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
+    ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
+    : Set (o₁ ⊔ o₂ ⊔ ℓ₂) where
+  private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
+  field
+    -- https://ncatlab.org/nlab/show/monoidal+functor
+    ε : ⊤ ⇨₂ Fₒ ⊤
+    μ : {a b : obj₁} → Fₒ a × Fₒ b ⇨₂ Fₒ (a × b)
+
+    -- *Strong*
+    ε⁻¹ : Fₒ ⊤ ⇨₂ ⊤
+    μ⁻¹ : {a b : obj₁} → Fₒ (a × b) ⇨₂ Fₒ a × Fₒ b
+
+  -- Maybe useful along with second′ and _⊗′_
+  first′ : {a b c : obj₁} ⦃ _ : Cartesian _⇨₂_ ⦄
+         → (Fₒ a ⇨₂ Fₒ c) → (Fₒ (a × b) ⇨₂ Fₒ (c × b))
+  first′ f = μ ∘ first f ∘ μ⁻¹
+
+open ProductsH ⦃ … ⦄ public
+
+id-ProductsH : ∀ {obj : Set o} ⦃ _ : Products obj ⦄
+                 {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
+             → ProductsH obj _⇨_ ⦃ Hₒ = id-Hₒ ⦄
+id-ProductsH = record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id }
+
+record ExponentialsH
+    (obj₁ : Set o₁) ⦃ _ : Exponentials obj₁ ⦄
+    {obj₂ : Set o₂} ⦃ _ : Exponentials obj₂ ⦄ (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
+    ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
+    : Set (o₁ ⊔ o₂ ⊔ ℓ₂) where
+  private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
+  field
+    ν : {a b : obj₁} → (Fₒ a ⇛ Fₒ b) ⇨₂ Fₒ (a ⇛ b)
+
+    -- *Strong*?
+    ν⁻¹ : {a b : obj₁} → Fₒ (a ⇛ b) ⇨₂ (Fₒ a ⇛ Fₒ b)
+
+open ExponentialsH ⦃ … ⦄ public
