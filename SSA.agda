@@ -11,7 +11,7 @@ open import Data.Product using (_,_)
 open import Data.Nat using (ℕ; suc; zero)
 open import Data.String hiding (toList; show)
 open import Data.List using (List; []; [_]; _∷_; upTo; reverse; _∷ʳ_)
-       renaming (length to lengthᴸ; zipWith to zipWithᴸ)
+       renaming (length to lengthᴸ; zipWith to zipWithᴸ; map to mapᴸ)
 
 open import Categorical.Raw
 open import Functions.Raw
@@ -37,51 +37,91 @@ record Id (z : Ty) : Set where
 Ref : Ty → Set
 Ref = Indexed Id
 
-record Statement : Set where
-  constructor mk
-  field
-    prim : String
-    {i}  : Ty
-    ins  : Ref i
-    o    : Ty
+mutual
 
-mk′ : ∀ {i}{o} → (i ⇨ₚ o) → Ref i → Statement
-mk′ {o = o} p r = mk (show p) r o
+  record Statement : Set where
+    inductive
+    constructor mk
+    field
+      comp# : ℕ
+      op : Op
+      {i} : Ty
+      ins : Ref i
+      o   : Ty
 
-SSA : Set
-SSA = List Statement
+  SSA : Set
+  SSA = List Statement
 
--- record SSA : Set where
---   constructor mk
---   field
---     ss : List Statement
+  data Op : Set where
+    primₒ : String → Op
+    applyₒ : Op
+    curryₒ : SSA → Op
 
-refs : ℕ → Ref b
-refs comp# = tabulate′ (mk comp#)
+  mk′ : ∀ {i}{o} → ℕ → (i ⇨ᵤ o) → Ref i → Statement × ℕ
+  mk′ {i}{o} comp# u r = first (λ op → mk comp# op r o) (mkOp u)
+   where
+     next = suc comp#
+     mkOp : (i ⇨ᵤ o) → Op × ℕ
+     mkOp (`prim p)  = primₒ (show p) , next
+     mkOp `apply     = applyₒ , next
+     mkOp (`curry f) = first curryₒ (ssa′ next f)
 
-ssaᵏ : ℕ → Ref a → (a ⇨ₖ b) → List Statement → SSA
-ssaᵏ _ ins ⌞ r ⌟ ss = reverse (mk "Out" (⟦ r ⟧′ ins) ⊤ ∷ ss)
-ssaᵏ comp# ins (f ∘·first p ∘ r) ss with ⟦ r ⟧′ ins ; ... | x ､ y =
-  ssaᵏ (suc comp#) (refs comp# ､ y) f (mk′ p x ∷ ss)
+  refs : ℕ → Ref b
+  refs comp# = tabulate′ (mk comp#)
 
-ssa : (a ⇨ₖ b) → SSA
-ssa {a} f = ssaᵏ 1 (refs 0) f [ mk "In" · a ]
+  ssa : (a ⇨ₖ b) → SSA
+  ssa f = exl (ssa′ 1 f)
 
-mapℕ : {A B : Set} → (ℕ → A → B) → List A → List B
-mapℕ f as = zipWithᴸ f (upTo (lengthᴸ as)) as
+  ssa′ : ℕ → (a ⇨ₖ b) → SSA × ℕ
+  ssa′ {a} prim# f = ssaᵏ 1 (refs 0) f [ mk 0 (primₒ "In") · a ]
+   where
+    ssaᵏ : ∀ {a b} → ℕ → Ref a → (a ⇨ₖ b) → List Statement → SSA × ℕ
+    ssaᵏ comp# ins ⌞ r ⌟ ss = reverse (mk comp# (primₒ "Out") (⟦ r ⟧′ ins) ⊤ ∷ ss) , suc comp#
+    ssaᵏ comp# ins (f ∘·first u ∘ r) ss with ⟦ r ⟧′ ins
+    ... | x ､ y with mk′ comp# u x
+    ...            | s , comp#′ =
+      ssaᵏ comp#′ (refs comp# ､ y) f (s ∷ ss)
+
+-- mapℕ : {A B : Set} → (ℕ → A → B) → List A → List B
+-- mapℕ f as = zipWithᴸ f (upTo (lengthᴸ as)) as
+
+instance
+  Show-Id : Show (Id z)
+  Show-Id = record { show = λ (mk comp# j) → "x" ++ show comp# ++ show j }
+
+private
+ 
+  indent-lines : String → String
+  indent-lines = unlines ∘ mapᴸ ("  " ++_) ∘ lines
+
+  mutual
+
+    show-Op : Op → String
+    show-Op (primₒ s) = s
+    show-Op applyₒ = "apply"
+    show-Op (curryₒ f) = "curry " ++ parensIfSpace ("\n" ++ indent-lines (show-SSA f))
+
+    show-Stmt : Statement → String
+    show-Stmt (mk comp# op ins o) =
+      show (refs {o} comp#) ++ " = " ++ show-Op op ++ " "
+              ++ parensIfSpace (show ins)
+
+    show-SSA : SSA → String
+    show-SSA ssa = unlines (show-SSA′ ssa)
+     where
+       show-SSA′ : SSA → List String
+       show-SSA′ [] = []
+       show-SSA′ (s ∷ ss) = show-Stmt s ∷ show-SSA′ ss
 
 instance
 
-  Show-Id : ∀ {z} → Show (Id z)
-  Show-Id = record {show = λ (mk comp# j) → "x" ++ show comp# ++ show j}
+  Show-Op : Show Op
+  Show-Op = record { show = show-Op }
 
-  Show-Stmt : Show (ℕ × Statement)
-  Show-Stmt = record { show = 
-    λ (comp# , mk prim ins o) →
-      show (refs {o} comp#) ++ " = " ++ prim ++ " " ++ parensIfSpace (show ins)
-   }
+  Show-Stmt : Show Statement
+  Show-Stmt = record { show = show-Stmt }
 
   Show-SSA : Show SSA
-  Show-SSA = record { show = unlines ∘ mapℕ (curry show) }
+  Show-SSA = record { show = show-SSA }
 
 -- TODO: sort out what to make private.
