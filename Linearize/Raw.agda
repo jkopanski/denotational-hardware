@@ -9,7 +9,7 @@ module Linearize.Raw {o}{objₘ : Set o} ⦃ _ : Products objₘ ⦄ ⦃ _ : Exp
              (_⇨ᵣ_ : obj → obj → Set ℓ) (let infix 0 _⇨ᵣ_; _⇨ᵣ_ = _⇨ᵣ_)
              ⦃ _ : CartesianClosed _⇨ₘ_ ⦄   -- monoidal suffices?
              ⦃ _ : Cartesian _⇨ᵣ_ ⦄   -- braided suffices
-             -- The rest are for ⟦_⟧ₖ
+             -- The rest are for ⟦_⟧ₖ. Maybe move them into a submodule.
              ⦃ Hₒ : Homomorphismₒ obj objₘ ⦄
              ⦃ Hₚ : Homomorphism _⇨ₚ_ _⇨ₘ_ ⦄
              ⦃ Hᵣ : Homomorphism _⇨ᵣ_ _⇨ₘ_ ⦄
@@ -29,8 +29,8 @@ mutual
 
   ⟦_⟧ₖ : (a ⇨ b) → (Fₒ a ⇨ₘ Fₒ b)
   ⟦ ⌞ r ⌟ ⟧ₖ = Fₘ r
-  ⟦ f ∘·first u ∘ r ⟧ₖ = ⟦ f ⟧ₖ ∘ μ ∘ first ⟦ u ⟧ᵤ ∘ μ⁻¹ ∘ Fₘ r
-
+  ⟦ f ∘·first u ∘ r ⟧ₖ = ⟦ f ⟧ₖ ∘ first′ ⟦ u ⟧ᵤ ∘ Fₘ r
+                     -- ⟦ f ⟧ₖ ∘ μ ∘ first ⟦ u ⟧ᵤ ∘ μ⁻¹ ∘ Fₘ r
 
 -- Types for curry & apply:
 -- 
@@ -45,11 +45,13 @@ mutual
 -- apply ∘ first ν⁻¹       : Fₒ (a ⇛ b) × Fₒ a ⇨ₘ Fₒ b
 -- apply ∘ first ν⁻¹ ∘ μ⁻¹ : Fₒ ((a ⇛ b) × a) ⇨ₘ Fₒ b
 
+-- TODO: maybe move semantics to Type (for all categories in the project)
+
 route : (a ⇨ᵣ b) → (a ⇨ b)
 route = ⌞_⌟
 
 primᵤ : (a ⇨ᵤ b) → (a ⇨ b)
-primᵤ p = ⌞ unitorᵉʳ ⌟ ∘·first p ∘ unitorⁱʳ
+primᵤ u = ⌞ unitorᵉʳ ⌟ ∘·first u ∘ unitorⁱʳ
 
 prim : (a ⇨ₚ b) → (a ⇨ b)
 prim p = primᵤ (`prim p)
@@ -85,6 +87,9 @@ f ⊗ₖ g = secondₖ g ∘ₖ firstₖ f
 
 instance
 
+  homomorphism : Homomorphism _⇨_ _⇨ₘ_
+  homomorphism = record { Fₘ = ⟦_⟧ₖ }
+
   category : Category _⇨_
   category = record { id = route id ; _∘_ = _∘ₖ_ }
 
@@ -111,8 +116,5 @@ instance
             ; xor   = prim xor
             ; cond  = prim cond
             }
-
-  homomorphism : Homomorphism _⇨_ _⇨ₘ_
-  homomorphism = record { Fₘ = ⟦_⟧ₖ }
 
   -- TODO: CategoryH, CartesianH, etc.
