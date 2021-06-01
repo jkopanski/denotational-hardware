@@ -6,5 +6,8 @@ open import Categorical.Laws
 
 open import Functions.Raw public
 
--- TODO
+-- TODO: Prove the laws
+
+
+
 
