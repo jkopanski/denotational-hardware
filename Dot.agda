@@ -86,7 +86,7 @@ comp (mk comp# op {i} ins o) = comp′ comp# name i ins o ++ᴸ subs
  where
    name : String
    name = case op of λ
-     { (primₒ p) → show p ; applyₒ → "apply" ; (curryₒ f) → "" }
+     { (primₒ str) → str ; applyₒ → "apply" ; (curryₒ f) → "" }
 
    subs : List String
    subs = case op of λ
