@@ -9,8 +9,8 @@ The common algebraic abstraction is categories, as described in the talks [*From
 
 The semantics of various representations are given by mappings from operationally motivated representations to their essential denotations.
 Those mappings are required to be homomorphic with respect to the shared programming interface.
-This requirement yields a collection of homomorphism equations whose solution is a correct implementation.
-As a happy byproduct, the homomorphisms also ensure that all expected laws hold.
+This requirement yields a collection of homomorphism equations all solutions of which are correct implementations.
+As a happy byproduct, the homomorphisms also ensure that all expected laws hold (assuming equivalence is denotational).
 
 ## Dependencies
 
