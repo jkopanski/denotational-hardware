@@ -4,6 +4,7 @@ import Show
 import Categorical.Object
 import Categorical.Equiv
 import Categorical.Raw
+import Categorical.Laws
 
 import Functions
 import Ty
