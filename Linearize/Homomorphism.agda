@@ -1,10 +1,10 @@
 {-# OPTIONS --safe --without-K #-}
 
-module Routing.Homomorphism where
+module Linearize.Homomorphism where
 
 open import Functions.Raw
 
-open import Routing.Raw public
+open import Linearize.Raw public
 
 {-
 
