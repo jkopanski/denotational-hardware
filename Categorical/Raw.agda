@@ -137,6 +137,7 @@ record CategoryH {obj₁ : Set o₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ�
 
 open CategoryH ⦃ … ⦄ public
 
+
 record ProductsH
     (obj₁ : Set o₁) ⦃ _ : Products obj₁ ⦄
     {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
@@ -152,10 +153,10 @@ record ProductsH
     ε⁻¹ : Fₒ ⊤ ⇨₂ ⊤
     μ⁻¹ : {a b : obj₁} → Fₒ (a × b) ⇨₂ Fₒ a × Fₒ b
 
-  -- Maybe useful along with second′ and _⊗′_
-  first′ : {a b c : obj₁} ⦃ _ : Cartesian _⇨₂_ ⦄
-         → (Fₒ a ⇨₂ Fₒ c) → (Fₒ (a × b) ⇨₂ Fₒ (c × b))
-  first′ f = μ ∘ first f ∘ μ⁻¹
+  -- -- Maybe useful along with second′ and _⊗′_
+  -- first′ : {a b c : obj₁} ⦃ _ : Cartesian _⇨₂_ ⦄
+  --        → (Fₒ a ⇨₂ Fₒ c) → (Fₒ (a × b) ⇨₂ Fₒ (c × b))
+  -- first′ f = μ ∘ first f ∘ μ⁻¹
 
 open ProductsH ⦃ … ⦄ public
 
@@ -163,6 +164,25 @@ id-ProductsH : ∀ {obj : Set o} ⦃ _ : Products obj ⦄
                  {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
              → ProductsH obj _⇨_ ⦃ Hₒ = id-Hₒ ⦄
 id-ProductsH = record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id }
+
+-- Cartesian homomorphism (cartesian functor)
+record CartesianH
+         {obj₁ : Set o₁} ⦃ _ : Products obj₁ ⦄ (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁)
+         {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂)
+         q ⦃ _ : Equivalent q _⇨₂_ ⦄
+         ⦃ _ : Cartesian _⇨₁_ ⦄
+         ⦃ _ : Cartesian _⇨₂_ ⦄
+         ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
+         ⦃ H : Homomorphism _⇨₁_ _⇨₂_ ⦄
+         ⦃ H : ProductsH obj₁ _⇨₂_ ⦄
+       : Set (o₁ ⊔ ℓ₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
+  field
+    F-!   : ∀ {a : obj₁} → Fₘ {a = a} ! ≈ ε ∘ !
+    F-exl : ∀ {a b : obj₁} → Fₘ exl ∘ μ {a = a}{b} ≈ exl
+    F-exr : ∀ {a b : obj₁} → Fₘ exr ∘ μ {a = a}{b} ≈ exr
+    F-▵   : ∀ {a c d} {f : a ⇨₁ c}{g : a ⇨₁ d} → Fₘ (f ▵ g) ≈ μ ∘ (Fₘ f ▵ Fₘ g)
+
+open CartesianH ⦃ … ⦄ public
 
 record ExponentialsH
     (obj₁ : Set o₁) ⦃ _ : Exponentials obj₁ ⦄
@@ -177,3 +197,5 @@ record ExponentialsH
     ν⁻¹ : {a b : obj₁} → Fₒ (a ⇛ b) ⇨₂ (Fₒ a ⇛ Fₒ b)
 
 open ExponentialsH ⦃ … ⦄ public
+
+-- TODO: CartesianClosedH
