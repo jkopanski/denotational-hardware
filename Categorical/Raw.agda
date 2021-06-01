@@ -32,7 +32,7 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
     !   : a ⇨ ⊤
     exl : a × b ⇨ a
     exr : a × b ⇨ b
-    _▵_ : ∀ {a c d} → a ⇨ c → (a ⇨ d) → (a ⇨ c × d)
+    _▵_ : ∀ {a c d} → (a ⇨ c) → (a ⇨ d) → (a ⇨ c × d)
 
   dup : a ⇨ a × a
   dup = id ▵ id
@@ -199,3 +199,47 @@ record ExponentialsH
 open ExponentialsH ⦃ … ⦄ public
 
 -- TODO: CartesianClosedH
+
+record BooleanH
+    (obj₁ : Set o₁) ⦃ _ : Boolean obj₁ ⦄
+    {obj₂ : Set o₂} ⦃ _ : Boolean obj₂ ⦄ (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
+    ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
+    : Set (o₁ ⊔ o₂ ⊔ ℓ₂) where
+  private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
+  field
+    β : Bool ⇨₂ Fₒ Bool
+
+open BooleanH ⦃ … ⦄ public
+
+id-booleanH : {obj : Set o} ⦃ _ : Boolean obj ⦄
+              {_⇨₁_ : obj → obj → Set ℓ₁} {_⇨₂_ : obj → obj → Set ℓ₂}
+              ⦃ cat₂ : Category _⇨₂_ ⦄
+            → BooleanH obj _⇨₂_ ⦃ Hₒ = id-Hₒ ⦄
+id-booleanH = record { β = id }
+
+record LogicH
+    {obj₁ : Set o₁} (_⇨₁′_ : obj₁ → obj₁ → Set ℓ₁)
+    {obj₂ : Set o₂} (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
+    q ⦃ _ : Equivalent q _⇨₂′_ ⦄
+    ⦃ _ : Boolean obj₁ ⦄ ⦃ _ : Products obj₁ ⦄ ⦃ _ : Logic _⇨₁′_ ⦄
+    ⦃ _ : Boolean obj₂ ⦄ ⦃ _ : Products obj₂ ⦄ ⦃ _ : Logic _⇨₂′_ ⦄
+    ⦃ _ : Cartesian _⇨₂′_ ⦄
+    ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
+    ⦃ H : Homomorphism _⇨₁′_ _⇨₂′_ ⦄
+    ⦃ productsH : ProductsH obj₁ _⇨₂′_ ⦄
+    ⦃ booleanH  : BooleanH obj₁ _⇨₂′_ ⦄
+  : Set (o₁ ⊔ ℓ₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
+  private infix 0 _⇨₁_; _⇨₁_ = _⇨₁′_
+  private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
+
+  field
+    F-false : Fₘ false ∘ ε ≈ β ∘ false
+    F-true  : Fₘ true  ∘ ε ≈ β ∘ true
+    F-not   : Fₘ not   ∘ β ≈ β ∘ not
+    F-∧     : Fₘ ∧   ∘ μ ∘ (β ⊗ β) ≈ β ∘ ∧
+    F-∨     : Fₘ ∨   ∘ μ ∘ (β ⊗ β) ≈ β ∘ ∨
+    F-xor   : Fₘ xor ∘ μ ∘ (β ⊗ β) ≈ β ∘ xor
+
+open LogicH ⦃ … ⦄ public
+
+-- TODO: id-logicH
