@@ -29,8 +29,8 @@ mutual
 
   ⟦_⟧ₖ : (a ⇨ b) → (Fₒ a ⇨ₘ Fₒ b)
   ⟦ ⌞ r ⌟ ⟧ₖ = Fₘ r
-  ⟦ f ∘·first u ∘ r ⟧ₖ = ⟦ f ⟧ₖ ∘ first′ ⟦ u ⟧ᵤ ∘ Fₘ r
-                     -- ⟦ f ⟧ₖ ∘ μ ∘ first ⟦ u ⟧ᵤ ∘ μ⁻¹ ∘ Fₘ r
+  ⟦ f ∘·first u ∘ r ⟧ₖ = ⟦ f ⟧ₖ ∘ μ ∘ first ⟦ u ⟧ᵤ ∘ μ⁻¹ ∘ Fₘ r
+                     -- ⟦ f ⟧ₖ ∘ first′ ⟦ u ⟧ᵤ ∘ Fₘ r
 
 -- Types for curry & apply:
 -- 
