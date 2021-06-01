@@ -66,7 +66,7 @@ MAlonzo/RTE.hs:9:1: error:
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ```
 
-You can fix this with:
+You can fix this error with:
 
 ```
 cabal v2-install ieee754
