@@ -2,6 +2,5 @@
 
 module Routing where
 
-open import Routing.Raw          public  -- exports Routing.Type
--- open import Routing.Homomorphism public
+open import Routing.Homomorphism public  -- exports Routing.Type and Routing.Raw
 -- open import Routing.Laws         public

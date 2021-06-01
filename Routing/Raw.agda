@@ -27,16 +27,3 @@ instance
     ; exr = mk right
     ; _▵_ = λ (mk f) (mk g) → mk λ { (left i) → f i ; (right j) → g j }
     }
-
-{-
-
--- TODO:
-
-instance
-
-  categoryH : CategoryH _⇨_ Function 0ℓ
-  categoryH = {!!}
-
-  -- Also CartesianH, CartesianClosedH, and LogicH
-
--}
