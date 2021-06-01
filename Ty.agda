@@ -43,6 +43,13 @@ module ty-instances where
              → ProductsH Ty _⇨_
     productsH = record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id }
 
+    exponentialsH : ∀ {ℓ o}{obj : Set o} ⦃ _ : Products obj ⦄
+                    ⦃ _ : Boolean obj ⦄ ⦃ _ : Exponentials obj ⦄
+                    {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
+             → ExponentialsH Ty _⇨_
+    exponentialsH = record { ν = id ; ν⁻¹ = id }
+
+
 open import Data.Nat
 
 -- # of atomic values (bits or functions) in each value of a given type
