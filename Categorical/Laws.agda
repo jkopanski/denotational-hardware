@@ -4,7 +4,7 @@ module Categorical.Laws where
 
 open import Level
 
-open import Categorical.Raw
+open import Categorical.Raw as R hiding (Category)
 open import Categorical.Equiv
 
 open ≈-Reasoning
@@ -16,9 +16,9 @@ private
     a b c d e : obj
     a′ b′ c′ d′ e′ : obj
 
-record LawfulCategory {obj : Set o} (_⇨′_ : obj → obj → Set ℓ)
-                      q ⦃ equiv : Equivalent q _⇨′_ ⦄
-                      ⦃ ⇨Category : Category _⇨′_ ⦄
+record Category {obj : Set o} (_⇨′_ : obj → obj → Set ℓ)
+                q ⦃ equiv : Equivalent q _⇨′_ ⦄
+                ⦃ ⇨Category : R.Category _⇨′_ ⦄
        : Set (suc o ⊔ ℓ ⊔ suc q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
