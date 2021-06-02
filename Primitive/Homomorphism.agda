@@ -4,6 +4,7 @@ open import Level
 
 open import Categorical.Raw
 open import Categorical.Equiv
+open import Categorical.Homomorphism
 open import Categorical.Laws as L hiding (Cartesian)
 open import Ty
 
