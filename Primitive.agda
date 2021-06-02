@@ -5,6 +5,7 @@
 open import Level
 
 open import Categorical.Raw
+open import Categorical.Equiv
 
 module Primitive
     {o ℓ} {obj : Set o}

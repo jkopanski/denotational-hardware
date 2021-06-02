@@ -11,7 +11,7 @@ data Ty : Set where
   _`×_  : Ty → Ty → Ty
   _`⇛_  : Ty → Ty → Ty
 
-open import Categorical.Raw
+open import Categorical.Homomorphism
 
 module ty-instances where
 

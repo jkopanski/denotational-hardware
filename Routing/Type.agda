@@ -8,6 +8,7 @@ open import Data.Sum
 open import Data.Product using (_,_)
 
 open import Categorical.Raw
+open import Categorical.Equiv
 open import Functions.Raw
 -- open import Fun.Type renaming (_⇨_ to _⇨ₜ_)
 

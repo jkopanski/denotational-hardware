@@ -9,6 +9,7 @@ open import Data.Product as × using (_,_; proj₁; proj₂; <_,_>)
 import Data.Bool as B
 
 open import Categorical.Raw
+open import Categorical.Equiv
 
 open import Functions.Type public
 

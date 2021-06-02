@@ -1,6 +1,6 @@
 {-# OPTIONS --safe --without-K #-}
 
-open import Categorical.Raw
+open import Categorical.Homomorphism
 
 module Linearize.Raw {o}{objₘ : Set o} ⦃ _ : Products objₘ ⦄ ⦃ _ : Exponentials objₘ ⦄
              {ℓₘ}(_⇨ₘ_ : objₘ → objₘ → Set ℓₘ) (let infix 0 _⇨ₘ_; _⇨ₘ_ = _⇨ₘ_)
