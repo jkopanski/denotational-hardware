@@ -84,4 +84,6 @@ A common first step is to prove specific homomorphism properties of type `Catego
 As of 2021-06-01, many of the proofs in [agda-machines](https://github.com/conal/agda-machines) have not been moved over.
 You can peek there for hints or start fresh as an exercise.
 
-*More to come here.*
+See the [open issues](https://github.com/conal/agda-hardware/issues).
+
+As another source of tasks, `git grep TODO`.
