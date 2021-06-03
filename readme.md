@@ -34,7 +34,7 @@ Makefile targets:
     *   `Equiv`: Basic interface for morphism equivalences and homomorphisms.
     *   `Raw`: Category classes (including cartesian and cartesian closed).
         "Raw" as in lacking laws (adopting this use of "raw" from agda-stdlib).
-        Homomorphism classes are here too, but should probably move to their own module.
+    *   `Homomorphism`: Homomorphism classes for categories, cartesian categories, etc.
 *   `Ty` (module and directory, as with a few others below): Inductive representation of types/objects with booleans, products, and exponentials, along with mappings to objects in other categories.
 *   `Primitive`: "Symbolic" (data type) representation of some common primitives, along with their homomorphic meanings.
     Currently monolithic, but may need some rethinking for modularity.
