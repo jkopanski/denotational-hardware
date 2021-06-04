@@ -37,6 +37,8 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   dup : a ⇨ a × a
   dup = id ▵ id
 
+  -- The following operations will probably move to Monoidal or Braided
+
   infixr 7 _⊗_
   _⊗_ : (a ⇨ c) → (b ⇨ d) → (a × b ⇨ c × d)
   f ⊗ g = f ∘ exl ▵ g ∘ exr
