@@ -17,8 +17,8 @@ private
     a′ b′ c′ d′ e′ : obj
 
 record Category {obj : Set o} (_⇨′_ : obj → obj → Set ℓ)
-                q ⦃ equiv : Equivalent q _⇨′_ ⦄
-                ⦃ ⇨Category : R.Category _⇨′_ ⦄
+                q ⦃ _ : Equivalent q _⇨′_ ⦄
+                ⦃ _ : R.Category _⇨′_ ⦄
        : Set (suc o ⊔ ℓ ⊔ suc q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
@@ -39,7 +39,7 @@ open Category ⦃ … ⦄ public
 
 
 record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄ (_⇨′_ : obj → obj → Set ℓ)
-                 q ⦃ equiv : Equivalent q _⇨′_ ⦄
+                 q ⦃ _ : Equivalent q _⇨′_ ⦄
                  ⦃ _ : R.Cartesian _⇨′_ ⦄
        : Set (suc o ⊔ ℓ ⊔ suc q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
