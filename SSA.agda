@@ -68,10 +68,10 @@ mutual
   refs comp# = tabulate′ (mk comp#)
 
   ssa : (a ⇨ₖ b) → SSA
-  ssa f = exl (ssa′ 1 f)
+  ssa f = exl (ssa′ 0 f)
 
   ssa′ : ℕ → (a ⇨ₖ b) → SSA × ℕ
-  ssa′ {a} prim# f = ssaᵏ 1 (refs 0) f [ mk 0 (primₒ "In") † a ]
+  ssa′ {a} comp# f = ssaᵏ (suc comp#) (refs comp#) f [ mk comp# (primₒ "In") † a ]
    where
     ssaᵏ : ∀ {a b} → ℕ → Ref a → (a ⇨ₖ b) → List Statement → SSA × ℕ
     ssaᵏ comp# ins ⌞ r ⌟ ss = reverse (mk comp# (primₒ "Out") (⟦ r ⟧′ ins) ⊤ ∷ ss) , suc comp#
