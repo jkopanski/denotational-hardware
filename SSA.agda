@@ -94,7 +94,8 @@ private
     show-Op : Op → String
     show-Op (primₒ s) = s
     show-Op applyₒ = "apply"
-    show-Op (curryₒ f) = "curry " ++ parensIfSpace ("\n" ++ indent-lines (show-SSA f))
+    show-Op (curryₒ f) =
+      "curry " ++ parensIfSpace ("\n" ++ indent-lines (show-SSA f))
 
     show-Stmt : Statement → String
     show-Stmt (mk comp# op ins o) =
@@ -102,7 +103,7 @@ private
               ++ parensIfSpace (show ins)
 
     show-SSA : SSA → String
-    show-SSA ssa = -- unlines (mapᴸ show-Stmt ssa)  -- fails termination check :/
+    show-SSA ssa = -- unlines (mapᴸ show-Stmt ssa)  -- termination check :(
                    unlines (show-SSA′ ssa)
      where
        show-SSA′ : SSA → List String
