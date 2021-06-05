@@ -2,8 +2,6 @@
 
 -- Generate static single assignment form from linearized morphism.
 
--- To insert before Dot.
-
 module SSA where
 
 open import Level using (0ℓ) -- temp?
@@ -21,7 +19,7 @@ open import Ty
 open import Index
 open import Primitive.Type renaming (_⇨_ to _⇨ₚ_)
 open import Routing.Type renaming (_⇨_ to _⇨ᵣ_)
-open import Linearize.Type {objₘ = Set} Function _⇨ₚ_ _⇨ᵣ_ renaming (_⇨_ to _⇨ₖ_)
+open import Linearize.Type Function _⇨ₚ_ _⇨ᵣ_ renaming (_⇨_ to _⇨ₖ_)
 
 private variable a b z : Ty
 
