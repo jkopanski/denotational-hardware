@@ -46,12 +46,6 @@ swizzle r x = tabulate (lookup x ∘ r)
 
 open import Data.List renaming (map to mapᴸ) hiding (zip; zipWith)
 
-path : Index z a → List Bool
-path bit       = []
-path fun       = []
-path (left  i) = 𝕗 ∷ path i
-path (right j) = 𝕥 ∷ path j
-
 infixr 4 _､_
 data Indexed (h : Ty → Set) : Ty → Set where
   † : Indexed h ⊤
@@ -116,7 +110,13 @@ module index-instances where
 
     show-index : Show (Index z a)
     show-index = record { show = fromList ∘ mapᴸ (bool 'l' 'r') ∘ path }
-     
+     where
+      path : Index z a → List Bool
+      path bit       = []
+      path fun       = []
+      path (left  i) = 𝕗 ∷ path i
+      path (right j) = 𝕥 ∷ path j
+
     show-indexed : ∀ {h} ⦃ _ : ∀ {z} → Show (h z) ⦄ → Show (Indexed h a)
     show-indexed {h = h} = record { show = go 𝕗 }
      where
