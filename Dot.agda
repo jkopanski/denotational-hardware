@@ -19,35 +19,35 @@ private variable a b z : Ty
 
 -- private
 
-nest : List String → String
-nest = (_++ "\n}") ∘ ("{\n" ++_) ∘
-          unlines ∘ mapᴸ (λ s → "  " ++ s ++ ";")
+nest : String → List String → List String → List String
+nest gty prelude ss = (gty ++ " {") ∷ mapᴸ ("  " ++_) (prelude ++ᴸ ss) ∷ʳ "}"
 
 -- TODO: Try dropping the semicolons.
 
-package : List String → String
-package = ("digraph " ++_) ∘ nest ∘ (prelude ++ᴸ_)
- where
-   prelude : List String
-   prelude =
-     "margin=0" ∷
-     "rankdir=LR" ∷
-     "node [shape=Mrecord]" ∷
-     "bgcolor=transparent" ∷
-     "nslimit=20" ∷
-     "ranksep=0.75" ∷
-     []
+-- graph : String → List String → List String → String
+-- graph sort prelude ss = sort ++ " " ++ concat (nest (prelude ++ᴸ ss))
 
-subgraph : List String → String
-subgraph = ("subgraph " ++_) ∘ nest ∘ (prelude ++ᴸ_)
- where
-   prelude : List String
-   prelude =
-    "margin=8" ∷
-    "fontsize=20" ∷
-    "labeljust=r" ∷
-    "color=DarkGreen" ∷
-    []
+package : List String → String
+package = unlines ∘ nest "digraph"
+  ( "margin=0"
+  ∷ "compound=true"
+  ∷ "rankdir=LR"
+  ∷ "node [shape=Mrecord]"
+  ∷ "bgcolor=transparent"
+  ∷ "nslimit=20"
+  ∷ "ranksep=0.75"
+  ∷ [])
+
+cluster : ℕ → String
+cluster comp# = "cluster_" ++ show comp#
+
+subgraph : ℕ → List String → List String
+subgraph comp# = nest ("subgraph " ++ cluster comp#)
+  ( "margin=8"
+  ∷ "fontsize=20"
+  ∷ "labeljust=r"
+  ∷ "color=DarkGreen"
+  ∷ [])
 
 -- 1 [label="{{<In0>|<In1>}|⊕|{<Out0>}}"];
 -- 0:Out1 -> 0:In0;
@@ -73,7 +73,7 @@ wire src dst = port "Out" src ++ " -> " ++  port "In" dst
 
 comp′ : ℕ → String → (i : Ty) → Ref i → Ty → List String
 comp′ comp# p i ins o with #atoms i + #atoms o
-... | zero = []  -- drop disconnected components
+-- ... | zero = []  -- drop disconnected components
 ... | _    =
   (show comp# ++
    " [label=\"" ++
@@ -86,16 +86,16 @@ comp (mk comp# op {i} ins o) = comp′ comp# name i ins o ++ᴸ subs
  where
    name : String
    name = case op of λ
-     { (primₒ str) → str ; applyₒ → "apply" ; (curryₒ f) → "" }
+     { (primₒ str) → str ; applyₒ → "apply" ; (curryₒ f) → "curry" }
 
    subs : List String
    subs = case op of λ
      { (primₒ _) → []
      ; applyₒ → []
-     ; (curryₒ f) → -- subgraph (concatᴸ (mapᴸ comp f)) ∷ []  -- termination
-                    subgraph (concatᴸ (mapᴸ-comp f)) ∷ []
+     ; (curryₒ f) → -- subgraph comp# (concatᴸ (mapᴸ comp f))  -- termination :(
+                    subgraph comp# (concatᴸ (mapᴸ-comp f))
      } where mapᴸ-comp : SSA → List (List String)
-             mapᴸ-comp [] = []
+             mapᴸ-comp []       = []
              mapᴸ-comp (s ∷ ss) = comp s ∷ mapᴸ-comp ss
 
 -- TODO: How can I persuade the termination checker that the "mapᴸ comp f" form
