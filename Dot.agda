@@ -90,8 +90,8 @@ comp (mk comp# op {i} ins o) = comp′ comp# name i ins o ++ᴸ subs
 
    subs : List String
    subs = case op of λ
-     { (primₒ _) → []
-     ; applyₒ → []
+     { (primₒ _)  → []
+     ; applyₒ     → []
      ; (curryₒ f) → -- subgraph comp# (concatᴸ (mapᴸ comp f))  -- termination :(
                     subgraph comp# (concatᴸ (mapᴸ-comp f))
      } where mapᴸ-comp : SSA → List (List String)
