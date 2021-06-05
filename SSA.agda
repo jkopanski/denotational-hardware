@@ -102,7 +102,8 @@ private
               ++ parensIfSpace (show ins)
 
     show-SSA : SSA → String
-    show-SSA ssa = unlines (show-SSA′ ssa)
+    show-SSA ssa = -- unlines (mapᴸ show-Stmt ssa)  -- fails termination check :/
+                   unlines (show-SSA′ ssa)
      where
        show-SSA′ : SSA → List String
        show-SSA′ [] = []
