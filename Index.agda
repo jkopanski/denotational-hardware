@@ -62,16 +62,16 @@ data Indexed (h : Ty → Set) : Ty → Set where
 private variable h : Ty → Set
 
 lookup′ : Indexed h a → Indexer h a
-lookup′ [ x ]b   bit      = x
+lookup′ [ x ]b  bit       = x
+lookup′ [ x ]f  fun       = x
 lookup′ (u ､ v) (left  i) = lookup′ u i
 lookup′ (u ､ v) (right i) = lookup′ v i
-lookup′ [ f ]f  fun       = f
 
 tabulate′ : ∀ {a h} → Indexer h a → Indexed h a
 tabulate′ {  `⊤  } f = †
 tabulate′ {`Bool } f = [ f bit ]b
-tabulate′ {_ `× _} f = tabulate′ (f ∘ left) ､ tabulate′ (f ∘ right)
 tabulate′ {_ `⇛ _} f = [ f fun ]f
+tabulate′ {_ `× _} f = tabulate′ (f ∘ left) ､ tabulate′ (f ∘ right)
 
 swizzle′ : Swizzle a b → (Indexed h a → Indexed h b)
 swizzle′ r a = tabulate′ (lookup′ a ∘ r)
@@ -81,26 +81,26 @@ swizzle′ r a = tabulate′ (lookup′ a ∘ r)
 map : ∀ {h k} → (∀ {z} → h z → k z) → Indexed h a → Indexed k a
 map g † = †
 map g [ b ]b = [ g b ]b
-map g (u ､ v) = map g u ､ map g v
 map g [ f ]f = [ g f ]f
+map g (u ､ v) = map g u ､ map g v
 
 toList : ∀ {X} → Indexed (λ _ → X) a → List X
 toList †       = []
 toList [ b ]b  = [ b ]
-toList (u ､ v) = toList u ++ toList v
 toList [ f ]f  = [ f ]
+toList (u ､ v) = toList u ++ toList v
 
 indices : Indexed (λ z → Index z a) a
 indices {  `⊤  } = †
 indices {`Bool } = [ bit ]b
-indices {a `× b} = map left indices ､ map right indices
 indices {a `⇛ b} = [ fun ]f
+indices {a `× b} = map left indices ､ map right indices
 
 zip : ∀ {h k} → Indexed h a → Indexed k a → Indexed (λ z → h z × k z) a
 zip †        †        = †
 zip [ x ]b  [ y ]b    = [ x , y ]b
-zip (u ､ v) (u′ ､ v′) = zip u u′ ､ zip v v′
 zip [ x ]f  [ y ]f    = [ x , y ]f
+zip (u ､ v) (u′ ､ v′) = zip u u′ ､ zip v v′
 
 zipWith : ∀ {h k m} → (∀ {z} → h z → k z → m z) → Indexed h a → Indexed k a → Indexed m a
 zipWith f u v = map (uncurry f) (zip u v)
@@ -124,5 +124,5 @@ module index-instances where
        go : Bool → Indexed h a → String
        go p † = "tt"
        go p [ b ]b = parensIfSpace (show b)
-       go p (u ､ v) = (if p then parens else id) (go 𝕥 u ++ᴸ " , " ++ᴸ go 𝕗 v)
        go p [ f ]f = parensIfSpace (show f)
+       go p (u ､ v) = (if p then parens else id) (go 𝕥 u ++ᴸ " , " ++ᴸ go 𝕗 v)
