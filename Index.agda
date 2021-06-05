@@ -54,10 +54,10 @@ path (right j) = 𝕥 ∷ path j
 
 infixr 4 _､_
 data Indexed (h : Ty → Set) : Ty → Set where
-  · : Indexed h ⊤
+  † : Indexed h ⊤
   [_]b : h Bool → Indexed h Bool
-  _､_ : Indexed h a → Indexed h b → Indexed h (a × b)
   [_]f : h (a ⇛ b) → Indexed h (a ⇛ b)
+  _､_ : Indexed h a → Indexed h b → Indexed h (a × b)
 
 private variable h : Ty → Set
 
@@ -68,7 +68,7 @@ lookup′ (u ､ v) (right i) = lookup′ v i
 lookup′ [ f ]f  fun       = f
 
 tabulate′ : ∀ {a h} → Indexer h a → Indexed h a
-tabulate′ {  `⊤  } f = ·
+tabulate′ {  `⊤  } f = †
 tabulate′ {`Bool } f = [ f bit ]b
 tabulate′ {_ `× _} f = tabulate′ (f ∘ left) ､ tabulate′ (f ∘ right)
 tabulate′ {_ `⇛ _} f = [ f fun ]f
@@ -79,25 +79,25 @@ swizzle′ r a = tabulate′ (lookup′ a ∘ r)
 -- TODO: Tabulate and indexed are very similar. Reconcile?
 
 map : ∀ {h k} → (∀ {z} → h z → k z) → Indexed h a → Indexed k a
-map g · = ·
+map g † = †
 map g [ b ]b = [ g b ]b
 map g (u ､ v) = map g u ､ map g v
 map g [ f ]f = [ g f ]f
 
 toList : ∀ {X} → Indexed (λ _ → X) a → List X
-toList ·       = []
+toList †       = []
 toList [ b ]b  = [ b ]
 toList (u ､ v) = toList u ++ toList v
 toList [ f ]f  = [ f ]
 
 indices : Indexed (λ z → Index z a) a
-indices {  `⊤  } = ·
+indices {  `⊤  } = †
 indices {`Bool } = [ bit ]b
 indices {a `× b} = map left indices ､ map right indices
 indices {a `⇛ b} = [ fun ]f
 
 zip : ∀ {h k} → Indexed h a → Indexed k a → Indexed (λ z → h z × k z) a
-zip ·        ·        = ·
+zip †        †        = †
 zip [ x ]b  [ y ]b    = [ x , y ]b
 zip (u ､ v) (u′ ､ v′) = zip u u′ ､ zip v v′
 zip [ x ]f  [ y ]f    = [ x , y ]f
@@ -122,7 +122,7 @@ module index-instances where
      where
        -- Flag says we're in the left part of a pair
        go : Bool → Indexed h a → String
-       go p · = "tt"
+       go p † = "tt"
        go p [ b ]b = parensIfSpace (show b)
        go p (u ､ v) = (if p then parens else id) (go 𝕥 u ++ᴸ " , " ++ᴸ go 𝕗 v)
        go p [ f ]f = parensIfSpace (show f)

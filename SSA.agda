@@ -73,7 +73,7 @@ mutual
   ssa f = exl (ssa′ 1 f)
 
   ssa′ : ℕ → (a ⇨ₖ b) → SSA × ℕ
-  ssa′ {a} prim# f = ssaᵏ 1 (refs 0) f [ mk 0 (primₒ "In") · a ]
+  ssa′ {a} prim# f = ssaᵏ 1 (refs 0) f [ mk 0 (primₒ "In") † a ]
    where
     ssaᵏ : ∀ {a b} → ℕ → Ref a → (a ⇨ₖ b) → List Statement → SSA × ℕ
     ssaᵏ comp# ins ⌞ r ⌟ ss = reverse (mk comp# (primₒ "Out") (⟦ r ⟧′ ins) ⊤ ∷ ss) , suc comp#
@@ -81,9 +81,6 @@ mutual
     ... | x ､ y with mk′ comp# u x
     ...            | s , comp#′ =
       ssaᵏ comp#′ (refs comp# ､ y) f (s ∷ ss)
-
--- mapℕ : {A B : Set} → (ℕ → A → B) → List A → List B
--- mapℕ f as = zipWithᴸ f (upTo (lengthᴸ as)) as
 
 instance
   Show-Id : Show (Id z)
