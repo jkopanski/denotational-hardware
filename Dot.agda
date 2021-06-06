@@ -41,12 +41,16 @@ package = unlines ∘ nest "digraph"
 cluster : ℕ → String
 cluster comp# = "cluster_" ++ show comp#
 
+subgraph-name : ℕ → String
+subgraph-name n = "f" ++ show n
+
 subgraph : ℕ → List String → List String
 subgraph comp# = nest ("subgraph " ++ cluster comp#)
   ( "margin=8"
-  ∷ "fontsize=20"
   ∷ "labeljust=r"
   ∷ "color=DarkGreen"
+  ∷ "fontsize=10"
+  ∷ ("label=" ++ subgraph-name comp#)
   ∷ [])
 
 -- 1 [label="{{<In0>|<In1>}|⊕|{<Out0>}}"];
@@ -86,7 +90,7 @@ comp (mk comp# op {i} ins o) = comp′ comp# name i ins o ++ᴸ subs
  where
    name : String
    name = case op of λ
-     { (primₒ str) → str ; applyₒ → "apply" ; (curryₒ f) → "curry" }
+     { (primₒ str) → str ; applyₒ → "apply" ; (curryₒ f) → "curry " ++ subgraph-name comp# }
 
    subs : List String
    subs = case op of λ
