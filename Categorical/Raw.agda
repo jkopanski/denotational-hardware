@@ -18,7 +18,7 @@ record Category {obj : Set o} (_⇨_ : obj → obj → Set ℓ) : Set (o ⊔ ℓ
   infixr 9 _∘_
   field
     id  : a ⇨ a
-    _∘_ : (g : b ⇨ c) (f : a ⇨ b) → (a ⇨ c)
+    _∘_ : {a b c : obj} → (g : b ⇨ c) (f : a ⇨ b) → (a ⇨ c)
 
 open Category ⦃ … ⦄ public
 
