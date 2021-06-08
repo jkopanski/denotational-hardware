@@ -58,22 +58,24 @@ example name f =
 
 main = run do
 
-  example "id-Bool"   (id {a = Bool})
-  example "id-Bool2"  (id {a = Bool × Bool})
-  example "not"       not
-  example "and"       ∧
-  example "nand"      (not ∘ ∧)
-  example "first-not" (first {b = V Bool 2} not)
+  -- example "id-Bool"   (id {a = Bool})
+  -- example "id-Bool2"  (id {a = Bool × Bool})
+  -- example "not"       not
+  -- example "and"       ∧
+  -- example "nand"      (not ∘ ∧)
+  -- example "first-not" (first {b = V Bool 2} not)
 
-  example "shiftR-swap-c5" (shiftR-swap {5})
-  example "lfsr-c5"  lfsr₅   -- wrong
+  -- example "shiftR-swap-c5" (shiftR-swap {5})
+  -- example "lfsr-c5"  lfsr₅   -- wrong
 
-  example "half-add"     halfAdd
-  example "full-add"     fullAdd
-  example "ripple-add-4" (rippleAdd 4)
-  example "ripple-add-8" (rippleAdd 8)
+  -- example "half-add"     halfAdd
+  -- example "full-add"     fullAdd
+  -- example "ripple-add-4" (rippleAdd 4)
+  -- example "ripple-add-8" (rippleAdd 8)
 
-  example "carry-select-3x5" (carrySelect 3 5)
-  example "carry-select-4x4" (carrySelect 4 4)
-  example "carry-select-8x8" (carrySelect 8 8)
-  -- example "carry-select-16x16" (carrySelect 16 16)
+  -- example "carry-select-3x5" (carrySelect 3 5)
+  -- example "carry-select-4x4" (carrySelect 4 4)
+  -- example "carry-select-8x8" (carrySelect 8 8)
+  -- -- example "carry-select-16x16" (carrySelect 16 16)
+
+  example "curry-and" (curry ∧)
