@@ -46,6 +46,8 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄ (_⇨′_ : obj → obj 
   field
     ⦃ ⇨Category ⦄ : Category _⇨_ q
     exl▵exr : ∀ {a b : obj} → exl ▵ exr ≈ id {a = a × b}
+    exl∘▵ : ∀ {f : a ⇨ b} {g : a ⇨ c} → exl ∘ (f ▵ g) ≈ f
+    exr∘▵ : ∀ {f : a ⇨ b} {g : a ⇨ c} → exr ∘ (f ▵ g) ≈ g
     -- ...
 
     ▵≈ : ∀ {f g : a ⇨ c} {h k : a ⇨ d} → h ≈ k → f ≈ g → h ▵ f ≈ k ▵ g
