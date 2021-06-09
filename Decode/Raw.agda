@@ -1,7 +1,5 @@
 {-# OPTIONS --safe --without-K #-}
 
-open import Level
-
 open import Categorical.Raw
 open import Categorical.Equiv
 open import Categorical.Laws as L hiding (Category)
@@ -22,8 +20,8 @@ module decode-raw-instances where
 
     category : Category _⇨_
     category = record
-      { id = λ {a} → mk id id (
-          begin
+      { id = λ {a} → mk id id
+          (begin
              d a ∘ id
            ≈⟨ identityʳ ⟩
              d a
@@ -31,8 +29,8 @@ module decode-raw-instances where
              id ∘ d a
            ∎)
       ; _∘_ = λ {a b c} (mk g g′ spec-g) (mk f f′ spec-f) →
-          mk (g ∘ f) (g′ ∘ f′) (
-             begin
+          mk (g ∘ f) (g′ ∘ f′)
+            (begin
                d c ∘ (g′ ∘ f′)
              ≈˘⟨ assoc ⟩
                (d c ∘ g′) ∘ f′
@@ -49,4 +47,4 @@ module decode-raw-instances where
       where open D
             open ≈-Reasoning
     
-  -- TODO: Cartesian
+  -- TODO: Cartesian, CartesianClosed, and Logic.
