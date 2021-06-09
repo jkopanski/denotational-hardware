@@ -17,7 +17,7 @@ private
     a′ b′ c′ d′ e′ : obj
 
 record Category {obj : Set o} (_⇨′_ : obj → obj → Set ℓ)
-                q ⦃ _ : Equivalent q _⇨′_ ⦄
+                q ⦃ equiv : Equivalent q _⇨′_ ⦄
                 ⦃ _ : R.Category _⇨′_ ⦄
        : Set (suc o ⊔ ℓ ⊔ suc q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
