@@ -21,9 +21,6 @@ instance
 
   open import Categorical.Homomorphism
 
-  -- equivalence : Equivalent q _⇨_
-  -- equivalence = {!!}
-
   categoryH : CategoryH _⇨_ _↠_ q
   categoryH = record { F-id = refl ; F-∘ = refl }
 
