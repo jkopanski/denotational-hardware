@@ -13,14 +13,6 @@ data Ty : Set where
 
 open import Categorical.Homomorphism
 
-toObj : ∀{o}{obj : Set o} ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄ ⦃ _ : Exponentials obj ⦄
-  → Ty → obj
-toObj   `⊤     = ⊤
-toObj  `Bool   = Bool
-toObj (a `× b) = toObj a × toObj b
-toObj (a `⇛ b) = toObj a ⇛ toObj b
-
-
 module ty-instances where
 
   instance
@@ -37,7 +29,13 @@ module ty-instances where
     homomorphismₒ : ∀ {o}{obj : Set o}
         ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄ ⦃ _ : Exponentials obj ⦄
       → Homomorphismₒ Ty obj
-    homomorphismₒ {obj = obj} = record { Fₒ = toObj }
+    homomorphismₒ {obj = obj} = record { Fₒ = h }
+      where
+        h : Ty → obj
+        h   `⊤     = ⊤
+        h  `Bool   = Bool
+        h (a `× b) = h a × h b
+        h (a `⇛ b) = h a ⇛ h b
 
     productsH : ∀ {ℓ o}{obj : Set o} ⦃ _ : Products obj ⦄
                   ⦃ _ : Boolean obj ⦄ ⦃ _ : Exponentials obj ⦄
