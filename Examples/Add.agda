@@ -6,20 +6,19 @@ open import Data.Nat
 open import Categorical.Raw
 open import Functions.Raw
 
-open import Ty
-
 module Examples.Add
-         {_⇨_ : Ty → Ty → Set} (let private infix 0 _⇨_; _⇨_ = _⇨_)
+         {o} {obj : Set o} ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄
+         {_⇨_ : obj → obj → Set} (let private infix 0 _⇨_; _⇨_ = _⇨_)
          ⦃ _ : Cartesian _⇨_ ⦄ ⦃ _ : Logic _⇨_ ⦄
  where
 
 -- TODO: package up module parameters into one record to pass in and open.
 
-private variable a b c : Ty
+private variable a b c : obj
 
 -- Morphism with carry-in and carry-out
 infix 0 _⇨ᶜ_
-_⇨ᶜ_ : Ty → Ty → Set
+_⇨ᶜ_ : obj → obj → Set
 a ⇨ᶜ b = Bool × a ⇨ b × Bool
 
 -- Summands ⇨ sum , carry
@@ -67,7 +66,7 @@ speculate f = cond ∘ second (constˡ f false ▵ constˡ f true)
 -- (cᵢ , (f (false , a) , f (true , a)))
 -- cond (cᵢ , (f (false , a) , f (true , a)))
 
-V² : Ty → ℕ → ℕ → Ty
+V² : obj → ℕ → ℕ → obj
 V² a m n = V (V a n) m
 
 carrySelect : ∀ m n → V² (Bool × Bool) m n ⇨ᶜ V² Bool m n
