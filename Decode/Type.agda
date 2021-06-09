@@ -2,7 +2,16 @@
 
 -- Change-of-representation functor. Some implementations restrict the shapes of
 -- data, thus requiring decoding from a restricted representation into a more
--- natural type.
+-- natural type. For instance, a digital circuit manipulates bit vectors that
+-- representing a variety of types.
+
+-- For instance, circuits map between bit vector streams so their objects are
+-- natural numbers, and a circuit is some `h : m ↠ n` for `m n : ℕ`. The meaning
+-- (homomorphic image) of `h` is some `f′ : Vec Bool m → Vec Bool n`. A more
+-- natural expression of `f′` may be a function `f : u → v`, where `Vec Bool m`
+-- and `Vec Bool n` are encodings of more natural types `u` and `v`.
+--
+-- TODO: How does this functor relate to the worker-wrapper transformation?
 
 open import Level
 
