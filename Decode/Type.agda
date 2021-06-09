@@ -12,17 +12,16 @@ open import Categorical.Equiv
 module Decode.Type {o} {obj : Set o}
                    {ℓ} (_↠_ : obj → obj → Set ℓ) ⦃ _ : Category _↠_ ⦄
                    q ⦃ _ : Equivalent q _↠_ ⦄
+                   {o′} {obj′ : Set o′} (⟦_⟧ : obj′ → obj)
  where
 
 -- Decoder
-record D : Set (o ⊔ ℓ) where
+record D : Set (o ⊔ o′ ⊔ ℓ) where
   constructor mk
   field
-    { τ τ′ } : obj  -- meaning vs representation
-    d : τ′ ↠ τ      -- interpret representation
-
--- TODO: Generalize τ′ to an indexed subset of obj, i.e., a set i (of object
--- indices) and a function i → obj.
+    { τ  } : obj     -- meaning
+    { τ′ } : obj′    -- representation
+    d : ⟦ τ′ ⟧ ↠ τ   -- interpret representation ("decode")
 
 infix 0 _⇨_
 record _⇨_ (a : D) (b : D) : Set (q ⊔ ℓ) where
@@ -30,7 +29,7 @@ record _⇨_ (a : D) (b : D) : Set (q ⊔ ℓ) where
   open D
   field
     f  : τ  a ↠ τ  b
-    f′ : τ′ a ↠ τ′ b
+    f′ : ⟦ τ′ a ⟧ ↠ ⟦ τ′ b ⟧
     spec : d b ∘ f′ ≈ f ∘ d a
 
 module decode-type-instances where

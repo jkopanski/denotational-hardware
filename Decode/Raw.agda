@@ -7,15 +7,14 @@ open import Categorical.Equiv
 open import Categorical.Laws as L hiding (Category)
 open import Categorical.Homomorphism
 
-module Decode.Raw
-    {o} {obj : Set o}
-    {ℓ}(_↠′_ : obj → obj → Set ℓ) (let private infix 0 _↠_; _↠_ = _↠′_)
-    ⦃ _ : Category _↠_ ⦄
-    q ⦃ _ : Equivalent q _↠_ ⦄
-    ⦃ _ : L.Category _↠_ q ⦄
+module Decode.Raw {o} {obj : Set o}
+                  {ℓ} (_↠_ : obj → obj → Set ℓ) ⦃ _ : Category _↠_ ⦄
+                  q ⦃ _ : Equivalent q _↠_ ⦄
+                  {o′} {obj′ : Set o′} (⟦_⟧ : obj′ → obj)
+                  ⦃ _ : L.Category _↠_ q ⦄
  where
 
-open import Decode.Type _↠_ q public
+open import Decode.Type _↠_ q ⟦_⟧ public
 
 module decode-raw-instances where
 
