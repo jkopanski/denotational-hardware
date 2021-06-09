@@ -50,8 +50,8 @@ module decode-type-instances where
   
     -- Forgetful functor from _⇨_ to _↠_
 
-    homomorphismₛₒ : Homomorphismₒ D obj
-    homomorphismₛₒ = record { Fₒ = τ }
+    homomorphismₒ : Homomorphismₒ D obj
+    homomorphismₒ = record { Fₒ = τ }
 
-    homomorphismₛ : Homomorphism _⇨_ _↠_
-    homomorphismₛ = record { Fₘ = _⇨_.f }
+    homomorphism : Homomorphism _⇨_ _↠_
+    homomorphism = record { Fₘ = _⇨_.f }
