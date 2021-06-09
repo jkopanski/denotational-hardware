@@ -10,8 +10,11 @@
 -- (homomorphic image) of `h` is some `f′ : Vec Bool m → Vec Bool n`. A more
 -- natural expression of `f′` may be a function `f : u → v`, where `Vec Bool m`
 -- and `Vec Bool n` are encodings of more natural types `u` and `v`.
---
+
 -- TODO: How does this functor relate to the worker-wrapper transformation?
+
+-- TODO: Are we defining an adjunction? If not, should it be; and if so, is it a
+-- common adjunction?
 
 open import Level
 
