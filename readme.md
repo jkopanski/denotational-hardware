@@ -73,7 +73,7 @@ MAlonzo/RTE.hs:9:1: error:
 You can fix this error with:
 
 ```
-cabal v2-install ieee754
+cabal install --lib ieee754
 ```
 
 You can find out how to more about this issue [here](https://github.com/agda/agda/issues/3619#issuecomment-665232148) and
