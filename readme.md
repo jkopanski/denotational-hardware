@@ -14,7 +14,10 @@ As a happy byproduct, the homomorphisms also ensure that all expected laws hold 
 
 ## Dependencies
 
-*   [Agda compiler](https://agda.readthedocs.io/en/latest/getting-started/installation.html#installing-the-agda-and-the-agda-mode-programs)
+*   [Agda compiler](https://agda.readthedocs.io/en/latest/getting-started/installation.html#installing-the-agda-and-the-agda-mode-programs).
+    Known to work with Agda 2.6.1.*.
+*   The [Agda standard library (agda-stdlib)](https://github.com/agda/agda-stdlib).
+    Known to work with version 1.4.
 *   Haskell [ieee754 package](https://github.com/agda/agda/issues/3619) (as described under Troubleshooting below)
 *   [GraphViz](https://graphviz.org/) for circuit graph rendering
 
