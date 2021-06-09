@@ -41,6 +41,7 @@ Makefile targets:
 *   `Routing`: information-rearranging category, indexed by `Ty`.
 *   `Linearize`: linearized representation of morphisms as alternating routings and primitives.
     Convenient for generating pictures and code.
+*   `Decode`: A category construction and change-of-representation functor.
 *   `SSA`: a simple static single-assignment ("SSA") program representation.
     Recursive, in order to support exponentials.
     Conversion from linearized morphisms.
