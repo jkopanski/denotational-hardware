@@ -22,7 +22,7 @@ _⇨ᶜ_ : obj → obj → Set
 a ⇨ᶜ b = Bool × a ⇨ b × Bool
 
 -- Summands ⇨ sum , carry
--- λ (c , a) → (c ⊕ z , c ∧ a)
+-- λ (a , b) → (a ⊕ b , a ∧ b)
 halfAdd : Bool ⇨ᶜ Bool
 halfAdd = xor ▵ ∧
 
