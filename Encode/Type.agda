@@ -27,6 +27,8 @@ module Encode.Type {o} {obj : Set o}
                    {o′} {obj′ : Set o′} (⟦_⟧ : obj′ → obj)
  where
 
+-- TODO: Is this version the categorical dual of Decode?
+
 -- Encoder
 record D : Set (o ⊔ o′ ⊔ ℓ) where
   constructor mk
