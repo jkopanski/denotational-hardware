@@ -55,11 +55,9 @@ instance
             Fₘ (cond {a = a}) ∘ μ {a = Bool} {b = a × a} ∘ (β ⊗ μ {a = a} {b = a} )
         ≡⟨⟩
           cond ∘ id ∘ (id ⊗ id)
-        ≈˘⟨ assoc ⟩
-          (cond ∘ id) ∘ (id ⊗ id)
+        ≈⟨ ∘≈ʳ identityˡ ⟩
+          cond ∘ (id ⊗ id)
         ≈⟨ ∘≈ʳ id⊗id ⟩
-          (cond ∘ id) ∘ id
-        ≈⟨ identityʳ ⟩
           cond ∘ id
         ≈⟨ identityʳ ⟩
             cond
@@ -86,11 +84,9 @@ instance
           Fₘ f ∘ μ {a = Bool} {b = Bool} ∘ (β ⊗ β)
         ≡⟨⟩
           f′ ∘ id ∘ (id ⊗ id)
-        ≈˘⟨ assoc ⟩
-          (f′ ∘ id) ∘ (id ⊗ id)
+        ≈⟨ ∘≈ʳ identityˡ ⟩
+          f′ ∘ (id ⊗ id)
         ≈⟨ ∘≈ʳ id⊗id ⟩
-          (f′ ∘ id) ∘ id
-        ≈⟨ identityʳ ⟩
           f′ ∘ id
         ≈⟨ identityʳ ⟩
           f′
