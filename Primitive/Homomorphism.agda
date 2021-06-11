@@ -70,7 +70,7 @@ instance
       Fₘ-f∘ε≈β∘f f {f′} ⦃ _≡_.refl ⦄ =
         begin
           Fₘ f ∘ ε
-        ≡⟨ _≡_.refl ⟩
+        ≡⟨⟩
           f′ ∘ ε
         ≈⟨ identityʳ ⟩
           f′
@@ -84,7 +84,7 @@ instance
       Fₘ-f∘μ∘β⊗β≈β∘f f {f′} ⦃ _≡_.refl ⦄ =
         begin
           Fₘ f ∘ μ {a = Bool} {b = Bool} ∘ (β ⊗ β)
-        ≡⟨ _≡_.refl ⟩
+        ≡⟨⟩
           f′ ∘ id ∘ (id ⊗ id)
         ≈˘⟨ assoc ⟩
           (f′ ∘ id) ∘ (id ⊗ id)
