@@ -7,6 +7,8 @@ import Categorical.Raw
 import Categorical.Homomorphism
 import Categorical.Laws
 
+import Categorical.Comma
+
 import Functions
 import Ty
 import Primitive
