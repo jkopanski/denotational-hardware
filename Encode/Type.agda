@@ -27,7 +27,9 @@ module Encode.Type {o} {obj : Set o}
                    {o′} {obj′ : Set o′} (⟦_⟧ : obj′ → obj)
  where
 
--- TODO: Is this version the categorical dual of Decode?
+-- TODO: Is this version the categorical dual of Decode? Or maybe it's the dual
+-- of the decoder for the dual of the underlying category. In other words, the
+-- dual an encoder is the decoder of the dual.
 
 -- Encoder
 record D : Set (o ⊔ o′ ⊔ ℓ) where
