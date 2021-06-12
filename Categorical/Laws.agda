@@ -4,8 +4,10 @@ module Categorical.Laws where
 
 open import Level
 
-open import Categorical.Raw as R hiding (Category; Cartesian)
+open import Categorical.Raw as R hiding (Category; Cartesian; CartesianClosed)
 open import Categorical.Equiv
+open import Relation.Binary.PropositionalEquality using (_≡_)
+open import Function.Equivalence using (_⇔_)
 
 open ≈-Reasoning
 
@@ -15,6 +17,7 @@ private
     obj obj₁ obj₂ : Set o
     a b c d e : obj
     a′ b′ c′ d′ e′ : obj
+
 
 record Category {obj : Set o} (_⇨′_ : obj → obj → Set ℓ)
                 q ⦃ equiv : Equivalent q _⇨′_ ⦄
@@ -37,18 +40,21 @@ record Category {obj : Set o} (_⇨′_ : obj → obj → Set ℓ)
 
 open Category ⦃ … ⦄ public
 
+open import Data.Product using () renaming (_×_ to _×ₚ_)
 
-record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄ (_⇨′_ : obj → obj → Set ℓ)
+record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
+                 (_⇨′_ : obj → obj → Set ℓ)
                  q ⦃ _ : Equivalent q _⇨′_ ⦄
                  ⦃ _ : R.Cartesian _⇨′_ ⦄
        : Set (suc o ⊔ ℓ ⊔ suc q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
+
   field
     ⦃ ⇨Category ⦄ : Category _⇨_ q
     exl▵exr : ∀ {a b : obj} → exl ▵ exr ≈ id {a = a × b}
-    exl∘▵ : ∀ {f : a ⇨ b} {g : a ⇨ c} → exl ∘ (f ▵ g) ≈ f
-    exr∘▵ : ∀ {f : a ⇨ b} {g : a ⇨ c} → exr ∘ (f ▵ g) ≈ g
-    -- ...
+
+    ∀▵ : ∀ {f : a ⇨ b} {g : a ⇨ c} {k : a ⇨ b × c}
+        → (k ≈ f ▵ g) ⇔ ( (exl ∘ k ≈ f) ×ₚ (exr ∘ k ≈ g) )
 
     ▵≈ : ∀ {f g : a ⇨ c} {h k : a ⇨ d} → h ≈ k → f ≈ g → h ▵ f ≈ k ▵ g
 
@@ -64,5 +70,40 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄ (_⇨′_ : obj → obj 
 open Cartesian ⦃ … ⦄ public
 
 -- TODO: CartesianClosed, Logic etc.
+record CartesianClosed {obj : Set o} ⦃ _ : Products obj ⦄
+                       ⦃ _ : Exponentials obj ⦄ (_⇨′_ : obj → obj → Set ℓ)
+                       q ⦃ _ : Equivalent q _⇨′_ ⦄
+                       ⦃ _ : Products (Set q) ⦄
+                       ⦃ _ : R.CartesianClosed _⇨′_ ⦄
+       : Set (suc o ⊔ ℓ ⊔ suc q) where
+  private infix 0 _⇨_; _⇨_ = _⇨′_
+  field
+    ⦃ ⇨Cartesian ⦄ : Cartesian _⇨_ q
+
+    ∀-exp : ∀ {f : a × b ⇨ c} {k : a ⇨ (b ⇛ c)}
+           → (k ≈ curry f) ⇔ (f ≈ uncurry k)
+           -- → (k ≈ curry f) ⇔ (f ≈ apply ∘ (k ⊗ id))
+           -- → (k ≈ curry f) ⇔ (f ≈ apply ∘ first k)
+
+    curry≈ : ∀ {f g : a × b ⇨ c}
+           → f ≈ g → curry f ≈ curry g
+
+  curry-apply : ∀ {a b : obj} → id { a = a ⇛ b } ≈ curry apply
+  curry-apply =  from ∀-exp ⟨$⟩
+                            ( begin
+                                apply
+                              ≈⟨ sym identityʳ ⟩
+                                apply ∘ R.id
+                              ≈⟨ ∘≈ʳ (sym id⊗id) ⟩
+                                apply ∘ (R.id ⊗ R.id)
+                              ≡⟨⟩
+                                apply ∘ first R.id
+                              ≡⟨⟩
+                                uncurry R.id
+                              ∎
+                            )
+    where open import Function.Equality using (_⟨$⟩_)
+          open Function.Equivalence.Equivalence using (from)
+          open Categorical.Equiv.≈-Reasoning
 
 -- TODO: Convert homomorphisms into lawfuls.
