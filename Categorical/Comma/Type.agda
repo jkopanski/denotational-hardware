@@ -1,4 +1,5 @@
 {-# OPTIONS --safe --without-K #-}
+-- Comma categories
 
 open import Level
 
@@ -26,11 +27,34 @@ record Obj : Set (o₁ ⊔ o₂ ⊔ ℓ₃) where
     { τ₂ } : obj₂
     h : Fₒ τ₁ ⇨₃ Fₒ τ₂
 
+open Obj
+
 infix 0 _⇨_
 record _⇨_ (a : Obj) (b : Obj) : Set (q ⊔ ℓ₁ ⊔ ℓ₂) where
   constructor mk
-  open Obj
   field
     f₁ : τ₁ a ⇨₁ τ₁ b
     f₂ : τ₂ a ⇨₂ τ₂ b
     commute : Fₘ f₂ ∘ h a ≈ h b ∘ Fₘ f₁
+
+open _⇨_
+
+module comma-type-instances where
+
+  open import Categorical.Equiv
+
+  instance
+  
+    -- Forgetful functors
+
+    homomorphismₒ₁ : Homomorphismₒ Obj obj₁
+    homomorphismₒ₁ = record { Fₒ = τ₁ }
+
+    homomorphism₁ : Homomorphism _⇨_ _⇨₁_
+    homomorphism₁ = record { Fₘ = _⇨_.f₁ }
+
+    homomorphismₒ₂ : Homomorphismₒ Obj obj₂
+    homomorphismₒ₂ = record { Fₒ = τ₂ }
+
+    homomorphism₂ : Homomorphism _⇨_ _⇨₂_
+    homomorphism₂ = record { Fₘ = _⇨_.f₂ }
