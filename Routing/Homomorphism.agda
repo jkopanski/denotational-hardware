@@ -1,11 +1,11 @@
 {-# OPTIONS --safe --without-K #-}
 
 open import Level
-open import Function using (id)
+open import Function using (id) renaming (_∘_ to _∙_)
 open import Data.Unit
 open import Data.Product using (_,_)
 open import Relation.Binary.PropositionalEquality
-  renaming (refl to ≡-refl)
+  renaming (refl to ≡-refl; sym to ≡-sym; trans to ≡-trans)
 
 module Routing.Homomorphism where
 
@@ -21,17 +21,44 @@ swizzle-id : (a : Ty) → swizzle {a = a} id ≈ id
 swizzle-id `⊤         = ≡-refl
 swizzle-id `Bool      = ≡-refl
 swizzle-id (a₁ `⇛ a₂) = ≡-refl
-swizzle-id (a₁ `× a₂) = cong₂ _,_ (swizzle-id a₁) (swizzle-id a₂)
+swizzle-id (a₁ `× a₂) {(x₁ , x₂)} = cong₂ _,_ (swizzle-id a₁ {x₁}) (swizzle-id a₂ {x₂})
 
-lookup∘tabulate-id : {a : Ty}{f : Indexer Fₒ a} → ∀{z}{i : Index z a}
+lookup∘tabulate-id : (a : Ty){f : Indexer Fₒ a} → ∀{z}(i : Index z a)
                    → lookup {a = a} (tabulate {a = a} f) i ≡ f i
-lookup∘tabulate-id {f} = {!!}
+lookup∘tabulate-id a {f} i = {!!}
+
+≈-tabulate : (a : Ty){f g : Indexer Fₒ a}
+           → (∀{z}(i : Index z a) → f i ≡ g i)
+           → tabulate f ≡ tabulate g
+≈-tabulate `⊤ hip =  ≡-refl
+≈-tabulate `Bool hip = hip bit
+≈-tabulate (a `⇛ a₁) hip = hip fun
+≈-tabulate (a `× a₁) hip = cong₂ _,_ (≈-tabulate a (hip ∙ left))
+                                     (≈-tabulate a₁ (hip ∙ right))
+
 
 swizzle-∘ : {b c a : Ty}{g : Swizzle b c}{f : Swizzle a b}
           → swizzle (f ∘ g) ≈ swizzle g ∘ swizzle f
--- Here I cannot use ≈-Reasoning because the implicit x is added to the
--- left hand side, so the goal is already of a different type.
-swizzle-∘ {b} {c} {a} {g} {f} = {!!}
+swizzle-∘ {b} {c} {a} {g} {f} {x} =
+  begin
+    swizzle (f ∘ g) x
+  ≡⟨⟩
+    tabulate ((lookup x ∘ f) ∘ g)
+  ≡˘⟨ ≈-tabulate c (λ i → ≡-trans {!!} (lookup∘tabulate-id {!!} {f = lookup x ∙ f ∙ g} i) )⟩
+    tabulate (lookup (tabulate (lookup x ∘ f)) ∘ g)
+  ≡⟨⟩
+    (swizzle g ∘ swizzle f) x
+  ∎
+ where open ≡-Reasoning
+{-
+   tabulate ((lookup x ∘ f) ∘ g)
+  ≡⟨ ? ⟩
+   tabulate (lookup (tabulate (lookup x ∘ f) ∘ g))
+  ≡⟨ ≡-refl ⟩
+   swizzle g (tabulate (lookup x ∘ f))
+  ∎
+  where open ≡-Reasoning
+-}
 {-
    tabulate ((lookup x ∘ f) ∘ g)
   ≡⟨ ≡-refl ⟩
