@@ -30,12 +30,12 @@ module ty-instances where
         ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄ ⦃ _ : Exponentials obj ⦄
       → Homomorphismₒ Ty obj
     homomorphismₒ {obj = obj} = record { Fₒ = h }
-     where
-       h : Ty → obj
-       h   `⊤     = ⊤
-       h  `Bool   = Bool
-       h (a `× b) = h a × h b
-       h (a `⇛ b) = h a ⇛ h b
+      where
+        h : Ty → obj
+        h   `⊤     = ⊤
+        h  `Bool   = Bool
+        h (a `× b) = h a × h b
+        h (a `⇛ b) = h a ⇛ h b
 
     productsH : ∀ {ℓ o}{obj : Set o} ⦃ _ : Products obj ⦄
                   ⦃ _ : Boolean obj ⦄ ⦃ _ : Exponentials obj ⦄
