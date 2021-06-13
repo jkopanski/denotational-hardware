@@ -58,7 +58,7 @@ swizzle-∘ g f {x} =
 
 instance
 
-  categoryH : CategoryH _⇨_ Function 0ℓ ⦃ Hₒ = ty-instances.homomorphismₒ ⦄
+  categoryH : CategoryH _⇨_ Function 0ℓ
   categoryH = record
     { F-id = λ {a} → swizzle-id a
     ; F-∘  = λ { {g = mk g} {mk f} → swizzle-∘ g f }
