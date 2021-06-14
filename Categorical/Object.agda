@@ -3,7 +3,7 @@
 module Categorical.Object where
 
 open import Level using (Level; lift; _⊔_) renaming (suc to lsuc)
-open import Function using (_∘′_) renaming (id to id′)
+open import Function
 
 open import Data.Nat hiding (_⊔_)
 
@@ -15,8 +15,8 @@ private
   -- Iterated composition
   infixr 8 _↑_
   _↑_ : ∀ {a}{A : Set a} → (A → A) → ℕ → (A → A)
-  f ↑ zero  = id′
-  f ↑ suc n = f ∘′ (f ↑ n)
+  f ↑ zero  = id
+  f ↑ suc n = f ∘ (f ↑ n)
 
 record Products (obj : Set o) : Set (lsuc o) where
   infixr 2 _×_
