@@ -24,11 +24,10 @@ record Products (obj : Set o) : Set (lsuc o) where
     ⊤ : obj
     _×_ : obj → obj → obj
 
+  -- (Right-pointing) vectors and (perfect binary leaf) trees
   V T : obj → ℕ → obj
   V A n = ((A ×_) ↑ n) ⊤
   T A n = ((λ z → z × z) ↑ n) A
-
-  -- TODO: redefine via fold etc
 
 open Products ⦃ … ⦄ public
 
