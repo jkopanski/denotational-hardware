@@ -20,7 +20,7 @@ shiftʳ x₀ [] = []
 shiftʳ x₀ (x ∷ xs) = x₀ ∷ shiftʳ x xs
 
 avg : ℕ × ℕ × ℕ → ℕ
-avg (p , q , r) = (p + q + r) div 3
+avg (a , b , c) = (a + b + c) div 3
 
 ℕ² : Set
 ℕ² = ℕ × ℕ
@@ -47,7 +47,7 @@ conv₁ = mealy λ ((a , b) , c) → avg (a , b , c) , (b , c)
 
 conv₁-spec : conv₁ ≗ conv {m}
 conv₁-spec (_ , []) = refl
-conv₁-spec ((_ , q) , x ∷ xs) rewrite conv₁-spec ((q , x) , xs) = refl
+conv₁-spec ((_ , b) , c ∷ xs) rewrite conv₁-spec ((b , c) , xs) = refl
 
 -- Figure 1b
 
@@ -60,7 +60,7 @@ conv₂ = mealy λ ((a , b) , (c , d)) →
 
 decode₂ : Vec ℕ² m → Vec ℕ (m * 2)
 decode₂ [] = []
-decode₂ ((x , y) ∷ xys) = x ∷ y ∷ decode₂ xys
+decode₂ ((a , b) ∷ ps) = a ∷ b ∷ decode₂ ps
 
 conv₂-spec : decode₂ ∘ conv₂ {m} ≗ conv {m * 2} ∘ map₂ decode₂
 conv₂-spec {zero } (_ ,   []  ) = refl
