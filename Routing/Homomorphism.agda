@@ -2,7 +2,7 @@
 
 open import Level
 open import Function using (id) renaming (_∘_ to _∙_)
-open import Data.Product using (_,_; proj₁; proj₂)
+open import Data.Product using (_,_)
 open import Relation.Binary.PropositionalEquality
   renaming (refl to ≡-refl; sym to ≡-sym; trans to ≡-trans)
 
@@ -24,11 +24,11 @@ lookup∘tabulate (left  i) = lookup∘tabulate i
 lookup∘tabulate (right j) = lookup∘tabulate j
 
 tabulate∘lookup : {a : Ty}(x : Fₒ a) → tabulate {a = a} (lookup x) ≡ x
-tabulate∘lookup {a = `⊤}    tt = ≡-refl
-tabulate∘lookup {a = `Bool} _  = ≡-refl
-tabulate∘lookup {a = a₁ `⇛ a₂} x = ≡-refl
-tabulate∘lookup {a = a₁ `× a₂} (x₁ , x₂)
-  = cong₂ _,_ (tabulate∘lookup {a₁} x₁) (tabulate∘lookup {a₂} x₂)
+tabulate∘lookup {a = `⊤}     tt      = ≡-refl
+tabulate∘lookup {a = `Bool}   _      = ≡-refl
+tabulate∘lookup {a = a `⇛ b} f       = ≡-refl
+tabulate∘lookup {a = a `× b} (x , y) =
+  cong₂ _,_ (tabulate∘lookup {a} x) (tabulate∘lookup {b} y)
 
 ≈-tabulate : {a : Ty}{f g : Indexer Fₒ a} → (∀{z}(i : Index z a) → f i ≡ g i)
            → tabulate f ≡ tabulate g
@@ -63,38 +63,6 @@ swizzle-∘ g f {x} =
   ∎
  where open ≡-Reasoning
 
-lookup-left : {a b : Ty}{x : Fₒ a × Fₒ b} → ∀{z}(i : Index z a)
-            → (lookup {a = a `× b} x ∘ left) i ≡ lookup (proj₁ x) i
-lookup-left _ = ≡-refl
-
-swizzle-left : {a b : Ty} → swizzle {a = a `× b} {b = a} left ≈ proj₁
-swizzle-left {a} {b} {x = x₁ , x₂} =
-  begin
-    swizzle {a = a `× b} {b = a} left (x₁ , x₂)
-  ≡⟨ ≈-tabulate (lookup-left {a = a} {b = b} {x = x₁ , x₂}) ⟩
-    tabulate {a = a} (lookup x₁)
-  ≡⟨ tabulate∘lookup {a = a} x₁ ⟩
-    x₁
-  ∎
- where open ≡-Reasoning
-
-
-lookup-right : {a b : Ty}{x : Fₒ a × Fₒ b} → ∀{z}(i : Index z b)
-             → (lookup {a = a `× b} x ∘ right) i ≡ lookup (proj₂ x) i
-lookup-right _ = ≡-refl
-
-swizzle-right : {a b : Ty} → swizzle {a = a `× b} {b = b} right ≈ proj₂
-swizzle-right {a} {b} {x = x₁ , x₂} =
-  begin
-    swizzle {a = a `× b} {b = b} right (x₁ , x₂)
-  ≡⟨ ≈-tabulate (lookup-right {a = a} {b = b} {x = x₁ , x₂}) ⟩
-    tabulate {a = b} (lookup x₂)
-  ≡⟨ tabulate∘lookup {a = b} x₂ ⟩
-    x₂
-  ∎
- where open ≡-Reasoning
-
-
 instance
 
   categoryH : CategoryH _⇨_ Function 0ℓ
@@ -106,9 +74,7 @@ instance
   cartesianH : CartesianH _⇨_ Function 0ℓ
   cartesianH = record
     { F-!   = ≡-refl
-    ; F-exl = λ {a} {b} {x} → swizzle-left {a} {b} {x}
-    ; F-exr = λ {a} {b} {x} → swizzle-right {a} {b} {x}
+    ; F-exl = λ {a} {b} {(x , y)} → tabulate∘lookup {a = a} x
+    ; F-exr = λ {a} {b} {(x , y)} → tabulate∘lookup {a = b} y
     ; F-▵   = ≡-refl
     }
-
-  -- TODO: Also CartesianClosedH, and LogicH
