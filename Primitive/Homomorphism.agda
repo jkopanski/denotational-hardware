@@ -23,8 +23,6 @@ open import Primitive.Raw _↠_ public
 
 private variable a b c : obj
 
--- TODO: fill in (https://github.com/conal/agda-hardware/issues/6)
-
 instance
 
   import Categorical.Raw as C
