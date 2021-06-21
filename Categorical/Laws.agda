@@ -70,7 +70,6 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
 
 open Cartesian ⦃ … ⦄ public
 
--- TODO: CartesianClosed, Logic etc.
 record CartesianClosed {obj : Set o} ⦃ _ : Products obj ⦄
                        ⦃ _ : Exponentials obj ⦄ (_⇨′_ : obj → obj → Set ℓ)
                        q ⦃ _ : Equivalent q _⇨′_ ⦄
@@ -104,3 +103,5 @@ record CartesianClosed {obj : Set o} ⦃ _ : Products obj ⦄
     where open import Function.Equality using (_⟨$⟩_)
           open Equivalence using (from)
           open ≈-Reasoning
+
+-- TODO: Logic
