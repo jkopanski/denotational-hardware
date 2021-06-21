@@ -2,6 +2,9 @@
 
 module Functions.Laws where
 
+open import Function.Equivalence hiding (id)
+
+open import Categorical.Raw hiding (Category; Cartesian; CartesianClosed)
 open import Categorical.Laws
 open import Categorical.Equiv
 open import Functions.Raw public
@@ -34,8 +37,7 @@ module →-laws-instances (extensionality : Extensionality _ _) where
                    , (λ { {a} → cong exr k≈f▵g }))
           (λ { (exl∘k≈f , exr∘k≈g) {a} → cong₂ _,_ exl∘k≈f exr∘k≈g })
       ; ▵≈ = λ h≈k f≈g → cong₂ _,_ h≈k f≈g
-      } where open import Function.Equivalence
-              open import Categorical.Raw
+      }
 
     cartesianClosed : CartesianClosed Function _
     cartesianClosed = record
@@ -45,7 +47,6 @@ module →-laws-instances (extensionality : Extensionality _ _) where
          (λ { f≡uncurry-k {a} → extensionality λ _ →
                                   sym≡ (trans≡ (cong id f≡uncurry-k) refl≡) })
       ; curry≈ = λ f≡g → extensionality (λ _ → trans≡ f≡g refl≡)
-      } where open import Function.Equivalence hiding (id)
-              open import Categorical.Raw
+      } 
 
     -- TODO: Logic
