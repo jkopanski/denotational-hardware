@@ -117,4 +117,3 @@ instance
             ; cond  = prim cond
             }
 
-  -- TODO: CategoryH, CartesianH, etc.
