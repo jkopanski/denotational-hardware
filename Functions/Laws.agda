@@ -29,16 +29,10 @@ module →-laws-instances (extensionality : Extensionality _ _) where
     cartesian : Cartesian Function _
     cartesian = record
       { exl▵exr = refl≡
-      ; ∀▵ =
-        equivalence
-          (λ k≈f▵g
-           → (λ { {a} → cong exl k≈f▵g })
-           , (λ { {a} → cong exr k≈f▵g })
-          )
-          (λ { (proj₁∘k≈f , proj₂∘k≈g) {a}
-           → cong₂ _,_ proj₁∘k≈f proj₂∘k≈g
-             }
-          )
+      ; ∀▵ = equivalence
+          (λ k≈f▵g → (λ { {a} → cong exl k≈f▵g })
+                   , (λ { {a} → cong exr k≈f▵g }))
+          (λ { (exl∘k≈f , exr∘k≈g) {a} → cong₂ _,_ exl∘k≈f exr∘k≈g })
       ; ▵≈ = λ h≈k f≈g → cong₂ _,_ h≈k f≈g
       } where open import Function.Equivalence
               open import Categorical.Raw
@@ -47,15 +41,9 @@ module →-laws-instances (extensionality : Extensionality _ _) where
     cartesianClosed = record
       { ∀-exp =
         equivalence
-         (λ { k≡f {a , b}
-          → sym≡ (trans≡ (cong (λ fbc → fbc b) k≡f) refl≡)
-            }
-         )
-         (λ { f≡uncurry-k {a}
-          → extensionality
-             (λ _ → sym≡ (trans≡ (cong id f≡uncurry-k) refl≡))
-            }
-         )
+         (λ { k≡f {a , b} → sym≡ (trans≡ (cong (λ fbc → fbc b) k≡f) refl≡) })
+         (λ { f≡uncurry-k {a} → extensionality λ _ →
+                                  sym≡ (trans≡ (cong id f≡uncurry-k) refl≡) })
       ; curry≈ = λ f≡g → extensionality (λ _ → trans≡ f≡g refl≡)
       } where open import Function.Equivalence hiding (id)
               open import Categorical.Raw
