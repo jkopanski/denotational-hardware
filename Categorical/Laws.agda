@@ -13,11 +13,9 @@ open ≈-Reasoning
 
 private
   variable
-    o ℓ o₁ ℓ₁ o₂ ℓ₂ : Level
-    obj obj₁ obj₂ : Set o
-    a b c d e : obj
-    a′ b′ c′ d′ e′ : obj
-
+    o ℓ : Level
+    obj : Set o
+    a b c d : obj
 
 record Category {obj : Set o} (_⇨′_ : obj → obj → Set ℓ)
                 q ⦃ equiv : Equivalent q _⇨′_ ⦄
