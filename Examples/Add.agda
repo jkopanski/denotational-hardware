@@ -21,6 +21,15 @@ infix 0 _⇨ᶜ_
 _⇨ᶜ_ : obj → obj → Set
 a ⇨ᶜ b = Bool × a ⇨ b × Bool
 
+-- Note for a ⇨ᶜ b that the carry-in denotes 0 or 1, while the carry-out denotes
+-- (in these examples) 0 or 2^n. Positioning carry-in on the one side and
+-- carry-out on the other helps definitions below come out more simply. Left-in
+-- and right-out reflect the little-endian interpretation and use of
+-- right-pointing vectors, though unfortunately contradicts customary practice
+-- of writing least significant bit on the right and most significant on the
+-- left. It might instead be worth defining and using left-pointing vectors, or
+-- trying with big-endian ordering.
+
 -- Summands ⇨ sum , carry
 -- λ (a , b) → (a ⊕ b , a ∧ b)
 halfAdd : Bool ⇨ᶜ Bool
