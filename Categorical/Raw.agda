@@ -90,6 +90,26 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   _⦂_ : (⊤ ⇨ a) → (⊤ ⇨ b) → (⊤ ⇨ a × b)
   a ⦂ b = (a ⊗ b) ∘ unitorⁱˡ
 
+  open import Data.Nat
+
+  mapⱽ : ∀ n → (a ⇨ b) → (V a n ⇨ V b n)
+  mapⱽ  zero   f = !
+  mapⱽ (suc n) f = f ⊗ mapⱽ n f
+
+  unzipⱽ : ∀ n → (V (a × b) n ⇨ V a n × V b n)
+  unzipⱽ  zero   = ! ▵ !
+  unzipⱽ (suc n) = transpose ∘ second (unzipⱽ n)
+
+  -- (a × b) × (V a n × V b n) ⇨ (a × V a n) × (b × V b n)
+
+  mapᵀ : ∀ n → (a ⇨ b) → (T a n ⇨ T b n)
+  mapᵀ  zero   f = f
+  mapᵀ (suc n) f = mapᵀ n f ⊗ mapᵀ n f
+
+  unzipᵀ : ∀ n → (T (a × b) n ⇨ T a n × T b n)
+  unzipᵀ  zero   = id
+  unzipᵀ (suc n) = transpose ∘ (unzipᵀ n ⊗ unzipᵀ n)
+
 open Cartesian ⦃ … ⦄ public
 
 
