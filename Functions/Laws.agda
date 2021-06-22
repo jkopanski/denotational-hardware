@@ -32,7 +32,7 @@ module →-laws-instances (extensionality : Extensionality _ _) where
     cartesian : Cartesian Function _
     cartesian = record
       { exl▵exr = refl≡
-      ; ∀▵ = equivalence
+      ; ∀× = equivalence
           (λ k≈f▵g → (λ { {a} → cong exl k≈f▵g })
                    , (λ { {a} → cong exr k≈f▵g }))
           (λ { (exl∘k≈f , exr∘k≈g) {a} → cong₂ _,_ exl∘k≈f exr∘k≈g })
@@ -41,11 +41,11 @@ module →-laws-instances (extensionality : Extensionality _ _) where
 
     cartesianClosed : CartesianClosed Function _
     cartesianClosed = record
-      { ∀-exp =
+      { ∀⇛ =
         equivalence
-         (λ { k≡f {a , b} → sym≡ (trans≡ (cong (λ fbc → fbc b) k≡f) refl≡) })
-         (λ { f≡uncurry-k {a} → extensionality λ _ →
-                                  sym≡ (trans≡ (cong id f≡uncurry-k) refl≡) })
+         (λ { g≈f {a , b} → sym≡ (trans≡ (cong (λ fbc → fbc b) g≈f) refl≡) })
+         (λ { f≈uncurry-g {a} → extensionality λ _ →
+                                  sym≡ (trans≡ (cong id f≈uncurry-g) refl≡) })
       ; curry≈ = λ f≡g → extensionality (λ _ → trans≡ f≡g refl≡)
       } 
 

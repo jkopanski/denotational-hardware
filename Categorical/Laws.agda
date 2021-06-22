@@ -52,7 +52,7 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
     exl▵exr : ∀ {a b : obj} → exl ▵ exr ≈ id {a = a × b}
     -- TODO: prove exl▵exr rather than assuming
 
-    ∀▵ : ∀ {f : a ⇨ b} {g : a ⇨ c} {k : a ⇨ b × c}
+    ∀× : ∀ {f : a ⇨ b} {g : a ⇨ c} {k : a ⇨ b × c}
        → (k ≈ f ▵ g) ⇔ (exl ∘ k ≈ f  ×ₚ  exr ∘ k ≈ g)
 
     ▵≈ : ∀ {f g : a ⇨ c} {h k : a ⇨ d} → h ≈ k → f ≈ g → h ▵ f ≈ k ▵ g
@@ -78,15 +78,14 @@ record CartesianClosed {obj : Set o} ⦃ _ : Products obj ⦄
   field
     ⦃ ⇨Cartesian ⦄ : Cartesian _⇨_ q
 
-    ∀-exp : ∀ {f : a × b ⇨ c} {k : a ⇨ (b ⇛ c)}
-          → (k ≈ curry f) ⇔ (f ≈ uncurry k)
-          -- → (k ≈ curry f) ⇔ (f ≈ apply ∘ (k ⊗ id))
-          -- → (k ≈ curry f) ⇔ (f ≈ apply ∘ first k)
+    ∀⇛ : ∀ {f : a × b ⇨ c} {g : a ⇨ (b ⇛ c)} → (g ≈ curry f) ⇔ (f ≈ uncurry g)
+    -- Note: uncurry g ≡ apply ∘ first g ≡ apply ∘ (g ∘ id)
+    -- RHS is often written "apply ∘ (g ∘ id)"
 
     curry≈ : ∀ {f g : a × b ⇨ c} → f ≈ g → curry f ≈ curry g
 
   curry-apply : ∀ {a b : obj} → id { a = a ⇛ b } ≈ curry apply
-  curry-apply = from ∀-exp ⟨$⟩
+  curry-apply = from ∀⇛ ⟨$⟩
                   (begin
                      apply
                    ≈˘⟨ identityʳ ⟩
