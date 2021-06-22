@@ -16,7 +16,9 @@ pattern 𝕗 = B.false
 pattern 𝕥 = B.true
 
 bool : ∀ {ℓ}{σ : Set ℓ} → σ → σ → B.Bool → σ
-bool e t c = B.if_then_else_ c t e
+-- bool e t 𝕗 = e
+-- bool e t 𝕥 = t
+bool e t c = B.if c then t else e
 
 module →-instances where
 
