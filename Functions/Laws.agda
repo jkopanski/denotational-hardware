@@ -41,12 +41,10 @@ module →-laws-instances (extensionality : Extensionality _ _) where
 
     cartesianClosed : CartesianClosed Function _
     cartesianClosed = record
-      { ∀⇛ =
-        equivalence
-         (λ { g≈f {a , b} → sym≡ (trans≡ (cong (λ fbc → fbc b) g≈f) refl≡) })
-         (λ { f≈uncurry-g {a} → extensionality λ _ →
-                                  sym≡ (trans≡ (cong id f≈uncurry-g) refl≡) })
-      ; curry≈ = λ f≡g → extensionality (λ _ → trans≡ f≡g refl≡)
+      { ∀⇛ = equivalence
+               (λ { g≈f {a , b} → sym≡ (cong (λ fbc → fbc b) g≈f) })
+               (λ { f≈uncurry-g {a} → extensionality λ _ → sym≡ f≈uncurry-g })
+      ; curry≈ = λ f≡g → extensionality (λ _ → f≡g)
       } 
 
     -- TODO: Logic
