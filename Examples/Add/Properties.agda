@@ -73,22 +73,27 @@ module fullAdd where
   spec {𝕥 , 𝕥 , 𝕗} = refl≡
   spec {𝕥 , 𝕥 , 𝕥} = refl≡
 
-module rippleAdd (n : ℕ) where
+module rippleAdd where
 
   -- rippleAdd : ∀ n → V (Bool × Bool) n ⇨ᶜ V Bool n
   -- rippleAdd = ripple fullAdd
 
-  bvalⁿ : Bool → ℕ
-  bvalⁿ b = (2 ^ n) * bval b
+  module _ (n : ℕ) where
 
-  valⁿ : V Bool n → ℕ
-  valⁿ = val n
+    bvalⁿ : Bool → ℕ
+    bvalⁿ b = (2 ^ n) * bval b
 
-  i : Bool × V (Bool × Bool) n → ℕ × (ℕ × ℕ)
-  i = bval ⊗ (valⁿ ⊗ valⁿ) ∘ unzipⱽ n
+    valⁿ : V Bool n → ℕ
+    valⁿ = val n
 
-  o : V Bool n × Bool → ℕ
-  o = add ∘ (valⁿ ⊗ bvalⁿ)
+    i : Bool × V (Bool × Bool) n → ℕ × (ℕ × ℕ)
+    i = bval ⊗ (valⁿ ⊗ valⁿ) ∘ unzipⱽ n
+
+    o : V Bool n × Bool → ℕ
+    o = add ∘ (valⁿ ⊗ bvalⁿ)
+
+  -- spec : ∀ n → o n ∘ rippleAdd n ≈ (add ∘ second add) ∘ i n
+  -- spec n = {!!}
 
 -- TODO: Replace ℕ by Fin (2 ^ n) throughout this module, and leave the carry
 -- bit as a bit.
