@@ -32,7 +32,7 @@ module halfAdd where
   i = bval ⊗ bval
 
   o : Bool × Bool → ℕ
-  o (s , cₒ) = val 2 (s , cₒ , tt)
+  o (s , cₒ) = bval s + bval cₒ * 2
 
   _ : i (𝕗 , 𝕥) ≡ (0 , 1)
   _ = refl≡
@@ -58,7 +58,7 @@ module fullAdd where
   i = bval ⊗ (bval ⊗ bval)
 
   o : Bool × Bool → ℕ
-  o (s , cₒ) = val 2 (s , cₒ , tt)
+  o (s , cₒ) = bval s + bval cₒ * 2
 
   spec : o ∘ fullAdd ≈ (add ∘ second add) ∘ i
 
