@@ -16,10 +16,14 @@ module Examples.Add
 
 private variable a b c : obj
 
+Cⁱ Cᵒ : obj → obj
+Cⁱ b = Bool × b
+Cᵒ b = b × Bool
+
 -- Morphism with carry-in and carry-out
 infix 0 _⇨ᶜ_
 _⇨ᶜ_ : obj → obj → Set
-a ⇨ᶜ b = Bool × a ⇨ b × Bool
+a ⇨ᶜ b = Cⁱ a ⇨ Cᵒ b
 
 -- Note for a ⇨ᶜ b that the carry-in denotes 0 or 1, while the carry-out denotes
 -- (in these examples) 0 or 2^n. Positioning carry-in on the one side and
@@ -68,7 +72,7 @@ constˡ f a = f ∘ first a ∘ unitorⁱˡ
 -- a , b
 -- f (a , b)
 
-speculate : (Bool × a ⇨ b) → (Bool × a ⇨ b)
+speculate : (Cⁱ a ⇨ b) → (Cⁱ a ⇨ b)
 speculate f = cond ∘ second (constˡ f false ▵ constˡ f true)
 
 -- (cᵢ , a)
