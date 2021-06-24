@@ -3,7 +3,7 @@
 module Categorical.Equiv where
 
 open import Level
-open import Function using (_∘′_) renaming (id to id′)
+open import Function
 open import Relation.Binary using (Rel; IsEquivalence; Setoid)
 import Relation.Binary.Reasoning.Setoid as SetoidR
 
@@ -50,7 +50,7 @@ record Homomorphismₒ (obj₁ : Set o₁) (obj₂ : Set o₂) : Set (o₁ ⊔ o
 open Homomorphismₒ ⦃ … ⦄ public
 
 id-Hₒ : Homomorphismₒ obj obj
-id-Hₒ = record { Fₒ = id′ }
+id-Hₒ = record { Fₒ = id }
 
 record Homomorphism
   {obj₁ : Set o₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁)
@@ -61,6 +61,9 @@ record Homomorphism
     Fₘ : (a ⇨₁ b) → (Fₒ a ⇨₂ Fₒ b)
 
 open Homomorphism ⦃ … ⦄ public
+
+id-H : {obj : Set o} {_⇨_ : obj → obj → Set ℓ} → Homomorphism _⇨_ _⇨_ ⦃ Hₒ = id-Hₒ ⦄
+id-H = record { Fₘ = id }
 
 import Relation.Binary.Construct.On as On
 
