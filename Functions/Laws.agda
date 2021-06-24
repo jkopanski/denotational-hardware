@@ -10,18 +10,19 @@ open import Categorical.Equiv
 open import Functions.Raw public
 open import Axiom.Extensionality.Propositional
 
-module →-laws-instances (extensionality : Extensionality _ _) where
+module →-laws-instances where
 
   open import Level
   open import Data.Product using (_,_)
   open import Relation.Binary.PropositionalEquality
+       hiding (Extensionality)
        renaming ( refl to refl≡
                 ; trans to trans≡
                 ; sym to sym≡
                 )
   instance
 
-    category : Category Function _
+    category : Category Function zero
     category = record
       { identityˡ = refl≡
       ; identityʳ = refl≡
@@ -29,7 +30,7 @@ module →-laws-instances (extensionality : Extensionality _ _) where
       ; ∘≈        = λ { {k = k} h≈k f≈g → trans≡ h≈k (cong k f≈g) }
       }
 
-    cartesian : Cartesian Function _
+    cartesian : Cartesian Function zero
     cartesian = record
       { exl▵exr = refl≡
       ; ∀× = equivalence
@@ -39,12 +40,14 @@ module →-laws-instances (extensionality : Extensionality _ _) where
       ; ▵≈ = λ h≈k f≈g → cong₂ _,_ h≈k f≈g
       }
 
-    cartesianClosed : CartesianClosed Function _
-    cartesianClosed = record
-      { ∀⇛ = equivalence
-               (λ { g≈f {a , b} → sym≡ (cong (λ fbc → fbc b) g≈f) })
-               (λ { f≈uncurry-g {a} → extensionality λ _ → sym≡ f≈uncurry-g })
-      ; curry≈ = λ f≡g → extensionality (λ _ → f≡g)
-      } 
+    module ccc (extensionality : Extensionality _ _) where
+
+      cartesianClosed : CartesianClosed Function zero
+      cartesianClosed = record
+        { ∀⇛ = equivalence
+                 (λ { g≈f {a , b} → sym≡ (cong (λ fbc → fbc b) g≈f) })
+                 (λ { f≈uncurry-g {a} → extensionality λ _ → sym≡ f≈uncurry-g })
+        ; curry≈ = λ f≡g → extensionality (λ _ → f≡g)
+        } 
 
     -- TODO: Logic
