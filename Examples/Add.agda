@@ -16,6 +16,7 @@ module Examples.Add
 
 private variable a b c : obj
 
+-- With carry-in 
 Cⁱ Cᵒ : obj → obj
 Cⁱ b = Bool × b
 Cᵒ b = b × Bool
@@ -32,7 +33,9 @@ a ⇨ᶜ b = Cⁱ a ⇨ Cᵒ b
 -- right-pointing vectors, though unfortunately contradicts customary practice
 -- of writing least significant bit on the right and most significant on the
 -- left. It might instead be worth defining and using left-pointing vectors, or
--- trying with big-endian ordering.
+-- trying with big-endian ordering. A catch, however, is that _,_ is
+-- right-associative, so right-pointing vectors are more easier to write and
+-- read.
 
 -- Summands ⇨ sum , carry
 -- λ (a , b) → (a ⊕ b , a ∧ b)
@@ -40,7 +43,7 @@ halfAdd : Bool ⇨ᶜ Bool
 halfAdd = xor ▵ ∧
 
 fullAdd : Bool × Bool ⇨ᶜ Bool
-fullAdd = second ∨ ∘ inAssocˡ′ halfAdd ∘ second halfAdd
+fullAdd = second ∨ ∘ inAssocˡ halfAdd ∘ second halfAdd
 
 -- λ (c , (a , b)) → let (p , d) = halfAdd (a , b)
 --                       (q , e) = halfAdd (c , p) in (q , e ∨ d)
@@ -54,7 +57,7 @@ fullAdd = second ∨ ∘ inAssocˡ′ halfAdd ∘ second halfAdd
 
 ripple : (a ⇨ᶜ b) → (n : ℕ) → (V a n ⇨ᶜ V b n)
 ripple f  zero   = swap
-ripple f (suc n) = assocˡ ∘ second (ripple f n) ∘ inAssocˡ′ f
+ripple f (suc n) = assocˡ ∘ second (ripple f n) ∘ inAssocˡ f
 
 -- cᵢ , (a , as)
 -- b , (c′ , as)
