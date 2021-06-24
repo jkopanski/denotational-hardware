@@ -39,6 +39,12 @@ record _⇨_ (a : Obj) (b : Obj) : Set (q ⊔ ℓ₁ ⊔ ℓ₂) where
 
 open _⇨_
 
+-- Shorthand
+infix 0 _⇉_
+_⇉_ : ∀ {σ₁ τ₁ : obj₁}{σ₂ τ₂ : obj₂}
+    → (Fₒ σ₁ ⇨₃ Fₒ σ₂) → (Fₒ τ₁ ⇨₃ Fₒ τ₂) → Set (ℓ₁ ⊔ ℓ₂ ⊔ q)
+g ⇉ h = mk g ⇨ mk h
+
 module comma-type-instances where
 
   open import Categorical.Equiv

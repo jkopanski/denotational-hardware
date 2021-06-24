@@ -52,8 +52,7 @@ module halfAdd where
   spec {𝕥 , 𝕥} = refl≡
 
   -- Arrow category morphism
-  arr : mk i ⇨ mk o
-
+  arr : i ⇉ o
   arr = mk halfAdd add λ 
     { {𝕗 , 𝕗} → refl≡
     ; {𝕗 , 𝕥} → refl≡
@@ -94,7 +93,7 @@ module fullAdd where
   spec {𝕥 , 𝕥 , 𝕥} = refl≡
 
   -- Arrow category morphism
-  arr : mk i ⇨ mk o
+  arr : i ⇉ o
   arr = mk fullAdd (add ∘ second add) λ 
     { {𝕗 , 𝕗 , 𝕗} → refl≡
     ; {𝕗 , 𝕗 , 𝕥} → refl≡
