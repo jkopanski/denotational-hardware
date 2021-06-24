@@ -2,6 +2,8 @@
 
 module Examples.Add.Properties where
 
+open import Level using (0ℓ)
+
 open import Data.Unit using (tt)
 open import Data.Product using (_,_)
 open import Data.Nat
@@ -9,6 +11,8 @@ open import Data.Nat
 open import Categorical.Equiv
 open import Categorical.Raw
 open import Functions.Raw
+open import Functions.Laws
+open import Categorical.Arrow Function 0ℓ
 
 open import Examples.Add
 
@@ -23,7 +27,8 @@ private
   add : ℕ × ℕ → ℕ
   add = uncurry _+_
 
-open import Relation.Binary.PropositionalEquality renaming (refl to refl≡)
+open import Relation.Binary.PropositionalEquality
+       renaming (refl to refl≡; sym to sym≡)
 open ≡-Reasoning
 
 module halfAdd where
@@ -45,6 +50,21 @@ module halfAdd where
   spec {𝕗 , 𝕥} = refl≡
   spec {𝕥 , 𝕗} = refl≡
   spec {𝕥 , 𝕥} = refl≡
+
+  -- Arrow category morphism
+  arr : mk i ⇨ mk o
+
+  arr = mk halfAdd add λ 
+    { {𝕗 , 𝕗} → refl≡
+    ; {𝕗 , 𝕥} → refl≡
+    ; {𝕥 , 𝕗} → refl≡
+    ; {𝕥 , 𝕥} → refl≡
+    }
+
+  -- arr = mk halfAdd add (λ {(a , b)} → spec {a , b})
+
+  -- TODO: Try with Function equivalence using _≗_ (explicit arguments)
+  -- so that arr = mk halfAdd add spec
 
 module fullAdd where
 
@@ -72,6 +92,19 @@ module fullAdd where
   spec {𝕥 , 𝕗 , 𝕥} = refl≡
   spec {𝕥 , 𝕥 , 𝕗} = refl≡
   spec {𝕥 , 𝕥 , 𝕥} = refl≡
+
+  -- Arrow category morphism
+  arr : mk i ⇨ mk o
+  arr = mk fullAdd (add ∘ second add) λ 
+    { {𝕗 , 𝕗 , 𝕗} → refl≡
+    ; {𝕗 , 𝕗 , 𝕥} → refl≡
+    ; {𝕗 , 𝕥 , 𝕗} → refl≡
+    ; {𝕗 , 𝕥 , 𝕥} → refl≡
+    ; {𝕥 , 𝕗 , 𝕗} → refl≡
+    ; {𝕥 , 𝕗 , 𝕥} → refl≡
+    ; {𝕥 , 𝕥 , 𝕗} → refl≡
+    ; {𝕥 , 𝕥 , 𝕥} → refl≡
+    }
 
 module rippleAdd where
 
