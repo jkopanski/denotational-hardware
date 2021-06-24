@@ -32,6 +32,11 @@ record CategoryH {obj₁ : Set o₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ�
 
 open CategoryH ⦃ … ⦄ public
 
+id-CategoryH : {obj : Set o} {_⇨_ : obj → obj → Set ℓ}
+               {q : Level} ⦃ _ : Equivalent q _⇨_ ⦄
+               ⦃ _ : Category _⇨_ ⦄
+             → CategoryH _⇨_ _⇨_ q ⦃ Hₒ = id-Hₒ ⦄ ⦃ H = id-H ⦄
+id-CategoryH = record { F-id = refl ; F-∘ = refl }
 
 record ProductsH
     (obj₁ : Set o₁) ⦃ _ : Products obj₁ ⦄
