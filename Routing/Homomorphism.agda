@@ -44,14 +44,14 @@ lookup-swizzle-∘ : {b c a : Ty}(g : Swizzle b c)(f : Swizzle a b){x : Fₒ a}
 lookup-swizzle-∘ g f i = ≡-trans (lookup∘tabulate (g i)) (≡-sym (lookup∘tabulate i))
 
 swizzle-id : (a : Ty) → swizzle {a = a} id ≈ id
-swizzle-id `⊤       = ≡-refl
-swizzle-id `Bool    = ≡-refl
-swizzle-id (a `⇛ b) = ≡-refl
-swizzle-id (a `× b) = cong₂ _,_ (swizzle-id a) (swizzle-id b)
+swizzle-id `⊤       _       = ≡-refl
+swizzle-id `Bool    _       = ≡-refl
+swizzle-id (a `⇛ b) _       = ≡-refl
+swizzle-id (a `× b) (x , y) = cong₂ _,_ (swizzle-id a x) (swizzle-id b y)
 
 swizzle-∘ : {b c a : Ty}(g : Swizzle b c)(f : Swizzle a b)
           → swizzle (f ∘ g) ≈ swizzle g ∘ swizzle f
-swizzle-∘ g f {x} =
+swizzle-∘ g f x =
   begin
     swizzle (f ∘ g) x
   ≡⟨⟩
@@ -73,8 +73,8 @@ instance
 
   cartesianH : CartesianH _⇨_ Function 0ℓ
   cartesianH = record
-    { F-!   = ≡-refl
-    ; F-exl = λ {a} {b} {(x , y)} → tabulate∘lookup {a = a} x
-    ; F-exr = λ {a} {b} {(x , y)} → tabulate∘lookup {a = b} y
-    ; F-▵   = ≡-refl
+    { F-!   = λ _ → ≡-refl
+    ; F-exl = λ {a b} (x , y) → tabulate∘lookup {a = a} x
+    ; F-exr = λ {a b} (x , y) → tabulate∘lookup {a = b} y
+    ; F-▵   = λ _ → ≡-refl
     }

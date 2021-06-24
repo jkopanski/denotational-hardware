@@ -8,7 +8,7 @@ import Categorical.Homomorphism
 import Categorical.Laws
 
 -- Categorical.Comma.Raw takes a long time to load :(
--- import Categorical.Comma.Type
+import Categorical.Comma.Type
 
 import Functions
 import Ty

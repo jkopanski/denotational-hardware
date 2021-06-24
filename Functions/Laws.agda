@@ -2,7 +2,7 @@
 
 module Functions.Laws where
 
-open import Function.Equivalence hiding (id)
+open import Function.Equivalence hiding (id; _∘_)
 
 open import Categorical.Raw hiding (Category; Cartesian; CartesianClosed)
 open import Categorical.Laws
@@ -24,20 +24,20 @@ module →-laws-instances where
 
     category : Category Function zero
     category = record
-      { identityˡ = refl≡
-      ; identityʳ = refl≡
-      ; assoc     = refl≡
-      ; ∘≈        = λ { {k = k} h≈k f≈g → trans≡ h≈k (cong k f≈g) }
+      { identityˡ = λ _ → refl≡
+      ; identityʳ = λ _ → refl≡
+      ; assoc     = λ _ → refl≡
+      ; ∘≈        = λ { {f = f}{k = k} h≈k f≈g x →
+                      trans≡ (h≈k (f x)) (cong k (f≈g x)) }
       }
 
     cartesian : Cartesian Function zero
     cartesian = record
-      { exl▵exr = refl≡
+      { exl▵exr = λ _ → refl≡
       ; ∀× = equivalence
-          (λ k≈f▵g → (λ { {a} → cong exl k≈f▵g })
-                   , (λ { {a} → cong exr k≈f▵g }))
-          (λ { (exl∘k≈f , exr∘k≈g) {a} → cong₂ _,_ exl∘k≈f exr∘k≈g })
-      ; ▵≈ = λ h≈k f≈g → cong₂ _,_ h≈k f≈g
+          (λ k≈f▵g → (λ x → cong exl (k≈f▵g x)) , (λ x → cong exr (k≈f▵g x)))
+          (λ (exl∘k≈f , exr∘k≈g) x → cong₂ _,_ (exl∘k≈f x) (exr∘k≈g x))
+      ; ▵≈ = λ h≈k f≈g x → cong₂ _,_ (h≈k x) (f≈g x)
       }
 
     module ccc (extensionality : Extensionality _ _) where
@@ -45,9 +45,7 @@ module →-laws-instances where
       cartesianClosed : CartesianClosed Function zero
       cartesianClosed = record
         { ∀⇛ = equivalence
-                 (λ { g≈f {a , b} → sym≡ (cong (λ fbc → fbc b) g≈f) })
-                 (λ { f≈uncurry-g {a} → extensionality λ _ → sym≡ f≈uncurry-g })
-        ; curry≈ = λ f≡g → extensionality (λ _ → f≡g)
-        } 
-
-    -- TODO: Logic
+            (λ g≈f (x , y) → sym≡ (cong (λ h → h y) (g≈f x)))
+            (λ f≈uncurry-g x → extensionality λ y → sym≡ (f≈uncurry-g (x , y)))
+        ; curry≈ = λ f≈g x → extensionality λ y → f≈g (x , y)
+        }

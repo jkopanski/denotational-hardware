@@ -33,6 +33,8 @@ open ≡-Reasoning
 
 module halfAdd where
 
+  -- halfAdd : Bool ⇨ᶜ Bool
+
   i : Bool × Bool → ℕ × ℕ
   i = bval ⊗ bval
 
@@ -46,32 +48,27 @@ module halfAdd where
   _ = refl≡
 
   spec : o ∘ halfAdd ≈ add ∘ i
-  spec {𝕗 , 𝕗} = refl≡
-  spec {𝕗 , 𝕥} = refl≡
-  spec {𝕥 , 𝕗} = refl≡
-  spec {𝕥 , 𝕥} = refl≡
+  spec (𝕗 , 𝕗) = refl≡
+  spec (𝕗 , 𝕥) = refl≡
+  spec (𝕥 , 𝕗) = refl≡
+  spec (𝕥 , 𝕥) = refl≡
 
   -- Arrow category morphism
   arr : i ⇉ o
-  arr = mk halfAdd add λ 
-    { {𝕗 , 𝕗} → refl≡
-    ; {𝕗 , 𝕥} → refl≡
-    ; {𝕥 , 𝕗} → refl≡
-    ; {𝕥 , 𝕥} → refl≡
-    }
+  arr = mk halfAdd add spec
 
-  -- arr = mk halfAdd add (λ {(a , b)} → spec {a , b})
-
-  -- TODO: Try with Function equivalence using _≗_ (explicit arguments)
-  -- so that arr = mk halfAdd add spec
+  -- Or skip spec and define arr directly:
+  
+  -- arr = mk halfAdd add λ 
+  --   { (𝕗 , 𝕗) → refl≡
+  --   ; (𝕗 , 𝕥) → refl≡
+  --   ; (𝕥 , 𝕗) → refl≡
+  --   ; (𝕥 , 𝕥) → refl≡
+  --   }
 
 module fullAdd where
 
   -- fullAdd : Bool × Bool ⇨ᶜ Bool
-  -- fullAdd = second ∨ ∘ inAssocˡ′ halfAdd ∘ second halfAdd
-  -- 
-  -- λ (c , (a , b)) → let (p , d) = halfAdd (a , b)
-  --                       (q , e) = halfAdd (c , p) in (q , e ∨ d)
 
   i : Bool × (Bool × Bool) → ℕ × (ℕ × ℕ)
   i = bval ⊗ (bval ⊗ bval)
@@ -80,30 +77,31 @@ module fullAdd where
   o (s , cₒ) = bval s + bval cₒ * 2
 
   spec : o ∘ fullAdd ≈ (add ∘ second add) ∘ i
-
-  -- spec {c , (a , b)} = {!!}
-
-  spec {𝕗 , 𝕗 , 𝕗} = refl≡
-  spec {𝕗 , 𝕗 , 𝕥} = refl≡
-  spec {𝕗 , 𝕥 , 𝕗} = refl≡
-  spec {𝕗 , 𝕥 , 𝕥} = refl≡
-  spec {𝕥 , 𝕗 , 𝕗} = refl≡
-  spec {𝕥 , 𝕗 , 𝕥} = refl≡
-  spec {𝕥 , 𝕥 , 𝕗} = refl≡
-  spec {𝕥 , 𝕥 , 𝕥} = refl≡
+  spec (𝕗 , 𝕗 , 𝕗) = refl≡
+  spec (𝕗 , 𝕗 , 𝕥) = refl≡
+  spec (𝕗 , 𝕥 , 𝕗) = refl≡
+  spec (𝕗 , 𝕥 , 𝕥) = refl≡
+  spec (𝕥 , 𝕗 , 𝕗) = refl≡
+  spec (𝕥 , 𝕗 , 𝕥) = refl≡
+  spec (𝕥 , 𝕥 , 𝕗) = refl≡
+  spec (𝕥 , 𝕥 , 𝕥) = refl≡
 
   -- Arrow category morphism
   arr : i ⇉ o
-  arr = mk fullAdd (add ∘ second add) λ 
-    { {𝕗 , 𝕗 , 𝕗} → refl≡
-    ; {𝕗 , 𝕗 , 𝕥} → refl≡
-    ; {𝕗 , 𝕥 , 𝕗} → refl≡
-    ; {𝕗 , 𝕥 , 𝕥} → refl≡
-    ; {𝕥 , 𝕗 , 𝕗} → refl≡
-    ; {𝕥 , 𝕗 , 𝕥} → refl≡
-    ; {𝕥 , 𝕥 , 𝕗} → refl≡
-    ; {𝕥 , 𝕥 , 𝕥} → refl≡
-    }
+  arr = mk fullAdd (add ∘ second add) spec
+
+  -- More directly,
+
+  -- arr = mk fullAdd (add ∘ second add) λ 
+  --   { (𝕗 , 𝕗 , 𝕗) → refl≡
+  --   ; (𝕗 , 𝕗 , 𝕥) → refl≡
+  --   ; (𝕗 , 𝕥 , 𝕗) → refl≡
+  --   ; (𝕗 , 𝕥 , 𝕥) → refl≡
+  --   ; (𝕥 , 𝕗 , 𝕗) → refl≡
+  --   ; (𝕥 , 𝕗 , 𝕥) → refl≡
+  --   ; (𝕥 , 𝕥 , 𝕗) → refl≡
+  --   ; (𝕥 , 𝕥 , 𝕥) → refl≡
+  --   }
 
 module rippleAdd where
 

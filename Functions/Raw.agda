@@ -37,14 +37,14 @@ module →-raw-instances where
               ; cond  = λ (c , t , e) → B.if c then t else e
               }
 
-    open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
+    open import Relation.Binary.PropositionalEquality as ≡ using (_≡_; _≗_)
 
     equivalent : Equivalent 0ℓ Function
     equivalent = record
-      { _≈_ = λ f g → ∀ {x} → f x ≡ g x
+      { _≈_ = _≗_
       ; equiv = record
-          { refl  = ≡.refl
-          ; sym   = λ f∼g → ≡.sym f∼g
-          ; trans = λ f∼g g∼h → ≡.trans f∼g g∼h
+          { refl  = λ _ → ≡.refl
+          ; sym   = λ f∼g x → ≡.sym (f∼g x)
+          ; trans = λ f∼g g∼h x → ≡.trans (f∼g x) (g∼h x)
           }
       }
