@@ -57,14 +57,14 @@ module halfAdd where
   arr : i ⇉ o
   arr = mk halfAdd add spec
 
-  -- Or skip spec and define arr directly:
+  -- Or skip spec, and define arr directly:
   
   -- arr = mk halfAdd add λ 
-  --   { (𝕗 , 𝕗) → refl≡
-  --   ; (𝕗 , 𝕥) → refl≡
-  --   ; (𝕥 , 𝕗) → refl≡
-  --   ; (𝕥 , 𝕥) → refl≡
-  --   }
+  --         { (𝕗 , 𝕗) → refl≡
+  --         ; (𝕗 , 𝕥) → refl≡
+  --         ; (𝕥 , 𝕗) → refl≡
+  --         ; (𝕥 , 𝕥) → refl≡
+  --         }
 
 module fullAdd where
 
