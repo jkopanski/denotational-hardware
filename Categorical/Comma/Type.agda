@@ -8,14 +8,14 @@ open import Categorical.Equiv
 open import Categorical.Homomorphism
 
 module Categorical.Comma.Type
-   {o₁}{obj₁ : Set o₁} {ℓ₁}(_⇨₁_ : obj₁ → obj₁ → Set ℓ₁) ⦃ _ : Category _⇨₁_ ⦄
-   {o₂}{obj₂ : Set o₂} {ℓ₂}(_⇨₂_ : obj₂ → obj₂ → Set ℓ₂) ⦃ _ : Category _⇨₂_ ⦄
-   {o₃}{obj₃ : Set o₃} {ℓ₃}(_⇨₃_ : obj₃ → obj₃ → Set ℓ₃) ⦃ _ : Category _⇨₃_ ⦄
+   {o₁}{obj₁ : Set o₁} {ℓ₁}(_⇨₁_ : obj₁ → obj₁ → Set ℓ₁) ⦃ c₁ : Category _⇨₁_ ⦄
+   {o₂}{obj₂ : Set o₂} {ℓ₂}(_⇨₂_ : obj₂ → obj₂ → Set ℓ₂) ⦃ c₂ : Category _⇨₂_ ⦄
+   {o₃}{obj₃ : Set o₃} {ℓ₃}(_⇨₃_ : obj₃ → obj₃ → Set ℓ₃) ⦃ c₃ : Category _⇨₃_ ⦄
    q ⦃ _ : Equivalent q _⇨₃_ ⦄
-   ⦃ _ : Homomorphismₒ obj₁ obj₃ ⦄ ⦃ _ : Homomorphism _⇨₁_ _⇨₃_ ⦄
-     ⦃ _ : CategoryH _⇨₁_ _⇨₃_ q ⦄
-   ⦃ _ : Homomorphismₒ obj₂ obj₃ ⦄ ⦃ _ : Homomorphism _⇨₂_ _⇨₃_ ⦄
-     ⦃ _ : CategoryH _⇨₂_ _⇨₃_ q ⦄
+   ⦃ hₒ₁ : Homomorphismₒ obj₁ obj₃ ⦄ ⦃ h₁ : Homomorphism _⇨₁_ _⇨₃_ ⦄
+     ⦃ ch₁ : CategoryH _⇨₁_ _⇨₃_ q ⦄
+   ⦃ hₒ₂ : Homomorphismₒ obj₂ obj₃ ⦄ ⦃ h₂ : Homomorphism _⇨₂_ _⇨₃_ ⦄
+     ⦃ ch₂ : CategoryH _⇨₂_ _⇨₃_ q ⦄
  where
 
 -- TODO: Define some bundles to reduce syntactic clutter.
@@ -35,7 +35,7 @@ record _⇨_ (a : Obj) (b : Obj) : Set (q ⊔ ℓ₁ ⊔ ℓ₂) where
   field
     f₁ : τ₁ a ⇨₁ τ₁ b
     f₂ : τ₂ a ⇨₂ τ₂ b
-    commute : Fₘ f₂ ∘ h a ≈ h b ∘ Fₘ f₁
+    commute : h b ∘ Fₘ f₁ ≈ Fₘ f₂ ∘ h a
 
 open _⇨_
 
