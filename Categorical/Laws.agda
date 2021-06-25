@@ -8,7 +8,9 @@ open import Categorical.Raw as R hiding (Category; Cartesian; CartesianClosed)
 open import Categorical.Equiv
 open import Relation.Binary.PropositionalEquality using (_≡_)
 open import Function.Equivalence using (_⇔_; module Equivalence)
+open import Function.Equality using (_⟨$⟩_)
 
+open Equivalence
 open ≈-Reasoning
 
 private
@@ -38,7 +40,7 @@ record Category {obj : Set o} (_⇨′_ : obj → obj → Set ℓ)
 
 open Category ⦃ … ⦄ public
 
-open import Data.Product using () renaming (_×_ to _×ₚ_)
+open import Data.Product using (_,_) renaming (_×_ to _×ₚ_)
 
 record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
                  (_⇨′_ : obj → obj → Set ℓ)
@@ -49,8 +51,6 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
 
   field
     ⦃ ⇨Category ⦄ : Category _⇨_ q
-    exl▵exr : ∀ {a b : obj} → exl ▵ exr ≈ id {a = a × b}
-    -- TODO: prove exl▵exr rather than assuming
 
     ∀× : ∀ {f : a ⇨ b} {g : a ⇨ c} {k : a ⇨ b × c}
        → (k ≈ f ▵ g) ⇔ (exl ∘ k ≈ f  ×ₚ  exr ∘ k ≈ g)
@@ -63,8 +63,12 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   ▵≈ʳ : ∀ {f g : a ⇨ c} {h : a ⇨ d} → f ≈ g → h ▵ f ≈ h ▵ g
   ▵≈ʳ f≈g = ▵≈ refl f≈g
 
+  exl▵exr : ∀ {a b : obj} → exl ▵ exr ≈ id {a = a × b}
+  exl▵exr = sym (from ∀× ⟨$⟩ (identityʳ , identityʳ))
+
   id⊗id : ∀ {a b : obj} → id ⊗ id ≈ id {a = a × b}
   id⊗id = exl▵exr • ▵≈ identityˡ identityˡ
+
 
 open Cartesian ⦃ … ⦄ public
 
@@ -79,8 +83,8 @@ record CartesianClosed {obj : Set o} ⦃ _ : Products obj ⦄
     ⦃ ⇨Cartesian ⦄ : Cartesian _⇨_ q
 
     ∀⇛ : ∀ {f : a × b ⇨ c} {g : a ⇨ (b ⇛ c)} → (g ≈ curry f) ⇔ (f ≈ uncurry g)
-    -- Note: uncurry g ≡ apply ∘ first g ≡ apply ∘ (g ∘ id)
-    -- RHS is often written "apply ∘ (g ∘ id)"
+    -- Note: uncurry g ≡ apply ∘ first g ≡ apply ∘ (g ⊗ id)
+    -- RHS is often written "apply ∘ (g ⊗ id)"
 
     curry≈ : ∀ {f g : a × b ⇨ c} → f ≈ g → curry f ≈ curry g
 
@@ -97,8 +101,5 @@ record CartesianClosed {obj : Set o} ⦃ _ : Products obj ⦄
                    ≡⟨⟩
                      uncurry id
                    ∎)
-    where open import Function.Equality using (_⟨$⟩_)
-          open Equivalence using (from)
-          open ≈-Reasoning
 
 -- TODO: Logic
