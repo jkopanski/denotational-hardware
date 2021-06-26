@@ -127,3 +127,11 @@ module rippleAdd where
 
 -- TODO: Replace ℕ by Fin (2 ^ n) throughout this module, and leave the carry
 -- bit as a bit.
+
+-- Speculation is a semantic no-op
+speculate≡id : ∀ {a c} (f : Bool × a → c) → speculate f ≈ f
+speculate≡id f (𝕗 , x) = refl≡
+speculate≡id f (𝕥 , x) = refl≡
+
+-- TODO: Can we generalize `speculate≡id` to other categories? We'll probably
+-- need laws about `cond` relative to `true` and `false`.
