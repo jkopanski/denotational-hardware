@@ -34,7 +34,7 @@ module →-raw-instances where
               ; ∧     = uncurry B._∧_
               ; ∨     = uncurry B._∨_
               ; xor   = uncurry B._xor_
-              ; cond  = λ (c , t , e) → B.if c then t else e
+              ; cond  = λ (c , e , t) → B.if c then t else e
               }
 
     open import Relation.Binary.PropositionalEquality as ≡ using (_≡_; _≗_)
