@@ -33,8 +33,7 @@ module →-laws-instances where
 
     cartesian : Cartesian Function zero
     cartesian = record
-      { exl▵exr = λ _ → refl≡
-      ; ∀× = equivalence
+      { ∀× = equivalence
           (λ k≈f▵g → (λ x → cong exl (k≈f▵g x)) , (λ x → cong exr (k≈f▵g x)))
           (λ (exl∘k≈f , exr∘k≈g) x → cong₂ _,_ (exl∘k≈f x) (exr∘k≈g x))
       ; ▵≈ = λ h≈k f≈g x → cong₂ _,_ (h≈k x) (f≈g x)
