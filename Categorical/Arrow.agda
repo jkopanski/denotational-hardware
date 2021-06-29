@@ -9,8 +9,8 @@ open import Categorical.Homomorphism
 
 module Categorical.Arrow
    {o}{obj : Set o} {ℓ}(_⇨_ : obj → obj → Set ℓ) ⦃ c : Category _⇨_ ⦄
-   q ⦃ _ : Equivalent q _⇨_ ⦄
-   ⦃ _ : L.Category _⇨_ q ⦄
+   {q} ⦃ _ : Equivalent q _⇨_ ⦄
+   ⦃ _ : L.Category _⇨_ ⦄
  where
 
 open import Categorical.Comma.Type _⇨_ _⇨_ _⇨_ q

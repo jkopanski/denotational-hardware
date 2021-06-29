@@ -13,6 +13,7 @@ open import IO
 open import Show
 open import Categorical.Raw
 open import Functions.Raw
+open import Functions.Laws
 open import Ty
 open import Index
 open import Primitive.Raw Function renaming (_⇨_ to _⇨ₚ_)
@@ -68,14 +69,14 @@ main = run do
   -- example "shiftR-swap-c5" (shiftR-swap {5})
   -- example "lfsr-c5"  lfsr₅   -- wrong
 
-  -- example "half-add"     halfAdd
-  -- example "full-add"     fullAdd
-  -- example "ripple-add-4" (rippleAdd 4)
-  -- example "ripple-add-8" (rippleAdd 8)
+  example "half-add"     halfAdd
+  example "full-add"     fullAdd
+  example "ripple-add-4" (rippleAdd 4)
+  example "ripple-add-8" (rippleAdd 8)
 
   -- example "carry-select-3x5" (carrySelect 3 5)
   -- example "carry-select-4x4" (carrySelect 4 4)
   -- example "carry-select-8x8" (carrySelect 8 8)
   -- -- example "carry-select-16x16" (carrySelect 16 16)
 
-  example "curry-and" (curry ∧)
+  -- example "curry-and" (curry ∧)

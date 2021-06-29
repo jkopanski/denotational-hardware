@@ -2,8 +2,6 @@
 
 module Examples.Add.Properties where
 
-open import Level using (0ℓ)
-
 open import Data.Unit using (tt)
 open import Data.Product using (_,_)
 open import Data.Nat
@@ -12,7 +10,7 @@ open import Categorical.Equiv
 open import Categorical.Raw
 open import Functions.Raw
 open import Functions.Laws
-open import Categorical.Arrow Function 0ℓ
+open import Categorical.Arrow Function
 
 open import Examples.Add
 

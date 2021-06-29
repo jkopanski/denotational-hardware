@@ -17,10 +17,10 @@ private
   variable
     o ℓ : Level
     obj : Set o
-    a b c d : obj
+    a b c d e : obj
 
 record Category {obj : Set o} (_⇨′_ : obj → obj → Set ℓ)
-                q ⦃ equiv : Equivalent q _⇨′_ ⦄
+                {q} ⦃ equiv : Equivalent q _⇨′_ ⦄
                 ⦃ _ : R.Category _⇨′_ ⦄
        : Set (suc o ⊔ ℓ ⊔ suc q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
@@ -38,19 +38,46 @@ record Category {obj : Set o} (_⇨′_ : obj → obj → Set ℓ)
   ∘≈ʳ : ∀ {f g : a ⇨ b} {h : b ⇨ c} → f ≈ g → h ∘ f ≈ h ∘ g
   ∘≈ʳ f≈g = ∘≈ refl f≈g
 
+  -- Taken from Categories.Morphism.Reasoning.Core in agda-categories.
+  -- I'll probably add more and move them to another module.
+
+  center : ∀ {f : a ⇨ b}{g : b ⇨ c}{h : c ⇨ d}{i : d ⇨ e}{hg : b ⇨ d}
+         → h ∘ g ≈ hg → (i ∘ h) ∘ (g ∘ f) ≈ i ∘ hg ∘ f
+  center {f = f}{g}{h}{i}{hg} h∘g≈hg =
+    begin
+      (i ∘ h) ∘ (g ∘ f)
+    ≈⟨ assoc ⟩
+      i ∘ h ∘ (g ∘ f)
+    ≈˘⟨ ∘≈ʳ assoc ⟩
+      i ∘ (h ∘ g) ∘ f
+    ≈⟨ ∘≈ʳ (∘≈ˡ h∘g≈hg) ⟩
+      i ∘ hg ∘ f
+    ∎
+
+  cancelInner : ∀ {f : a ⇨ b}{g : b ⇨ c}{h : c ⇨ b}{i : b ⇨ d}
+              → h ∘ g ≈ id → (i ∘ h) ∘ (g ∘ f) ≈ i ∘ f
+  cancelInner {f = f}{g}{h}{i} h∘g≈id =
+    begin
+      (i ∘ h) ∘ (g ∘ f)
+    ≈⟨ center h∘g≈id ⟩
+      i ∘ id ∘ f
+    ≈⟨ ∘≈ʳ identityˡ ⟩
+      i ∘ f
+    ∎
+
 open Category ⦃ … ⦄ public
 
 open import Data.Product using (_,_) renaming (_×_ to _×ₚ_)
 
 record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
                  (_⇨′_ : obj → obj → Set ℓ)
-                 q ⦃ _ : Equivalent q _⇨′_ ⦄
+                 {q} ⦃ _ : Equivalent q _⇨′_ ⦄
                  ⦃ _ : R.Cartesian _⇨′_ ⦄
        : Set (suc o ⊔ ℓ ⊔ suc q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
 
   field
-    ⦃ ⇨Category ⦄ : Category _⇨_ q
+    ⦃ ⇨Category ⦄ : Category _⇨_
 
     ∀× : ∀ {f : a ⇨ b} {g : a ⇨ c} {k : a ⇨ b × c}
        → (k ≈ f ▵ g) ⇔ (exl ∘ k ≈ f  ×ₚ  exr ∘ k ≈ g)
@@ -74,13 +101,13 @@ open Cartesian ⦃ … ⦄ public
 
 record CartesianClosed {obj : Set o} ⦃ _ : Products obj ⦄
                        ⦃ _ : Exponentials obj ⦄ (_⇨′_ : obj → obj → Set ℓ)
-                       q ⦃ _ : Equivalent q _⇨′_ ⦄
+                       {q} ⦃ _ : Equivalent q _⇨′_ ⦄
                        ⦃ _ : Products (Set q) ⦄
                        ⦃ _ : R.CartesianClosed _⇨′_ ⦄
        : Set (suc o ⊔ ℓ ⊔ suc q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
-    ⦃ ⇨Cartesian ⦄ : Cartesian _⇨_ q
+    ⦃ ⇨Cartesian ⦄ : Cartesian _⇨_
 
     ∀⇛ : ∀ {f : a × b ⇨ c} {g : a ⇨ (b ⇛ c)} → (g ≈ curry f) ⇔ (f ≈ uncurry g)
     -- Note: uncurry g ≡ apply ∘ first g ≡ apply ∘ (g ⊗ id)
