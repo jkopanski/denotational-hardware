@@ -12,6 +12,7 @@ data Ty : Set where
   _`⇛_  : Ty → Ty → Ty
 
 open import Categorical.Homomorphism
+import Categorical.Laws as L
 
 module ty-instances where
 
@@ -40,8 +41,9 @@ module ty-instances where
     productsH : ∀ {ℓ o}{obj : Set o} ⦃ _ : Products obj ⦄
                   ⦃ _ : Boolean obj ⦄ ⦃ _ : Exponentials obj ⦄
                   {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
+                  {q} ⦃ _ : Equivalent q _⇨_ ⦄ ⦃ _ : L.Category _⇨_ ⦄
              → ProductsH Ty _⇨_
-    productsH = record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id }
+    productsH = record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id ; ε⁻¹∘ε = L.identityˡ }
 
     exponentialsH : ∀ {ℓ o}{obj : Set o} ⦃ _ : Products obj ⦄
                     ⦃ _ : Boolean obj ⦄ ⦃ _ : Exponentials obj ⦄

@@ -4,7 +4,6 @@
 
 module SSA where
 
-open import Level using (0ℓ) -- temp?
 open import Data.Product using (_,_)
 open import Data.Nat using (ℕ; suc; zero)
 open import Data.String hiding (toList; show)

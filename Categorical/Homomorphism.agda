@@ -5,6 +5,7 @@ module Categorical.Homomorphism where
 open import Level
 
 open import Categorical.Raw public
+import Categorical.Laws as L
 
 private
   variable
@@ -19,7 +20,7 @@ open import Categorical.Equiv  public
 -- Category homomorphism (functor)
 record CategoryH {obj₁ : Set o₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁)
                  {obj₂ : Set o₂} (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂)
-                 q ⦃ _ : Equivalent q _⇨₂_ ⦄
+                 {q} ⦃ _ : Equivalent q _⇨₂_ ⦄
                  ⦃ _ : Category _⇨₁_ ⦄
                  ⦃ _ : Category _⇨₂_ ⦄
                  ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
@@ -35,14 +36,16 @@ open CategoryH ⦃ … ⦄ public
 id-CategoryH : {obj : Set o} {_⇨_ : obj → obj → Set ℓ}
                {q : Level} ⦃ _ : Equivalent q _⇨_ ⦄
                ⦃ _ : Category _⇨_ ⦄
-             → CategoryH _⇨_ _⇨_ q ⦃ Hₒ = id-Hₒ ⦄ ⦃ H = id-H ⦄
+             → CategoryH _⇨_ _⇨_ ⦃ Hₒ = id-Hₒ ⦄ ⦃ H = id-H ⦄
 id-CategoryH = record { F-id = refl ; F-∘ = refl }
 
 record ProductsH
     (obj₁ : Set o₁) ⦃ _ : Products obj₁ ⦄
-    {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
+    {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄
+    (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂) ⦃ _ : Category _⇨₂′_ ⦄
     ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
-    : Set (o₁ ⊔ o₂ ⊔ ℓ₂) where
+    {q} ⦃ _ : Equivalent q _⇨₂′_ ⦄
+    : Set (o₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
   private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
   field
     -- https://ncatlab.org/nlab/show/monoidal+functor
@@ -53,6 +56,8 @@ record ProductsH
     ε⁻¹ : Fₒ ⊤ ⇨₂ ⊤
     μ⁻¹ : {a b : obj₁} → Fₒ (a × b) ⇨₂ Fₒ a × Fₒ b
 
+    ε⁻¹∘ε : ε⁻¹ ∘ ε ≈ id
+
   -- -- Maybe useful along with second′ and _⊗′_
   -- first′ : {a b c : obj₁} ⦃ _ : Cartesian _⇨₂_ ⦄
   --        → (Fₒ a ⇨₂ Fₒ c) → (Fₒ (a × b) ⇨₂ Fₒ (c × b))
@@ -62,19 +67,21 @@ open ProductsH ⦃ … ⦄ public
 
 id-ProductsH : ∀ {obj : Set o} ⦃ _ : Products obj ⦄
                  {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
+                 {q} ⦃ _ : Equivalent q _⇨_ ⦄ ⦃ _ : L.Category _⇨_ ⦄
              → ProductsH obj _⇨_ ⦃ Hₒ = id-Hₒ ⦄
-id-ProductsH = record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id }
+id-ProductsH =
+  record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id ; ε⁻¹∘ε = L.identityˡ }
 
 -- Cartesian homomorphism (cartesian functor)
 record CartesianH
          {obj₁ : Set o₁} ⦃ _ : Products obj₁ ⦄ (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁)
          {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂)
-         q ⦃ _ : Equivalent q _⇨₂_ ⦄
+         {q} ⦃ _ : Equivalent q _⇨₂_ ⦄
          ⦃ _ : Cartesian _⇨₁_ ⦄
          ⦃ _ : Cartesian _⇨₂_ ⦄
          ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
          ⦃ H : Homomorphism _⇨₁_ _⇨₂_ ⦄
-         ⦃ H : ProductsH obj₁ _⇨₂_ ⦄
+         ⦃ pH : ProductsH obj₁ _⇨₂_ ⦄
        : Set (o₁ ⊔ ℓ₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
   field
     F-!   : ∀ {a : obj₁} → Fₘ {a = a} ! ≈ ε ∘ !
@@ -120,7 +127,7 @@ id-booleanH = record { β = id }
 record LogicH
     {obj₁ : Set o₁} (_⇨₁′_ : obj₁ → obj₁ → Set ℓ₁)
     {obj₂ : Set o₂} (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
-    q ⦃ _ : Equivalent q _⇨₂′_ ⦄
+    {q} ⦃ _ : Equivalent q _⇨₂′_ ⦄
     ⦃ _ : Boolean obj₁ ⦄ ⦃ _ : Products obj₁ ⦄ ⦃ _ : Logic _⇨₁′_ ⦄
     ⦃ _ : Boolean obj₂ ⦄ ⦃ _ : Products obj₂ ⦄ ⦃ _ : Logic _⇨₂′_ ⦄
     ⦃ _ : Cartesian _⇨₂′_ ⦄

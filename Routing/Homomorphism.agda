@@ -1,6 +1,5 @@
 {-# OPTIONS --safe --without-K #-}
 
-open import Level
 open import Function using (id) renaming (_∘_ to _∙_)
 open import Data.Product using (_,_)
 open import Relation.Binary.PropositionalEquality
@@ -9,6 +8,7 @@ open import Relation.Binary.PropositionalEquality
 module Routing.Homomorphism where
 
 open import Functions.Raw
+open import Functions.Laws
 open import Routing.Raw public
 open import Ty
 open import Index
@@ -65,13 +65,13 @@ swizzle-∘ g f x =
 
 instance
 
-  categoryH : CategoryH _⇨_ Function 0ℓ
+  categoryH : CategoryH _⇨_ Function
   categoryH = record
     { F-id = λ {a} → swizzle-id a
     ; F-∘  = λ { {g = mk g} {mk f} → swizzle-∘ g f }
     }
 
-  cartesianH : CartesianH _⇨_ Function 0ℓ
+  cartesianH : CartesianH _⇨_ Function
   cartesianH = record
     { F-!   = λ _ → ≡-refl
     ; F-exl = λ {a b} (x , y) → tabulate∘lookup {a = a} x

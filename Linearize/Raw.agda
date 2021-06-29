@@ -13,6 +13,7 @@ module Linearize.Raw {o}{objₘ : Set o} ⦃ _ : Products objₘ ⦄ ⦃ _ : Exp
              ⦃ Hₒ : Homomorphismₒ obj objₘ ⦄
              ⦃ Hₚ : Homomorphism _⇨ₚ_ _⇨ₘ_ ⦄
              ⦃ Hᵣ : Homomorphism _⇨ᵣ_ _⇨ₘ_ ⦄
+             {q} ⦃ _ : Equivalent q _⇨ₘ_ ⦄
              ⦃ _ : ProductsH obj _⇨ₘ_ ⦄ ⦃ _ : ExponentialsH obj _⇨ₘ_ ⦄
   where
 

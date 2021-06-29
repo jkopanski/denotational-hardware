@@ -22,7 +22,7 @@ module →-laws-instances where
                 )
   instance
 
-    category : Category Function zero
+    category : Category Function
     category = record
       { identityˡ = λ _ → refl≡
       ; identityʳ = λ _ → refl≡
@@ -31,7 +31,7 @@ module →-laws-instances where
                       trans≡ (h≈k (f x)) (cong k (f≈g x)) }
       }
 
-    cartesian : Cartesian Function zero
+    cartesian : Cartesian Function
     cartesian = record
       { ∀× = equivalence
           (λ k≈f▵g → (λ x → cong exl (k≈f▵g x)) , (λ x → cong exr (k≈f▵g x)))
@@ -41,7 +41,7 @@ module →-laws-instances where
 
     module ccc (extensionality : Extensionality _ _) where
 
-      cartesianClosed : CartesianClosed Function zero
+      cartesianClosed : CartesianClosed Function
       cartesianClosed = record
         { ∀⇛ = equivalence
             (λ g≈f (x , y) → sym≡ (cong (λ h → h y) (g≈f x)))
