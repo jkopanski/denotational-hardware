@@ -13,7 +13,7 @@ module Categorical.Arrow
    ⦃ _ : L.Category _⇨_ ⦄
  where
 
-open import Categorical.Comma.Type _⇨_ _⇨_ _⇨_ q
+open import Categorical.Comma.Type _⇨_ _⇨_ _⇨_
         ⦃ hₒ₁ = id-Hₒ ⦄ ⦃ h₁ = id-H ⦄ ⦃ ch₁ = id-CategoryH ⦄
         ⦃ hₒ₂ = id-Hₒ ⦄ ⦃ h₂ = id-H ⦄ ⦃ ch₂ = id-CategoryH ⦄
      public
