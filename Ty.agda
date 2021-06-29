@@ -43,7 +43,11 @@ module ty-instances where
                   {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
                   {q} ⦃ _ : Equivalent q _⇨_ ⦄ ⦃ _ : L.Category _⇨_ ⦄
              → ProductsH Ty _⇨_
-    productsH = record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id ; ε⁻¹∘ε = L.identityˡ }
+    productsH = record
+      { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id
+      ; ε⁻¹∘ε = L.identityˡ ; ε∘ε⁻¹ = L.identityˡ
+      ; μ⁻¹∘μ = L.identityˡ ; μ∘μ⁻¹ = L.identityˡ
+      }
 
     exponentialsH : ∀ {ℓ o}{obj : Set o} ⦃ _ : Products obj ⦄
                     ⦃ _ : Boolean obj ⦄ ⦃ _ : Exponentials obj ⦄
@@ -55,7 +59,7 @@ module ty-instances where
                ⦃ _ : Boolean obj ⦄ ⦃ _ : Exponentials obj ⦄
                {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
              → BooleanH Ty _⇨_
-    booleanH = record { β = id }
+    booleanH = record { β = id ; β⁻¹ = id }
 
 
 open import Data.Nat

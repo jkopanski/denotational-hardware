@@ -9,6 +9,7 @@ import Categorical.Laws
 
 -- import Categorical.Comma
 import Categorical.Comma.Type
+import Categorical.Arrow
 
 import Functions
 import Ty
