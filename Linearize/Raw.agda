@@ -96,9 +96,9 @@ instance
 
   cartesian : Cartesian _⇨_
   cartesian = record { !   = route !
+                     ; _▵_ = λ f g → (f ⊗ₖ g) ∘ route dup
                      ; exl = route exl
                      ; exr = route exr
-                     ; _▵_ = λ f g → (f ⊗ₖ g) ∘ route dup
                      }
 
   cartesianClosed : CartesianClosed _⇨_

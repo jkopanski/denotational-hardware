@@ -37,6 +37,10 @@ record Equivalent q {obj : Set o} (_⇨_ : obj → obj → Set ℓ)
   _•_ : {f g h : a ⇨ b} (g≈h : g ≈ h) (f≈g : f ≈ g) → f ≈ h
   g≈h • f≈g = trans f≈g g≈h
 
+  infixr 1 _;_   -- unicode
+  _;_ : {f g h : a ⇨ b} (f≈g : f ≈ g) (g≈h : g ≈ h) → f ≈ h
+  _;_ = trans
+
 open Equivalent ⦃ … ⦄ public
 
 -- TODO: Replace Equivalent by Setoid?

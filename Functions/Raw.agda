@@ -21,7 +21,7 @@ module →-raw-instances where
     category = record { id = F.id ; _∘_ = F._∘′_ }
 
     cartesian : Cartesian Function
-    cartesian = record { exl = proj₁ ; exr = proj₂ ; _▵_ = <_,_> }
+    cartesian = record { _▵_ = <_,_> ; exl = proj₁ ; exr = proj₂ }
 
     cartesianClosed : CartesianClosed Function
     cartesianClosed = record { curry = ×.curry ; apply = ×.uncurry id }

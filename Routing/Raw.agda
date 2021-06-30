@@ -23,7 +23,7 @@ instance
   cartesian : Cartesian _⇨_
   cartesian = record
     { !   = mk λ ()
+    ; _▵_ = λ (mk f) (mk g) → mk λ { (left i) → f i ; (right j) → g j }
     ; exl = mk left
     ; exr = mk right
-    ; _▵_ = λ (mk f) (mk g) → mk λ { (left i) → f i ; (right j) → g j }
     }
