@@ -5,7 +5,8 @@ module Categorical.Homomorphism where
 open import Level
 
 open import Categorical.Raw public
-import Categorical.Laws as L
+open import Categorical.Laws as L
+       hiding (Category; Cartesian; CartesianClosed)
 
 private
   variable
@@ -57,6 +58,10 @@ record ProductsH
     μ⁻¹ : {a b : obj₁} → Fₒ (a × b) ⇨₂ Fₒ a × Fₒ b
 
     ε⁻¹∘ε : ε⁻¹ ∘ ε ≈ id
+    ε∘ε⁻¹ : ε ∘ ε⁻¹ ≈ id
+
+    μ⁻¹∘μ : μ⁻¹ ∘ μ {a}{b} ≈ id
+    μ∘μ⁻¹ : μ ∘ μ⁻¹ {a}{b} ≈ id
 
   -- -- Maybe useful along with second′ and _⊗′_
   -- first′ : {a b c : obj₁} ⦃ _ : Cartesian _⇨₂_ ⦄
@@ -70,7 +75,10 @@ id-ProductsH : ∀ {obj : Set o} ⦃ _ : Products obj ⦄
                  {q} ⦃ _ : Equivalent q _⇨_ ⦄ ⦃ _ : L.Category _⇨_ ⦄
              → ProductsH obj _⇨_ ⦃ Hₒ = id-Hₒ ⦄
 id-ProductsH =
-  record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id ; ε⁻¹∘ε = L.identityˡ }
+  record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id
+         ; ε⁻¹∘ε = L.identityˡ ; ε∘ε⁻¹ = L.identityˡ
+         ; μ⁻¹∘μ = L.identityˡ ; μ∘μ⁻¹ = L.identityˡ
+         }
 
 -- Cartesian homomorphism (cartesian functor)
 record CartesianH
@@ -111,18 +119,34 @@ record BooleanH
     (obj₁ : Set o₁) ⦃ _ : Boolean obj₁ ⦄
     {obj₂ : Set o₂} ⦃ _ : Boolean obj₂ ⦄ (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
     ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
-    : Set (o₁ ⊔ o₂ ⊔ ℓ₂) where
+    -- {q : Level} ⦃ _ : Equivalent q _⇨₂′_ ⦄
+    : Set (o₁ ⊔ o₂ ⊔ ℓ₂ {- ⊔ q -}) where
   private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
   field
-    β : Bool ⇨₂ Fₒ Bool
+    β   : Bool ⇨₂ Fₒ Bool
+    β⁻¹ : Fₒ Bool ⇨₂ Bool
+  
+    -- -- Oops. These two need Category _⇨₂_, which we won't always have,
+    -- -- e.g., for primitives.
+    -- -- TODO: Maybe split off StrongBooleanH with β⁻¹ and the inverse
+    -- -- properties, and similarly for ProductsH.
+    -- β⁻¹∘β : β⁻¹ ∘ β ≈ id
+    -- β∘β⁻¹ : β ∘ β⁻¹ ≈ id
 
 open BooleanH ⦃ … ⦄ public
 
 id-booleanH : {obj : Set o} ⦃ _ : Boolean obj ⦄
               {_⇨₁_ : obj → obj → Set ℓ₁} {_⇨₂_ : obj → obj → Set ℓ₂}
-              ⦃ cat₂ : Category _⇨₂_ ⦄
+              ⦃ _ : Category _⇨₂_ ⦄
+              -- {q : Level} ⦃ _ : Equivalent q _⇨₂_ ⦄
+              -- ⦃ _ : L.Category _⇨₂_ ⦃ rcat = cat₂ ⦄ ⦄
             → BooleanH obj _⇨₂_ ⦃ Hₒ = id-Hₒ ⦄
-id-booleanH = record { β = id }
+id-booleanH = record
+  { β   = id
+  ; β⁻¹ = id
+  -- ; β⁻¹∘β = {!identityˡ!}
+  -- ; β∘β⁻¹ = {!identityˡ!}
+  }
 
 record LogicH
     {obj₁ : Set o₁} (_⇨₁′_ : obj₁ → obj₁ → Set ℓ₁)

@@ -11,7 +11,7 @@ module Categorical.Comma.Type
    {o₁}{obj₁ : Set o₁} {ℓ₁}(_⇨₁_ : obj₁ → obj₁ → Set ℓ₁) ⦃ c₁ : Category _⇨₁_ ⦄
    {o₂}{obj₂ : Set o₂} {ℓ₂}(_⇨₂_ : obj₂ → obj₂ → Set ℓ₂) ⦃ c₂ : Category _⇨₂_ ⦄
    {o₃}{obj₃ : Set o₃} {ℓ₃}(_⇨₃_ : obj₃ → obj₃ → Set ℓ₃) ⦃ c₃ : Category _⇨₃_ ⦄
-   q ⦃ _ : Equivalent q _⇨₃_ ⦄
+   {q} ⦃ _ : Equivalent q _⇨₃_ ⦄
    ⦃ hₒ₁ : Homomorphismₒ obj₁ obj₃ ⦄ ⦃ h₁ : Homomorphism _⇨₁_ _⇨₃_ ⦄
      ⦃ ch₁ : CategoryH _⇨₁_ _⇨₃_ ⦄
    ⦃ hₒ₂ : Homomorphismₒ obj₂ obj₃ ⦄ ⦃ h₂ : Homomorphism _⇨₂_ _⇨₃_ ⦄
