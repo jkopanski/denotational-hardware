@@ -8,7 +8,8 @@ import Categorical.Homomorphism
 import Categorical.Laws
 
 -- import Categorical.Comma
-import Categorical.Comma.Type
+import Categorical.Comma.Raw
+-- import Categorical.Comma.Type
 import Categorical.Arrow
 
 import Functions
