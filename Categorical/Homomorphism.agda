@@ -7,6 +7,7 @@ open import Level
 open import Categorical.Raw public
 open import Categorical.Laws as L
        hiding (Category; Cartesian; CartesianClosed)
+open import Categorical.Reasoning
 
 private
   variable
@@ -14,9 +15,9 @@ private
     obj₁ obj₂ : Set o
     a b c d : obj₁
 
--- Homomorphisms. Maybe move to a new module.
-
 open import Categorical.Equiv  public
+
+open ≈-Reasoning
 
 -- Category homomorphism (functor)
 record CategoryH {obj₁ : Set o₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁)
@@ -93,9 +94,24 @@ record CartesianH
        : Set (o₁ ⊔ ℓ₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
   field
     F-!   : ∀ {a : obj₁} → Fₘ {a = a} ! ≈ ε ∘ !
+    F-▵   : ∀ {a c d} {f : a ⇨₁ c}{g : a ⇨₁ d} → Fₘ (f ▵ g) ≈ μ ∘ (Fₘ f ▵ Fₘ g)
     F-exl : ∀ {a b : obj₁} → Fₘ exl ∘ μ {a = a}{b} ≈ exl
     F-exr : ∀ {a b : obj₁} → Fₘ exr ∘ μ {a = a}{b} ≈ exr
-    F-▵   : ∀ {a c d} {f : a ⇨₁ c}{g : a ⇨₁ d} → Fₘ (f ▵ g) ≈ μ ∘ (Fₘ f ▵ Fₘ g)
+
+  module _ ⦃ _ : L.Category _⇨₂_ ⦄ where
+
+    F-!′ : {a : obj₁} → ε⁻¹ ∘ Fₘ {a = a} ! ≈ !
+    F-!′ = ∘≈ʳ F-! ; ∘-assoc-elimˡ ε⁻¹∘ε
+
+    F-▵′ : {f : a ⇨₁ c}{g : a ⇨₁ d} → μ⁻¹ ∘ Fₘ (f ▵ g) ≈ Fₘ f ▵ Fₘ g
+    F-▵′ = ∘≈ʳ F-▵ ; ∘-assoc-elimˡ μ⁻¹∘μ
+
+    F-exl′ : {a b : obj₁} → Fₘ exl ≈ exl ∘ μ⁻¹ {a = a}{b}
+    F-exl′ = introʳ μ∘μ⁻¹ ; ∘-assocˡ′ F-exl
+
+    F-exr′ : {a b : obj₁} → Fₘ exr ≈ exr ∘ μ⁻¹ {a = a}{b}
+    F-exr′ = introʳ μ∘μ⁻¹ ; ∘-assocˡ′ F-exr
+
 
 open CartesianH ⦃ … ⦄ public
 

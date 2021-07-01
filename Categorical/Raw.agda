@@ -30,9 +30,9 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   field
     ⦃ ⇨Category ⦄ : Category _⇨_
     !   : a ⇨ ⊤
+    _▵_ : ∀ {a c d} → (a ⇨ c) → (a ⇨ d) → (a ⇨ c × d)
     exl : a × b ⇨ a
     exr : a × b ⇨ b
-    _▵_ : ∀ {a c d} → (a ⇨ c) → (a ⇨ d) → (a ⇨ c × d)
 
   dup : a ⇨ a × a
   dup = id ▵ id
