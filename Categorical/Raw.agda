@@ -43,11 +43,14 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   _⊗_ : (a ⇨ c) → (b ⇨ d) → (a × b ⇨ c × d)
   f ⊗ g = f ∘ exl ▵ g ∘ exr
 
-  first : a ⇨ c → a × b ⇨ c × b
+  first : (a ⇨ c) → (a × b ⇨ c × b)
   first f = f ⊗ id
 
-  second : b ⇨ d → a × b ⇨ a × d
+  second : (b ⇨ d) → (a × b ⇨ a × d)
   second g = id ⊗ g
+
+  twice : (a ⇨ c) → (a × a ⇨ c × c)
+  twice f = f ⊗ f
 
   unitorᵉˡ : ⊤ × a ⇨ a
   unitorᵉˡ = exr
@@ -100,6 +103,10 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   unzipⱽ  zero   = ! ▵ !
   unzipⱽ (suc n) = transpose ∘ second (unzipⱽ n)
 
+  replicateⱽ : ∀ n → a ⇨ V a n
+  replicateⱽ zero    = !
+  replicateⱽ (suc n) = id ▵ replicateⱽ n
+
   -- (a × b) × (V a n × V b n) ⇨ (a × V a n) × (b × V b n)
 
   mapᵀ : ∀ n → (a ⇨ b) → (T a n ⇨ T b n)
@@ -109,6 +116,10 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   unzipᵀ : ∀ n → (T (a × b) n ⇨ T a n × T b n)
   unzipᵀ  zero   = id
   unzipᵀ (suc n) = transpose ∘ (unzipᵀ n ⊗ unzipᵀ n)
+
+  replicateᵀ : ∀ n → a ⇨ T a n
+  replicateᵀ zero    = id
+  replicateᵀ (suc n) = replicateᵀ n ▵ replicateᵀ n
 
 open Cartesian ⦃ … ⦄ public
 

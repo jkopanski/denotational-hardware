@@ -1,4 +1,5 @@
 -- Miscellaneous circuit examples
+{-# OPTIONS --guardedness #-}
 
 module Test where
 

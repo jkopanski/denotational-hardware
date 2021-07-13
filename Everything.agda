@@ -1,3 +1,5 @@
+{-# OPTIONS --guardedness #-}  -- for Test's use of IO
+
 module Everything where
 
 import Show
