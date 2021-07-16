@@ -10,19 +10,17 @@ open ≈-Reasoning
 open import Categorical.Reasoning
 
 module Categorical.Comma.Raw
-   {o₁}{obj₁ : Set o₁} ⦃ _ : Products obj₁ ⦄
-     {ℓ₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁) ⦃ _ : Cartesian _⇨₁_ ⦄
-   {o₂}{obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄
-     {ℓ₂} (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂) ⦃ _ : Cartesian _⇨₂_ ⦄
-   {o₃}{obj₃ : Set o₃} ⦃ _ : Products obj₃ ⦄
-     {ℓ₃} (_⇨₃_ : obj₃ → obj₃ → Set ℓ₃) ⦃ _ : Cartesian _⇨₃_ ⦄
-   {q} ⦃ _ : Equivalent q _⇨₃_ ⦄ ⦃ _ : L.Cartesian _⇨₃_ ⦄
+   {o₁}{obj₁ : Set o₁}
+     {ℓ₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁) ⦃ _ : Category _⇨₁_ ⦄
+   {o₂}{obj₂ : Set o₂}
+     {ℓ₂} (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂) ⦃ _ : Category _⇨₂_ ⦄
+   {o₃}{obj₃ : Set o₃}
+     {ℓ₃} (_⇨₃_ : obj₃ → obj₃ → Set ℓ₃) ⦃ _ : Category _⇨₃_ ⦄
+   {q} ⦃ _ : Equivalent q _⇨₃_ ⦄ ⦃ _ : L.Category _⇨₃_ ⦄
    ⦃ _ : Homomorphismₒ obj₁ obj₃ ⦄ ⦃ _ : Homomorphism _⇨₁_ _⇨₃_ ⦄
-     ⦃ catH₁ : CategoryH _⇨₁_ _⇨₃_ ⦄ ⦃ _ : ProductsH obj₁ _⇨₃_ ⦄
-     ⦃ cartH₁ : CartesianH _⇨₁_ _⇨₃_ ⦄
+     ⦃ catH₁ : CategoryH _⇨₁_ _⇨₃_ ⦄
    ⦃ _ : Homomorphismₒ obj₂ obj₃ ⦄ ⦃ _ : Homomorphism _⇨₂_ _⇨₃_ ⦄
-     ⦃ catH₂ : CategoryH _⇨₂_ _⇨₃_ ⦄ ⦃ _ : ProductsH obj₂ _⇨₃_ ⦄
-     ⦃ cartH₂ : CartesianH _⇨₂_ _⇨₃_ ⦄
+     ⦃ catH₂ : CategoryH _⇨₂_ _⇨₃_ ⦄
  where
 
 open import Categorical.Comma.Type _⇨₁_ _⇨₂_ _⇨₃_
@@ -31,7 +29,7 @@ open import Categorical.Comma.Type _⇨₁_ _⇨₂_ _⇨₃_
 
 open Obj
 
-private
+module comma-cat where
 
   -- variable a : Obj  --  "No instance of type CategoryH _⇨₂_ _⇨₃_ was found in scope."
 
@@ -70,7 +68,18 @@ private
     mk (g₁ ∘ f₁) (g₂ ∘ f₂)
        (∘≈ʳ F-∘ ; ∘-assocˡ′ comm-g ; ∘-assocʳ′ comm-f ; ∘-assocˡ′ (sym F-∘))
 
-module comma-raw-instances-obj where
+  instance
+
+    category : Category _⇨_
+    category = record { id = id′ ; _∘_ = comp }
+
+module comma-products
+    ⦃ _ : Products obj₁ ⦄  ⦃ _ : Products obj₂ ⦄  ⦃ _ : Products obj₃ ⦄
+    ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄ ⦃ _ : Cartesian _⇨₃_ ⦄
+    ⦃ _ : L.Cartesian _⇨₃_ ⦄
+    ⦃ _ : ProductsH obj₁ _⇨₃_ ⦄  ⦃ _ : ProductsH obj₂ _⇨₃_ ⦄
+    ⦃ _ : CartesianH _⇨₁_ _⇨₃_ ⦄ ⦃ _ : CartesianH _⇨₂_ _⇨₃_ ⦄
+  where
 
   instance
 
@@ -78,8 +87,6 @@ module comma-raw-instances-obj where
     products = record { ⊤   = mk (ε ∘ ε⁻¹)
                       ; _×_ = λ (mk h) (mk k) → mk (μ ∘ (h ⊗ k) ∘ μ⁻¹)
                       }
-
-private
 
   -- !′ : ∀ {a} → a ⇨ ⊤
   -- !′ {a} = mk ! !
@@ -162,15 +169,10 @@ private
     ; sym (∘-assocˡ′ F-exr)
     )
 
-
-module comma-raw-instances where
-
   instance
 
-    category : Category _⇨_
-    category = record { id = id′ ; _∘_ = comp }
-  
     cartesian : Cartesian _⇨_
     cartesian = record { ! = !′ ; _▵_ = fork ; exl = exl′ ; exr = exr′ }
 
-    -- TODO: CartesianClosed and Logic.
+-- TODO: CartesianClosed and Logic.
+

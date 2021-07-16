@@ -6,7 +6,7 @@ open import Ty
 
 module Ty.Utils {ℓ}
   {_⇨_ : Ty → Ty → Set ℓ} (let infix 0 _⇨_; _⇨_ = _⇨_)
-  ⦃ _ : Cartesian _⇨_ ⦄
+  ⦃ _ : Category _⇨_ ⦄ ⦃ _ : Cartesian _⇨_ ⦄
   where
 
 open import Data.Nat

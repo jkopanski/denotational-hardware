@@ -86,8 +86,8 @@ record CartesianH
          {obj₁ : Set o₁} ⦃ _ : Products obj₁ ⦄ (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁)
          {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂)
          {q} ⦃ _ : Equivalent q _⇨₂_ ⦄
-         ⦃ _ : Cartesian _⇨₁_ ⦄
-         ⦃ _ : Cartesian _⇨₂_ ⦄
+         ⦃ _ : Category _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₁_ ⦄
+         ⦃ _ : Category _⇨₂_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄
          ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
          ⦃ H : Homomorphism _⇨₁_ _⇨₂_ ⦄
          ⦃ pH : ProductsH obj₁ _⇨₂_ ⦄
@@ -116,8 +116,8 @@ open CartesianH ⦃ … ⦄ public
 
 id-CartesianH : {obj : Set o} {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Products obj ⦄
                 {q : Level} ⦃ _ : Equivalent q _⇨_ ⦄
-                ⦃ _ : Cartesian _⇨_ ⦄
-                ⦃ _ : L.Cartesian _⇨_ ⦄
+                ⦃ _ :   Category _⇨_ ⦄ ⦃ _ :   Cartesian _⇨_ ⦄
+                ⦃ _ : L.Category _⇨_ ⦄ ⦃ _ : L.Cartesian _⇨_ ⦄
               → CartesianH _⇨_ _⇨_ ⦃ Hₒ = id-Hₒ ⦄ ⦃ H = id-H ⦄ ⦃ pH = id-ProductsH ⦄
 id-CartesianH = record
   { F-!   = sym identityˡ
@@ -181,7 +181,7 @@ record LogicH
     {q} ⦃ _ : Equivalent q _⇨₂′_ ⦄
     ⦃ _ : Boolean obj₁ ⦄ ⦃ _ : Products obj₁ ⦄ ⦃ _ : Logic _⇨₁′_ ⦄
     ⦃ _ : Boolean obj₂ ⦄ ⦃ _ : Products obj₂ ⦄ ⦃ _ : Logic _⇨₂′_ ⦄
-    ⦃ _ : Cartesian _⇨₂′_ ⦄
+    ⦃ _ : Category _⇨₂′_ ⦄ ⦃ _ : Cartesian _⇨₂′_ ⦄
     ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
     ⦃ H : Homomorphism _⇨₁′_ _⇨₂′_ ⦄
     ⦃ productsH : ProductsH obj₁ _⇨₂′_ ⦄
