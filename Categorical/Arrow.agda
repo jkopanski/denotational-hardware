@@ -9,9 +9,9 @@ open import Categorical.Laws as L hiding (Category; Cartesian)
 open import Categorical.Homomorphism
 
 module Categorical.Arrow
-   {o}{obj : Set o} ⦃ _ : Products obj ⦄
-   {ℓ} (_↠_ : obj → obj → Set ℓ) ⦃ _ : Category _↠_ ⦄ ⦃ _ : Cartesian _↠_ ⦄
-   {q} ⦃ _ : Equivalent q _↠_ ⦄ ⦃ _ : L.Category _↠_ ⦄ ⦃ _ : L.Cartesian _↠_ ⦄
+   {o}{obj : Set o}
+   {ℓ} (_↠_ : obj → obj → Set ℓ) ⦃ _ : Category _↠_ ⦄
+   {q} ⦃ _ : Equivalent q _↠_ ⦄ ⦃ _ : L.Category _↠_ ⦄
  where
 
 private
@@ -26,20 +26,22 @@ private
     catH : CategoryH _↠_ _↠_
     catH = id-CategoryH
 
+    -- TODO: Replace Hₒ, H, etc by a bundle
+
+open import Categorical.Comma.Raw _↠_ _↠_ _↠_
+              ⦃ catH₁ = catH ⦄ ⦃ catH₂ = catH ⦄ public
+
+
+module arrow-products ⦃ p : Products obj ⦄ ⦃ c : Cartesian _↠_ ⦄ ⦃ lc : L.Cartesian _↠_ ⦄ where
+
+  instance
+
     prodH : ProductsH obj _↠_
     prodH = id-ProductsH
 
     cartH : CartesianH _↠_ _↠_
     cartH = id-CartesianH
 
-    -- TODO: Replace Hₒ, H, etc by a bundle
-
--- open import Categorical.Comma.Type _↠_ _↠_ _↠_ ⦃ ch₁ = catH ⦄ ⦃ ch₂ = catH ⦄ public
-
-open import Categorical.Comma.Raw _↠_ _↠_ _↠_
-  ⦃ catH₁ = catH ⦄ ⦃ cartH₁ = cartH ⦄
-  ⦃ catH₂ = catH ⦄ ⦃ cartH₂ = cartH ⦄
-  public
 
 -- Transposition
 _ᵀ : ∀ {a b} ((mk f₁ f₂ _) : a ⇨ b) → (f₁ ⇉ f₂)
