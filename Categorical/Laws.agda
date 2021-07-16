@@ -80,13 +80,12 @@ open import Data.Product using (_,_) renaming (_×_ to _×ₚ_)
 record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
                  (_⇨′_ : obj → obj → Set ℓ)
                  {q} ⦃ _ : Equivalent q _⇨′_ ⦄
-                 ⦃ _ : R.Cartesian _⇨′_ ⦄
+                 ⦃ _ : R.Category _⇨′_ ⦄ ⦃ _ : R.Cartesian _⇨′_ ⦄
+                 ⦃ ⇨Category : Category _⇨′_ ⦄
        : Set (suc o ⊔ ℓ ⊔ suc q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
 
   field
-    ⦃ ⇨Category ⦄ : Category _⇨_
-
     ∀⊤ : ∀ {f : a ⇨ ⊤} → f ≈ !
 
     ∀× : ∀ {f : a ⇨ b} {g : a ⇨ c} {k : a ⇨ b × c}
@@ -154,12 +153,13 @@ record CartesianClosed {obj : Set o} ⦃ _ : Products obj ⦄
                        ⦃ _ : Exponentials obj ⦄ (_⇨′_ : obj → obj → Set ℓ)
                        {q} ⦃ _ : Equivalent q _⇨′_ ⦄
                        ⦃ _ : Products (Set q) ⦄
+                       ⦃ _ : R.Category _⇨′_ ⦄
+                       ⦃ _ : R.Cartesian _⇨′_ ⦄
                        ⦃ _ : R.CartesianClosed _⇨′_ ⦄
+                       ⦃ ⇨Category : Category _⇨′_ ⦄ ⦃ ⇨Cartesian : Cartesian _⇨′_ ⦄
        : Set (suc o ⊔ ℓ ⊔ suc q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
-    ⦃ ⇨Cartesian ⦄ : Cartesian _⇨_
-
     ∀⇛ : ∀ {f : a × b ⇨ c} {g : a ⇨ (b ⇛ c)} → (g ≈ curry f) ⇔ (f ≈ uncurry g)
     -- Note: uncurry g ≡ apply ∘ first g ≡ apply ∘ (g ⊗ id)
     -- RHS is often written "apply ∘ (g ⊗ id)"

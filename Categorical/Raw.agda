@@ -24,13 +24,14 @@ open Category ⦃ … ⦄ public
 
 
 record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
-         (_⇨′_ : obj → obj → Set ℓ) : Set (o ⊔ ℓ) where
+         (_⇨′_ : obj → obj → Set ℓ)
+         ⦃ ⇨Category : Category _⇨′_ ⦄
+    : Set (o ⊔ ℓ) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   infixr 7 _▵_
   field
-    ⦃ ⇨Category ⦄ : Category _⇨_
     !   : a ⇨ ⊤
-    _▵_ : ∀ {a c d} → (a ⇨ c) → (a ⇨ d) → (a ⇨ c × d)
+    _▵_ : (a ⇨ c) → (a ⇨ d) → (a ⇨ c × d)
     exl : a × b ⇨ a
     exr : a × b ⇨ b
 
@@ -126,10 +127,13 @@ open Cartesian ⦃ … ⦄ public
 
 record CartesianClosed {obj : Set o}
          ⦃ _ : Products obj ⦄ ⦃ _ : Exponentials obj ⦄
-         (_⇨′_ : obj → obj → Set ℓ) : Set (o ⊔ ℓ) where
+         (_⇨′_ : obj → obj → Set ℓ)
+         ⦃ ⇨Category : Category _⇨′_ ⦄
+         ⦃ ⇨Cartesian : Cartesian _⇨′_ ⦄
+    : Set (o ⊔ ℓ) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
-    ⦃ ⇨Cartesian ⦄ : Cartesian _⇨_
+    
     curry : (a × b ⇨ c) → (a ⇨ (b ⇛ c))
     apply : (a ⇛ b) × a ⇨ b
 

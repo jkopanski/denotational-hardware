@@ -7,8 +7,9 @@ module Linearize.Raw {o}{objₘ : Set o} ⦃ _ : Products objₘ ⦄ ⦃ _ : Exp
              {ℓ}{obj : Set ℓ} ⦃ _ : Products obj ⦄ ⦃ _ : Exponentials obj ⦄
              (_⇨ₚ_ : obj → obj → Set ℓ) (let infix 0 _⇨ₚ_; _⇨ₚ_ = _⇨ₚ_)
              (_⇨ᵣ_ : obj → obj → Set ℓ) (let infix 0 _⇨ᵣ_; _⇨ᵣ_ = _⇨ᵣ_)
-             ⦃ _ : CartesianClosed _⇨ₘ_ ⦄   -- monoidal suffices?
-             ⦃ _ : Cartesian _⇨ᵣ_ ⦄   -- braided suffices
+             ⦃ _ : Category _⇨ₘ_ ⦄ ⦃ _ : Cartesian _⇨ₘ_ ⦄
+               ⦃ _ : CartesianClosed _⇨ₘ_ ⦄   -- monoidal suffices?
+             ⦃ _ : Category _⇨ᵣ_ ⦄ ⦃ _ : Cartesian _⇨ᵣ_ ⦄  -- braided suffices?
              -- The rest are for ⟦_⟧ₖ. Maybe move them into a submodule.
              ⦃ Hₒ : Homomorphismₒ obj objₘ ⦄
              ⦃ Hₚ : Homomorphism _⇨ₚ_ _⇨ₘ_ ⦄

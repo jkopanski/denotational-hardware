@@ -11,12 +11,12 @@ open import Categorical.Reasoning
 
 module Categorical.Comma.Raw
    {o₁}{obj₁ : Set o₁} ⦃ _ : Products obj₁ ⦄
-     {ℓ₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁) ⦃ _ : Cartesian _⇨₁_ ⦄
+     {ℓ₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁) ⦃ _ : Category _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₁_ ⦄
    {o₂}{obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄
-     {ℓ₂} (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂) ⦃ _ : Cartesian _⇨₂_ ⦄
+     {ℓ₂} (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂) ⦃ _ : Category _⇨₂_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄
    {o₃}{obj₃ : Set o₃} ⦃ _ : Products obj₃ ⦄
-     {ℓ₃} (_⇨₃_ : obj₃ → obj₃ → Set ℓ₃) ⦃ _ : Cartesian _⇨₃_ ⦄
-   {q} ⦃ _ : Equivalent q _⇨₃_ ⦄ ⦃ _ : L.Cartesian _⇨₃_ ⦄
+     {ℓ₃} (_⇨₃_ : obj₃ → obj₃ → Set ℓ₃) ⦃ _ : Category _⇨₃_ ⦄ ⦃ _ : Cartesian _⇨₃_ ⦄
+   {q} ⦃ _ : Equivalent q _⇨₃_ ⦄ ⦃ _ : L.Category _⇨₃_ ⦄ ⦃ _ : L.Cartesian _⇨₃_ ⦄
    ⦃ _ : Homomorphismₒ obj₁ obj₃ ⦄ ⦃ _ : Homomorphism _⇨₁_ _⇨₃_ ⦄
      ⦃ catH₁ : CategoryH _⇨₁_ _⇨₃_ ⦄ ⦃ _ : ProductsH obj₁ _⇨₃_ ⦄
      ⦃ cartH₁ : CartesianH _⇨₁_ _⇨₃_ ⦄
@@ -24,6 +24,8 @@ module Categorical.Comma.Raw
      ⦃ catH₂ : CategoryH _⇨₂_ _⇨₃_ ⦄ ⦃ _ : ProductsH obj₂ _⇨₃_ ⦄
      ⦃ cartH₂ : CartesianH _⇨₂_ _⇨₃_ ⦄
  where
+
+-- TODO: Move Cartesian from module parameters to Cartesian instance
 
 open import Categorical.Comma.Type _⇨₁_ _⇨₂_ _⇨₃_
        ⦃ catH₁ = catH₁ ⦄ ⦃ catH₂ = catH₂ ⦄

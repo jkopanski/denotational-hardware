@@ -10,8 +10,8 @@ open import Categorical.Homomorphism
 
 module Categorical.Arrow
    {o}{obj : Set o} ⦃ _ : Products obj ⦄
-   {ℓ} (_↠_ : obj → obj → Set ℓ) ⦃ _ : Cartesian _↠_ ⦄
-   {q} ⦃ _ : Equivalent q _↠_ ⦄ ⦃ _ : L.Cartesian _↠_ ⦄
+   {ℓ} (_↠_ : obj → obj → Set ℓ) ⦃ _ : Category _↠_ ⦄ ⦃ _ : Cartesian _↠_ ⦄
+   {q} ⦃ _ : Equivalent q _↠_ ⦄ ⦃ _ : L.Category _↠_ ⦄ ⦃ _ : L.Cartesian _↠_ ⦄
  where
 
 private
