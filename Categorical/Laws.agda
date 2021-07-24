@@ -122,11 +122,11 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   -- exl∘▵ : ∀ {f : a ⇨ c}{g : b ⇨ d} → exl ∘ (f ⊗ g) ≈ f ∘ exl
   -- exr∘▵ : ∀ {f : a ⇨ c}{g : b ⇨ d} → exr ∘ (f ⊗ g) ≈ g ∘ exr
 
-  exl∘▵exr : ∀ {a b : obj} → exl ▵ exr ≈ id {a = a × b}
-  exl∘▵exr = sym (∀×← (identityʳ , identityʳ))
+  exl▵exr : ∀ {a b : obj} → exl ▵ exr ≈ id {a = a × b}
+  exl▵exr = sym (∀×← (identityʳ , identityʳ))
 
   id⊗id : ∀ {a b : obj} → id ⊗ id ≈ id {a = a × b}
-  id⊗id = exl∘▵exr • ▵≈ identityˡ identityˡ
+  id⊗id = exl▵exr • ▵≈ identityˡ identityˡ
 
   ▵∘ : ∀ {f : a ⇨ b}{g : b ⇨ c}{h : b ⇨ d} → (g ▵ h) ∘ f ≈ g ∘ f ▵ h ∘ f
   ▵∘ {f = f}{g}{h}= ∀×← (∘≈ˡ exl∘▵ • sym assoc , ∘≈ˡ exr∘▵ • sym assoc)
