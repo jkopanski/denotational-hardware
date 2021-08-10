@@ -8,24 +8,24 @@ open import Categorical.Equiv
 open import Categorical.Homomorphism
 
 module Categorical.Comma.Type
+   {o₀}{obj₀ : Set o₀} {ℓ₀}(_⇨₀_ : obj₀ → obj₀ → Set ℓ₀) ⦃ c₀ : Category _⇨₀_ ⦄
    {o₁}{obj₁ : Set o₁} {ℓ₁}(_⇨₁_ : obj₁ → obj₁ → Set ℓ₁) ⦃ c₁ : Category _⇨₁_ ⦄
    {o₂}{obj₂ : Set o₂} {ℓ₂}(_⇨₂_ : obj₂ → obj₂ → Set ℓ₂) ⦃ c₂ : Category _⇨₂_ ⦄
-   {o₃}{obj₃ : Set o₃} {ℓ₃}(_⇨₃_ : obj₃ → obj₃ → Set ℓ₃) ⦃ c₃ : Category _⇨₃_ ⦄
-   {q} ⦃ _ : Equivalent q _⇨₃_ ⦄
-   ⦃ hₒ₁ : Homomorphismₒ obj₁ obj₃ ⦄ ⦃ h₁ : Homomorphism _⇨₁_ _⇨₃_ ⦄
-     ⦃ catH₁ : CategoryH _⇨₁_ _⇨₃_ ⦄
-   ⦃ hₒ₂ : Homomorphismₒ obj₂ obj₃ ⦄ ⦃ h₂ : Homomorphism _⇨₂_ _⇨₃_ ⦄
-     ⦃ catH₂ : CategoryH _⇨₂_ _⇨₃_ ⦄
+   {q} ⦃ _ : Equivalent q _⇨₀_ ⦄
+   ⦃ hₒ₁ : Homomorphismₒ obj₁ obj₀ ⦄ ⦃ h₁ : Homomorphism _⇨₁_ _⇨₀_ ⦄
+     ⦃ catH₁ : CategoryH _⇨₁_ _⇨₀_ ⦄
+   ⦃ hₒ₂ : Homomorphismₒ obj₂ obj₀ ⦄ ⦃ h₂ : Homomorphism _⇨₂_ _⇨₀_ ⦄
+     ⦃ catH₂ : CategoryH _⇨₂_ _⇨₀_ ⦄
  where
 
 -- TODO: Define some bundles to reduce syntactic clutter.
 
-record Obj : Set (o₁ ⊔ o₂ ⊔ ℓ₃) where
+record Obj : Set (o₁ ⊔ o₂ ⊔ ℓ₀) where
   constructor mk
   field
     { τ₁ } : obj₁
     { τ₂ } : obj₂
-    h : Fₒ τ₁ ⇨₃ Fₒ τ₂
+    h : Fₒ τ₁ ⇨₀ Fₒ τ₂
 
 open Obj
 
@@ -42,7 +42,7 @@ open _⇨_
 -- Shorthand
 infix 0 _⇉_
 _⇉_ : ∀ {σ₁ τ₁ : obj₁}{σ₂ τ₂ : obj₂}
-    → (Fₒ σ₁ ⇨₃ Fₒ σ₂) → (Fₒ τ₁ ⇨₃ Fₒ τ₂) → Set (ℓ₁ ⊔ ℓ₂ ⊔ q)
+    → (Fₒ σ₁ ⇨₀ Fₒ σ₂) → (Fₒ τ₁ ⇨₀ Fₒ τ₂) → Set (ℓ₁ ⊔ ℓ₂ ⊔ q)
 g ⇉ h = mk g ⇨ mk h
 
 module comma-type-instances where
