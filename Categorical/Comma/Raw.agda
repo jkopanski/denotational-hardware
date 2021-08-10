@@ -10,20 +10,17 @@ open ≈-Reasoning
 open import Categorical.Reasoning
 
 module Categorical.Comma.Raw
-   {o₁}{obj₁ : Set o₁}
-     {ℓ₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁) ⦃ _ : Category _⇨₁_ ⦄
-   {o₂}{obj₂ : Set o₂}
-     {ℓ₂} (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂) ⦃ _ : Category _⇨₂_ ⦄
-   {o₃}{obj₃ : Set o₃}
-     {ℓ₃} (_⇨₃_ : obj₃ → obj₃ → Set ℓ₃) ⦃ _ : Category _⇨₃_ ⦄
-   {q} ⦃ _ : Equivalent q _⇨₃_ ⦄ ⦃ _ : L.Category _⇨₃_ ⦄
-   ⦃ _ : Homomorphismₒ obj₁ obj₃ ⦄ ⦃ _ : Homomorphism _⇨₁_ _⇨₃_ ⦄
-     ⦃ catH₁ : CategoryH _⇨₁_ _⇨₃_ ⦄
-   ⦃ _ : Homomorphismₒ obj₂ obj₃ ⦄ ⦃ _ : Homomorphism _⇨₂_ _⇨₃_ ⦄
-     ⦃ catH₂ : CategoryH _⇨₂_ _⇨₃_ ⦄
+   {o₀}{obj₀ : Set o₀} {ℓ₀} (_⇨₀_ : obj₀ → obj₀ → Set ℓ₀) ⦃ _ : Category _⇨₀_ ⦄
+   {o₁}{obj₁ : Set o₁} {ℓ₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁) ⦃ _ : Category _⇨₁_ ⦄
+   {o₂}{obj₂ : Set o₂} {ℓ₂} (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂) ⦃ _ : Category _⇨₂_ ⦄
+   {q} ⦃ _ : Equivalent q _⇨₀_ ⦄ ⦃ _ : L.Category _⇨₀_ ⦄
+   ⦃ _ : Homomorphismₒ obj₁ obj₀ ⦄ ⦃ _ : Homomorphism _⇨₁_ _⇨₀_ ⦄
+     ⦃ catH₁ : CategoryH _⇨₁_ _⇨₀_ ⦄
+   ⦃ _ : Homomorphismₒ obj₂ obj₀ ⦄ ⦃ _ : Homomorphism _⇨₂_ _⇨₀_ ⦄
+     ⦃ catH₂ : CategoryH _⇨₂_ _⇨₀_ ⦄
  where
 
-open import Categorical.Comma.Type _⇨₁_ _⇨₂_ _⇨₃_
+open import Categorical.Comma.Type _⇨₀_ _⇨₁_ _⇨₂_
        ⦃ catH₁ = catH₁ ⦄ ⦃ catH₂ = catH₂ ⦄
      public
 
@@ -31,7 +28,7 @@ open Obj
 
 module comma-cat where
 
-  -- variable a : Obj  --  "No instance of type CategoryH _⇨₂_ _⇨₃_ was found in scope."
+  -- variable a : Obj  --  "No instance of type CategoryH _⇨₂_ _⇨₀_ was found in scope."
 
   -- id′ : ∀ {a} → a ⇨ a
   -- id′ {a} = mk id id
@@ -74,11 +71,11 @@ module comma-cat where
     category = record { id = id′ ; _∘_ = comp }
 
 module comma-products
-    ⦃ _ : Products obj₁ ⦄  ⦃ _ : Products obj₂ ⦄  ⦃ _ : Products obj₃ ⦄
-    ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄ ⦃ _ : Cartesian _⇨₃_ ⦄
-    ⦃ _ : L.Cartesian _⇨₃_ ⦄
-    ⦃ _ : ProductsH obj₁ _⇨₃_ ⦄  ⦃ _ : ProductsH obj₂ _⇨₃_ ⦄
-    ⦃ _ : CartesianH _⇨₁_ _⇨₃_ ⦄ ⦃ _ : CartesianH _⇨₂_ _⇨₃_ ⦄
+    ⦃ _ : Products obj₁ ⦄  ⦃ _ : Products obj₂ ⦄  ⦃ _ : Products obj₀ ⦄
+    ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄ ⦃ _ : Cartesian _⇨₀_ ⦄
+    ⦃ _ : L.Cartesian _⇨₀_ ⦄
+    ⦃ _ : ProductsH obj₁ _⇨₀_ ⦄  ⦃ _ : ProductsH obj₂ _⇨₀_ ⦄
+    ⦃ _ : CartesianH _⇨₁_ _⇨₀_ ⦄ ⦃ _ : CartesianH _⇨₂_ _⇨₀_ ⦄
   where
 
   instance
