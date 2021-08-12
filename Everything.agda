@@ -8,6 +8,7 @@ import Categorical.Equiv
 import Categorical.Raw
 import Categorical.Homomorphism
 import Categorical.Laws
+import Categorical.MakeLawful
 
 import Categorical.Comma
 import Categorical.Arrow

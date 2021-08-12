@@ -24,11 +24,11 @@ LawfulCategoryᶠ : {obj₁ : Set o₁} {_⇨₁_ : obj₁ → obj₁ → Set �
                   {obj₂ : Set o₂} (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂)
                   {q : Level} ⦃ _ : Equivalent q _⇨₂_ ⦄
                   ⦃ _ : Category _⇨₁_ ⦄ ⦃ _ : Category _⇨₂_ ⦄
-                  ⦃ _ : L.Category _⇨₂_ q ⦄
+                  ⦃ _ : L.Category _⇨₂_ ⦄
                   ⦃ _ : Homomorphismₒ obj₁ obj₂ ⦄
                   ⦃ H : Homomorphism _⇨₁_ _⇨₂_ ⦄
-                  ⦃ F : CategoryH _⇨₁_ _⇨₂_ q ⦄
-                → L.Category _⇨₁_ q ⦃ equiv = H-equiv H ⦄
+                  ⦃ F : CategoryH _⇨₁_ _⇨₂_ ⦄
+                → L.Category _⇨₁_ ⦃ equiv = H-equiv H ⦄
 
 LawfulCategoryᶠ F = record
   { identityˡ = λ {a b} {f} →
