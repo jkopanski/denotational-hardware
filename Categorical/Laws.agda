@@ -120,8 +120,22 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   exr∘▵ = proj₂ (∀×→ refl)
 
   -- Specializing:
-  -- exl∘⊗ : ∀ {f : a ⇨ c}{g : b ⇨ d} → exl ∘ (f ⊗ g) ≈ f ∘ exl
-  -- exr∘⊗ : ∀ {f : a ⇨ c}{g : b ⇨ d} → exr ∘ (f ⊗ g) ≈ g ∘ exr
+  exl∘⊗ : ∀ {f : a ⇨ c}{g : b ⇨ d} → exl ∘ (f ⊗ g) ≈ f ∘ exl
+  exl∘⊗ = exl∘▵
+  exr∘⊗ : ∀ {f : a ⇨ c}{g : b ⇨ d} → exr ∘ (f ⊗ g) ≈ g ∘ exr
+  exr∘⊗ = exr∘▵
+
+  exl∘first : ∀ {b : obj} {f : a ⇨ c} → exl ∘ first {b = b} f ≈ f ∘ exl
+  exl∘first = exl∘⊗
+
+  exr∘first : ∀ {b : obj} {f : a ⇨ c} → exr ∘ first {b = b} f ≈ exr
+  exr∘first = exr∘⊗ ; identityˡ
+
+  exl∘second : ∀ {a : obj} {g : b ⇨ d} → exl ∘ second {a = a} g ≈ exl
+  exl∘second = exl∘⊗ ; identityˡ
+
+  exr∘second : ∀ {a : obj} {g : b ⇨ d} → exr ∘ second {a = a} g ≈ g ∘ exr
+  exr∘second = exr∘⊗
 
   exl▵exr : ∀ {a b : obj} → exl ▵ exr ≈ id {a = a × b}
   exl▵exr = sym (∀×← (identityʳ , identityʳ))
@@ -201,7 +215,10 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
 
   -- Note that first∘first specializes first∘⊗ and ⊗∘first, whie second∘second
   -- specializes second∘⊗ and ⊗∘second.
-  
+
+  -- TODO: redefine first f and second g via ▵ to avoid id ∘ exr and id ∘ exl.
+  -- There many be broad consequences.
+
 open Cartesian ⦃ … ⦄ public
 
 record CartesianClosed {obj : Set o} ⦃ _ : Products obj ⦄
