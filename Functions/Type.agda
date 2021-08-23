@@ -9,6 +9,9 @@ open import Categorical.Raw
 
 import Data.Bool as B
 
+⟨→⟩ : Set → Set → Set
+⟨→⟩ a b = a → b
+
 Function : Set → Set → Set
 Function a b = a → b
 

@@ -44,8 +44,8 @@ halfAdd = xor ▵ ∧
 fullAdd : Bool × Bool ⇨ᶜ Bool
 fullAdd = second ∨ ∘ inAssocˡ halfAdd ∘ second halfAdd
 
--- λ (c , (a , b)) → let (p , d) = halfAdd (a , b)
---                       (q , e) = halfAdd (c , p) in (q , e ∨ d)
+-- λ (c , (a , b)) → let p , d = halfAdd (a , b)
+--                       q , e = halfAdd (c , p) in (q , e ∨ d)
 
 -- c , (a , b)
 -- c , (p , d)

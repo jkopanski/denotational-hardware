@@ -19,6 +19,7 @@ private
     o ℓ : Level
     obj : Set o
     a b c d e : obj
+    a′ b′ c′ d′ e′ : obj
 
 record Category {obj : Set o} (_⇨′_ : obj → obj → Set ℓ)
                 {q} ⦃ equiv : Equivalent q _⇨′_ ⦄
@@ -119,18 +120,54 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   exr∘▵ = proj₂ (∀×→ refl)
 
   -- Specializing:
-  -- exl∘▵ : ∀ {f : a ⇨ c}{g : b ⇨ d} → exl ∘ (f ⊗ g) ≈ f ∘ exl
-  -- exr∘▵ : ∀ {f : a ⇨ c}{g : b ⇨ d} → exr ∘ (f ⊗ g) ≈ g ∘ exr
+  exl∘⊗ : ∀ {f : a ⇨ c}{g : b ⇨ d} → exl ∘ (f ⊗ g) ≈ f ∘ exl
+  exl∘⊗ = exl∘▵
+  exr∘⊗ : ∀ {f : a ⇨ c}{g : b ⇨ d} → exr ∘ (f ⊗ g) ≈ g ∘ exr
+  exr∘⊗ = exr∘▵
+
+  exl∘first : ∀ {b : obj} {f : a ⇨ c} → exl ∘ first {b = b} f ≈ f ∘ exl
+  exl∘first = exl∘⊗
+
+  exr∘first : ∀ {b : obj} {f : a ⇨ c} → exr ∘ first {b = b} f ≈ exr
+  exr∘first = exr∘⊗ ; identityˡ
+
+  exl∘second : ∀ {a : obj} {g : b ⇨ d} → exl ∘ second {a = a} g ≈ exl
+  exl∘second = exl∘⊗ ; identityˡ
+
+  exr∘second : ∀ {a : obj} {g : b ⇨ d} → exr ∘ second {a = a} g ≈ g ∘ exr
+  exr∘second = exr∘⊗
 
   exl▵exr : ∀ {a b : obj} → exl ▵ exr ≈ id {a = a × b}
   exl▵exr = sym (∀×← (identityʳ , identityʳ))
+
+  ⊗≈ : ∀ {a b c d : obj}{f g : a ⇨ c}{h k : b ⇨ d}
+     → f ≈ g → h ≈ k → f ⊗ h ≈ g ⊗ k
+  ⊗≈ f≈g h≈k = ▵≈ (∘≈ˡ f≈g) (∘≈ˡ h≈k)
+
+  -- ⊗≈ {f = f}{g}{h}{k} f≈g h≈k =
+  --   begin
+  --     f ⊗ h
+  --   ≡⟨⟩
+  --     f ∘ exl ▵ h ∘ exr
+  --   ≈⟨ ▵≈ (∘≈ˡ f≈g) (∘≈ˡ h≈k) ⟩
+  --     g ∘ exl ▵ k ∘ exr
+  --   ≡⟨⟩
+  --     g ⊗ k
+  --   ∎
+
+  ⊗≈ˡ : ∀ {a b c d : obj}{f g : a ⇨ c}{h : b ⇨ d}
+     → f ≈ g → f ⊗ h ≈ g ⊗ h
+  ⊗≈ˡ f≈g = ⊗≈ f≈g refl
+
+  ⊗≈ʳ : ∀ {a b c d : obj}{f : a ⇨ c}{h k : b ⇨ d}
+     → h ≈ k → f ⊗ h ≈ f ⊗ k
+  ⊗≈ʳ h≈k = ⊗≈ refl h≈k
 
   id⊗id : ∀ {a b : obj} → id ⊗ id ≈ id {a = a × b}
   id⊗id = exl▵exr • ▵≈ identityˡ identityˡ
 
   ▵∘ : ∀ {f : a ⇨ b}{g : b ⇨ c}{h : b ⇨ d} → (g ▵ h) ∘ f ≈ g ∘ f ▵ h ∘ f
   ▵∘ {f = f}{g}{h}= ∀×← (∘≈ˡ exl∘▵ • sym assoc , ∘≈ˡ exr∘▵ • sym assoc)
-  -- exl ∘ ((g ▵ h) ∘ f) ≈ g ∘ f
 
   ⊗∘▵ : ∀ {f : a ⇨ b}{g : a ⇨ c}{h : b ⇨ d}{k : c ⇨ e}
       → (h ⊗ k) ∘ (f ▵ g) ≈ h ∘ f ▵ k ∘ g
@@ -146,6 +183,41 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
     ≈⟨ ▵≈ (∘≈ʳ exl∘▵) (∘≈ʳ exr∘▵) ⟩
       h ∘ f ▵ k ∘ g
     ∎
+
+  first∘▵ : ∀ {f : a ⇨ b}{g : a ⇨ c}{h : b ⇨ d}
+      → first h ∘ (f ▵ g) ≈ h ∘ f ▵ g
+  first∘▵ = ⊗∘▵ ; ▵≈ʳ identityˡ
+
+  second∘▵ : ∀ {f : a ⇨ b}{g : a ⇨ c}{k : c ⇨ e}
+      → second k ∘ (f ▵ g) ≈ f ▵ k ∘ g
+  second∘▵ = ⊗∘▵ ; ▵≈ˡ identityˡ
+
+  ⊗∘⊗ : ∀ {f : a ⇨ c}{g : b ⇨ d}{h : c ⇨ c′}{k : d ⇨ d′}
+      → (h ⊗ k) ∘ (f ⊗ g) ≈ h ∘ f ⊗ k ∘ g
+  ⊗∘⊗ = ⊗∘▵ ; ▵≈ ∘-assocˡ ∘-assocˡ
+
+  first∘⊗ : ∀ {f : a ⇨ c}{g : b ⇨ d}{h : c ⇨ c′}
+      → first h ∘ (f ⊗ g) ≈ h ∘ f ⊗ g
+  first∘⊗ = ⊗∘⊗ ; ⊗≈ʳ identityˡ
+       -- = first∘▵ ; ▵≈ˡ ∘-assocˡ
+
+  ⊗∘first : ∀ {f : a ⇨ c}{h : c ⇨ c′}{k : d ⇨ d′}
+      → (h ⊗ k) ∘ first f ≈ h ∘ f ⊗ k
+  ⊗∘first = ⊗∘⊗ ; ⊗≈ʳ identityʳ
+
+  ⊗∘second : ∀ {g : b ⇨ d}{h : c ⇨ c′}{k : d ⇨ d′}
+      → (h ⊗ k) ∘ second g ≈ h ⊗ k ∘ g
+  ⊗∘second = ⊗∘⊗ ; ⊗≈ˡ identityʳ
+
+  second∘⊗ : ∀ {f : a ⇨ c}{g : b ⇨ d}{k : d ⇨ d′}
+      → second k ∘ (f ⊗ g) ≈ f ⊗ k ∘ g
+  second∘⊗ = ⊗∘⊗ ; ⊗≈ˡ identityˡ
+
+  -- Note that first∘first specializes first∘⊗ and ⊗∘first, whie second∘second
+  -- specializes second∘⊗ and ⊗∘second.
+
+  -- TODO: redefine first f and second g via ▵ to avoid id ∘ exr and id ∘ exl.
+  -- There many be broad consequences.
 
 open Cartesian ⦃ … ⦄ public
 

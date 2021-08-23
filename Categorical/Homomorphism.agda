@@ -112,6 +112,98 @@ record CartesianH
     F-exr′ : {a b : obj₁} → Fₘ exr ≈ exr ∘ μ⁻¹ {a = a}{b}
     F-exr′ = introʳ μ∘μ⁻¹ ; ∘-assocˡ′ F-exr
 
+    module _ ⦃ _ : L.Cartesian _⇨₂_ ⦄ ⦃ _ : CategoryH _⇨₁_ _⇨₂_ ⦄ where
+
+      F-⊗ : ∀ {a b c d}{f : a ⇨₁ c}{g : b ⇨₁ d} → Fₘ (f ⊗ g) ∘ μ ≈ μ ∘ (Fₘ f ⊗ Fₘ g)
+      F-⊗ {f = f}{g} =
+        begin
+          Fₘ (f ∘ exl ▵ g ∘ exr) ∘ μ
+        ≈⟨ ∘≈ˡ (F-▵ ; ∘≈ʳ (▵≈ F-∘ F-∘)) ⟩
+          (μ ∘ (Fₘ f ∘ Fₘ exl ▵ Fₘ g ∘ Fₘ exr)) ∘ μ
+        ≈⟨ ∘-assocʳ ⟩
+          μ ∘ ((Fₘ f ∘ Fₘ exl ▵ Fₘ g ∘ Fₘ exr) ∘ μ)
+        ≈⟨ ∘≈ʳ (▵∘ ; ▵≈ (∘-assocʳ′ F-exl) (∘-assocʳ′ F-exr)) ⟩
+          μ ∘ (Fₘ f ∘ exl ▵ Fₘ g ∘ exr)
+        ∎
+
+      -- I wonder whether proofs become simpler and/or more regular if we switch
+      -- all axioms and lemmas to the form "Fₘ ... ≈ ...". One experiment:
+      F-⊗′ : ∀ {a b c d}{f : a ⇨₁ c}{g : b ⇨₁ d} → Fₘ (f ⊗ g) ≈ μ ∘ (Fₘ f ⊗ Fₘ g) ∘ μ⁻¹
+      F-⊗′ {f = f}{g} =
+        begin
+          Fₘ (f ∘ exl ▵ g ∘ exr)
+        ≈⟨ F-▵ ; ∘≈ʳ (▵≈ F-∘ F-∘) ⟩
+          μ ∘ (Fₘ f ∘ Fₘ exl ▵ Fₘ g ∘ Fₘ exr)
+        ≈⟨ ∘≈ʳ (▵≈ (∘≈ʳ F-exl′ ; ∘-assocˡ) (∘≈ʳ F-exr′ ; ∘-assocˡ)) ⟩
+          μ ∘ ((Fₘ f ∘ exl) ∘ μ⁻¹ ▵ (Fₘ g ∘ exr) ∘ μ⁻¹)
+        ≈⟨ ∘≈ʳ (sym ▵∘) ⟩
+          μ ∘ (Fₘ f ∘ exl ▵ Fₘ g ∘ exr) ∘ μ⁻¹
+        ∎
+
+      F-first : ∀ {a b c : obj₁}{f : a ⇨₁ c}
+               → Fₘ (first {b = b} f) ∘ μ ≈ μ ∘ first (Fₘ f)
+      F-first = F-⊗ ; ∘≈ʳ (⊗≈ʳ F-id)
+
+      F-second : ∀ {a b d : obj₁}{g : b ⇨₁ d}
+               → Fₘ (second {a = a} g) ∘ μ ≈ μ ∘ second (Fₘ g)
+      F-second = F-⊗ ; ∘≈ʳ (⊗≈ˡ F-id)
+
+      F-second′ : ∀ {a b d : obj₁}{g : b ⇨₁ d}
+                → Fₘ (second {a = a} g) ≈ μ ∘ second (Fₘ g) ∘ μ⁻¹
+      F-second′ = F-⊗′ ; ∘≈ʳ (∘≈ˡ (⊗≈ˡ F-id))
+
+      -- F-assocˡ′ : ∀ {a b c : obj₁}
+      --    → Fₘ (assocˡ {a = a}{b}{c}) ≈ μ ∘ first μ ∘ assocˡ ∘ second μ⁻¹ ∘ μ⁻¹
+      -- F-assocˡ′ =
+      --   begin
+      --     Fₘ assocˡ
+      --   ≡⟨⟩
+      --     Fₘ (second exl ▵ exr ∘ exr)
+      --   ≈⟨ F-▵ ⟩
+      --     μ ∘ (Fₘ (second exl) ▵ Fₘ (exr ∘ exr))
+      --   ≈⟨ ∘≈ʳ (▵≈ʳ F-∘) ⟩
+      --     μ ∘ (Fₘ (second exl) ▵ Fₘ exr ∘ Fₘ exr)
+      --   ≈⟨ ∘≈ʳ (▵≈ˡ F-second′) ⟩
+      --     μ ∘ (μ ∘ second (Fₘ exl) ∘ μ⁻¹ ▵ Fₘ exr ∘ Fₘ exr)
+      --   ≈⟨ ∘≈ʳ (▵≈ˡ (∘≈ʳ (∘≈ˡ (⊗≈ʳ F-exl′)))) ⟩
+      --     μ ∘ (μ ∘ second (exl ∘ μ⁻¹) ∘ μ⁻¹ ▵ Fₘ exr ∘ Fₘ exr)
+      --   ≈⟨ ∘≈ʳ (▵≈ʳ {!!}) ⟩
+      --     μ ∘ (μ ∘ second (exl ∘ μ⁻¹) ∘ μ⁻¹ ▵ (exr ∘ μ⁻¹) ∘ (exr ∘ μ⁻¹))
+      --   ≈⟨ ∘≈ʳ (▵≈ˡ {!!}) ⟩
+      --     μ ∘ (μ ∘ second exl ∘ second μ⁻¹ ∘ μ⁻¹ ▵ (exr ∘ μ⁻¹) ∘ (exr ∘ μ⁻¹))
+      --   ≈⟨ {!!} ⟩
+      --     μ ∘ first μ ∘ (second exl ▵ exr ∘ exr) ∘ second μ⁻¹ ∘ μ⁻¹
+      --   ≡⟨⟩
+      --     μ ∘ first μ ∘ assocˡ ∘ second μ⁻¹ ∘ μ⁻¹
+      --   ∎
+
+      F-assocˡ : ∀ {a b c : obj₁}
+         → Fₘ (assocˡ {a = a}{b}{c}) ∘ μ ∘ second μ ≈ μ ∘ first μ ∘ assocˡ
+      F-assocˡ =
+        begin
+          Fₘ assocˡ ∘ μ ∘ second μ
+        ≡⟨⟩
+          Fₘ (second exl ▵ exr ∘ exr) ∘ μ ∘ second μ
+        ≈⟨ ∘≈ˡ F-▵ ⟩
+          (μ ∘ (Fₘ (second exl) ▵ Fₘ (exr ∘ exr))) ∘ μ ∘ second μ
+        ≈⟨ ∘-assocˡ′ (∘-assocʳ′ ▵∘ ; ∘≈ʳ (▵≈ʳ (∘≈ˡ F-∘ ; ∘-assocʳ′ F-exr))) ⟩
+          (μ ∘ (Fₘ (second exl) ∘ μ ▵ Fₘ exr ∘ exr)) ∘ second μ
+        ≈⟨ ∘-assocʳ′ (▵∘ ; ▵≈ ∘-assocʳ ∘-assocʳ ; ▵≈ʳ (∘≈ʳ exr∘▵ ; ∘-assocˡ′ F-exr)) ⟩
+          μ ∘ (Fₘ (second exl) ∘ μ ∘ second μ ▵ exr ∘ exr)
+        ≈⟨ ∘≈ʳ (▵≈ˡ (∘-assocˡ′ F-second)) ⟩
+          μ ∘ ((μ ∘ second (Fₘ exl)) ∘ second μ ▵ exr ∘ exr)
+        ≈⟨ ∘≈ʳ (▵≈ˡ (∘-assocʳ′ (second∘⊗ ; ⊗≈ʳ F-exl))) ⟩
+          μ ∘ (μ ∘ second exl ▵ exr ∘ exr)
+        ≈⟨ ∘≈ʳ (sym first∘▵) ⟩
+          μ ∘ first μ ∘ (second exl ▵ exr ∘ exr)
+        ≡⟨⟩
+          μ ∘ first μ ∘ assocˡ
+        ∎
+
+      -- F-assocʳ : ∀ {a b c : obj₁}
+      --    → Fₘ (assocʳ {a = a}{b}{c}) ∘ μ ∘ first μ ≈ μ ∘ second μ ∘ assocʳ
+      -- F-assocʳ = {!!}
+
 open CartesianH ⦃ … ⦄ public
 
 id-CartesianH : {obj : Set o} {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Products obj ⦄
