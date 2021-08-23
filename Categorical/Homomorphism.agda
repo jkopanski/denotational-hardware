@@ -144,6 +144,10 @@ record CartesianH
                → Fₘ (first {b = b} f) ∘ μ ≈ μ ∘ first (Fₘ f)
       F-first = F-⊗ ; ∘≈ʳ (⊗≈ʳ F-id)
 
+      F-first′ : ∀ {a b c : obj₁}{f : a ⇨₁ c}
+               → Fₘ (first {b = b} f) ≈ μ ∘ first (Fₘ f) ∘ μ⁻¹
+      F-first′ = introʳ μ∘μ⁻¹ ; ∘-assocˡʳ′ F-first
+
       F-second : ∀ {a b d : obj₁}{g : b ⇨₁ d}
                → Fₘ (second {a = a} g) ∘ μ ≈ μ ∘ second (Fₘ g)
       F-second = F-⊗ ; ∘≈ʳ (⊗≈ˡ F-id)
@@ -199,6 +203,17 @@ record CartesianH
         ≡⟨⟩
           μ ∘ first μ ∘ assocˡ
         ∎
+
+      -- F-assocˡ′ : ∀ {a b c : obj₁}
+      --    → Fₘ (assocˡ {a = a}{b}{c}) ≈ μ ∘ first μ ∘ assocˡ ∘ second μ⁻¹ ∘ μ⁻¹
+      -- F-assocˡ′ =
+      --   begin
+      --     Fₘ assocˡ
+      --   ≈⟨ sym (∘≈ʳ (∘≈ʳ {!∘-assocˡ ∘ elimˡ ?!} ; {!!}) ; elimʳ {!!}) ⟩
+      --     Fₘ assocˡ ∘ μ ∘ second μ ∘ second μ⁻¹ ∘ μ⁻¹
+      --   ≈⟨ (∘-assocˡ³ ; ∘≈ˡ F-assocˡ ; ∘-assocʳ³) ⟩
+      --     μ ∘ first μ ∘ assocˡ ∘ second μ⁻¹ ∘ μ⁻¹
+      --   ∎
 
       -- F-assocʳ : ∀ {a b c : obj₁}
       --    → Fₘ (assocʳ {a = a}{b}{c}) ∘ μ ∘ first μ ≈ μ ∘ second μ ∘ assocʳ

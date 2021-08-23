@@ -30,12 +30,4 @@ mutual
   infixr 9 _∘·first_∘_
   data _⇨_ : obj → obj → Set ℓ where
     ⌞_⌟ : (r : a ⇨ᵣ b) → (a ⇨ b)
-    _∘·first_∘_ : (f : c × z ⇨ d) (p : b ⇨ᵤ c) (r : a ⇨ᵣ b × z) → (a ⇨ d)
-
-  infix 0 _⇨ᵤ_
-  data _⇨ᵤ_ : obj → obj → Set ℓ where
-    `prim  : (a ⇨ₚ b) → (a ⇨ᵤ b)
-    `apply : (a ⇛ b) × a ⇨ᵤ b
-    `curry : (a × b ⇨ c) → (a ⇨ᵤ (b ⇛ c))
-
-  -- TODO: Consider uncurry in place of apply
+    _∘·first_∘_ : (f : c × z ⇨ d) (p : b ⇨ₚ c) (r : a ⇨ᵣ b × z) → (a ⇨ d)
