@@ -83,6 +83,8 @@ private
 
   -- Fₘ (first {b = b} f) ∘ μ ≈ μ ∘ first (Fₘ f)
 
+{-
+
   ⟦first⟧′ : {b : obj} (f : a ⇨ c) → ⟦ firstₖ {b = b} f ⟧ₖ ≈ μ ∘ first ⟦ f ⟧ₖ ∘ μ⁻¹
   ⟦first⟧′ ⌞ r ⌟ = F-first′
 
@@ -106,65 +108,92 @@ private
       ⟦ (firstₖ f ∘ ⌞ assocˡ ⌟) ∘·first p ∘ (assocʳ ∘ first r) ⟧ₖ
     ≡⟨⟩
       ⟦ firstₖ f ∘ ⌞ assocˡ ⌟ ⟧ₖ ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ Fᵣ (assocʳ ∘ first r)
+    ≈⟨ ∘≈ˡ (firstₖ f ⟦∘⟧ ⌞ assocˡ ⌟) ; ∘-assocʳ ⟩
+      ⟦ firstₖ f ⟧ₖ ∘ ⟦ ⌞ assocˡ ⌟ ⟧ₖ ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ Fᵣ (assocʳ ∘ first r)
+    ≈⟨ ∘≈ʳ⁵ (F-∘ ; ∘≈ʳ F-first′) ⟩
+      ⟦ firstₖ f ⟧ₖ ∘ Fᵣ assocˡ ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ Fᵣ assocʳ ∘ μ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ˡ (⟦first⟧′ f) ; ∘-assocʳ³ ⟩
+      μ ∘ first ⟦ f ⟧ₖ ∘ μ⁻¹ ∘ Fᵣ assocˡ ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ Fᵣ assocʳ ∘ μ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ³ (∘≈ F-assocˡ′ (∘≈ʳ³ (∘≈ˡ F-assocʳ′))) ⟩
+       μ ∘ first ⟦ f ⟧ₖ ∘ μ⁻¹ ∘ (μ ∘ first μ ∘ assocˡ ∘ second μ⁻¹ ∘ μ⁻¹) ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ (μ ∘ second μ ∘ assocʳ ∘ first μ⁻¹ ∘ μ⁻¹) ∘ μ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ³ (∘≈ʳ⁴ ∘-assocʳ⁵ ; ∘-assocʳ⁵) ⟩
+       μ ∘ first ⟦ f ⟧ₖ ∘ μ⁻¹ ∘ μ ∘ first μ ∘ assocˡ ∘ second μ⁻¹ ∘ μ⁻¹ ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ μ ∘ second μ ∘ assocʳ ∘ first μ⁻¹ ∘ μ⁻¹ ∘ μ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ² (∘-assocˡ ; elimˡ μ⁻¹∘μ ; ∘≈ʳ³ (∘-assocˡ ; elimˡ μ⁻¹∘μ ; ∘≈ʳ (∘-assocˡ ; elimˡ μ⁻¹∘μ ; ∘≈ʳ³ (∘-assocˡ ; elimˡ μ⁻¹∘μ)))) ⟩
+      μ ∘ first ⟦ f ⟧ₖ ∘ first μ ∘ assocˡ ∘ second μ⁻¹ ∘ first (Fₚ p) ∘ second μ ∘ assocʳ ∘ first μ⁻¹ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ⁵ (∘-assocˡʳ′ (first∘second ; sym second∘first)) ⟩
+      μ ∘ first ⟦ f ⟧ₖ ∘ first μ ∘ assocˡ ∘ second μ⁻¹ ∘ second μ ∘ first (Fₚ p) ∘ assocʳ ∘ first μ⁻¹ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ⁴ (∘-assocˡ ; elimˡ (second-inverse μ⁻¹∘μ)) ⟩
+      μ ∘ first ⟦ f ⟧ₖ ∘ first μ ∘ assocˡ ∘ first (Fₚ p) ∘ assocʳ ∘ first μ⁻¹ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ³ ∘-assocˡ³ ⟩
+      μ ∘ first ⟦ f ⟧ₖ ∘ first μ ∘ (assocˡ ∘ first (Fₚ p) ∘ assocʳ) ∘ first μ⁻¹ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ³ (∘≈ˡ (sym first-first)) ⟩
+      μ ∘ first ⟦ f ⟧ₖ ∘ first μ ∘ first (first (Fₚ p)) ∘ first μ⁻¹ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ ∘-assocˡ⁵ ⟩
+      μ ∘ (first ⟦ f ⟧ₖ ∘ first μ ∘ first (first (Fₚ p)) ∘ first μ⁻¹ ∘ first (Fᵣ r)) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ (∘≈ˡ (∘≈ʳ (∘≈ʳ (∘≈ʳ first∘first ; first∘first) ; first∘first) ; first∘first)) ⟩
+      μ ∘ first (⟦ f ⟧ₖ ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ Fᵣ r) ∘ μ⁻¹
+    ≡⟨⟩
+      μ ∘ first ⟦ f ∘·first p ∘ r ⟧ₖ ∘ μ⁻¹
+    ∎
 
-    -- ≈⟨ ∘-assocʳ⁵ ⟩
-    --   ⟦ firstₖ f ∘ ⌞ assocˡ ⌟ ⟧ₖ ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ Fᵣ (assocʳ ∘ first r) ∘ μ
-    -- ≈⟨ ∘≈ˡ (firstₖ f ⟦∘⟧ ⌞ assocˡ ⌟) ⟩
-    --   (⟦ firstₖ f ⟧ₖ ∘ ⟦ ⌞ assocˡ ⌟ ⟧ₖ) ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ Fᵣ (assocʳ ∘ first r) ∘ μ
-    -- ≈⟨ ∘≈ʳ (∘≈ʳ (∘≈ʳ (∘≈ʳ (∘≈ˡ F-∘)))) ⟩
-    --   (⟦ firstₖ f ⟧ₖ ∘ ⟦ ⌞ assocˡ ⌟ ⟧ₖ) ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ (Fᵣ assocʳ ∘ Fᵣ (first r)) ∘ μ
-    -- ≈⟨ (∘≈ʳ (∘≈ʳ (∘≈ʳ (∘≈ʳ ∘-assocʳ))) ; ∘-assocʳ) ⟩
-    --   ⟦ firstₖ f ⟧ₖ ∘ Fᵣ assocˡ ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ Fᵣ assocʳ ∘ Fᵣ (first r) ∘ μ
-    -- ≈⟨ ∘≈ʳ (∘≈ʳ (∘≈ʳ (∘≈ʳ (∘≈ʳ (∘≈ʳ F-first))))) ⟩
+-}
 
-      -- ⟦ firstₖ f ⟧ₖ ∘ Fᵣ assocˡ ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ Fᵣ assocʳ ∘ μ ∘ first (Fᵣ r)
 
-    -- ≈⟨ {!∘≈ˡ ?!} ⟩
-    --   (μ ∘ first ⟦ f ⟧ₖ) ∘ ⟦ ⌞ assocˡ ⌟ ⟧ₖ ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ Fᵣ assocʳ ∘ Fᵣ (first r) ∘ μ
+  ⟦first⟧ : {b : obj} (f : a ⇨ c) → ⟦ firstₖ {b = b} f ⟧ₖ ∘ μ ≈ μ ∘ first ⟦ f ⟧ₖ
+  ⟦first⟧ ⌞ r ⌟ = F-first
 
-    -- ≈⟨ {!!} ⟩
-    --   μ ∘ first ⟦ f ⟧ₖ ∘ first μ ∘ assocˡ ∘ first (Fₚ p) ∘ assocʳ ∘ first μ⁻¹ ∘ first (Fᵣ r)
-    -- ≈⟨ ∘≈ʳ (∘≈ʳ (∘≈ʳ ∘-assocˡ³)) ⟩
-    --   μ ∘ first ⟦ f ⟧ₖ ∘ first μ ∘ (assocˡ ∘ first (Fₚ p) ∘ assocʳ) ∘ first μ⁻¹ ∘ first (Fᵣ r)
-    -- ≈⟨ ∘≈ʳ (∘≈ʳ (∘≈ʳ (∘≈ˡ (sym first-first)))) ⟩
-    --   μ ∘ first ⟦ f ⟧ₖ ∘ first μ ∘ first (first (Fₚ p)) ∘ first μ⁻¹ ∘ first (Fᵣ r)
-    -- ≈⟨ ∘≈ʳ (∘≈ʳ (∘≈ʳ (∘≈ʳ first∘⊗ ; first∘⊗) ; first∘⊗) ; first∘⊗) ⟩
-    --   μ ∘ first (⟦ f ⟧ₖ ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ Fᵣ r)
-    -- ≡⟨⟩
 
-    ≈⟨ {!!} ⟩
+
+  -- ⟦first⟧′ {b = b} ⌞ r ⌟ =
+  --   begin
+  --     ⟦ firstₖ ⌞ r ⌟ ⟧ₖ
+  --   ≡⟨⟩
+  --     ⟦ ⌞ first r ⌟ ⟧ₖ
+  --   ≡⟨⟩
+  --     Fₘ (first r)
+  --   ≈⟨ F-first′ ⟩
+  --     μ ∘ first (Fₘ r) ∘ μ⁻¹
+  --   ≡⟨⟩
+  --     μ ∘ first ⟦ ⌞ r ⌟ ⟧ₖ ∘ μ⁻¹
+  --   ∎
+
+  ⟦first⟧′ (f ∘·first p ∘ r) =
+    begin
+      ⟦ firstₖ (f ∘·first p ∘ r) ⟧ₖ
+    ≡⟨⟩
+      ⟦ (firstₖ f ∘ ⌞ assocˡ ⌟) ∘·first p ∘ (assocʳ ∘ first r) ⟧ₖ
+    ≡⟨⟩
+      ⟦ firstₖ f ∘ ⌞ assocˡ ⌟ ⟧ₖ ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ Fᵣ (assocʳ ∘ first r)
+    ≈⟨ ∘≈ˡ (firstₖ f ⟦∘⟧ ⌞ assocˡ ⌟) ; ∘-assocʳ ⟩
+      ⟦ firstₖ f ⟧ₖ ∘ ⟦ ⌞ assocˡ ⌟ ⟧ₖ ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ Fᵣ (assocʳ ∘ first r)
+    ≈⟨ ∘≈ʳ⁵ (F-∘ ; ∘≈ʳ F-first′) ⟩
+      ⟦ firstₖ f ⟧ₖ ∘ Fᵣ assocˡ ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ Fᵣ assocʳ ∘ μ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ˡ (⟦first⟧′ f) ; ∘-assocʳ³ ⟩
+      μ ∘ first ⟦ f ⟧ₖ ∘ μ⁻¹ ∘ Fᵣ assocˡ ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ Fᵣ assocʳ ∘ μ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ³ (∘≈ F-assocˡ′ (∘≈ʳ³ (∘≈ˡ F-assocʳ′))) ⟩
+       μ ∘ first ⟦ f ⟧ₖ ∘ μ⁻¹ ∘ (μ ∘ first μ ∘ assocˡ ∘ second μ⁻¹ ∘ μ⁻¹) ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ (μ ∘ second μ ∘ assocʳ ∘ first μ⁻¹ ∘ μ⁻¹) ∘ μ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ³ (∘≈ʳ⁴ ∘-assocʳ⁵ ; ∘-assocʳ⁵) ⟩
+       μ ∘ first ⟦ f ⟧ₖ ∘ μ⁻¹ ∘ μ ∘ first μ ∘ assocˡ ∘ second μ⁻¹ ∘ μ⁻¹ ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ μ ∘ second μ ∘ assocʳ ∘ first μ⁻¹ ∘ μ⁻¹ ∘ μ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ² (∘-assocˡ ; elimˡ μ⁻¹∘μ ; ∘≈ʳ³ (∘-assocˡ ; elimˡ μ⁻¹∘μ ; ∘≈ʳ (∘-assocˡ ; elimˡ μ⁻¹∘μ ; ∘≈ʳ³ (∘-assocˡ ; elimˡ μ⁻¹∘μ)))) ⟩
+      μ ∘ first ⟦ f ⟧ₖ ∘ first μ ∘ assocˡ ∘ second μ⁻¹ ∘ first (Fₚ p) ∘ second μ ∘ assocʳ ∘ first μ⁻¹ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ⁵ (∘-assocˡʳ′ (first∘second ; sym second∘first)) ⟩
+      μ ∘ first ⟦ f ⟧ₖ ∘ first μ ∘ assocˡ ∘ second μ⁻¹ ∘ second μ ∘ first (Fₚ p) ∘ assocʳ ∘ first μ⁻¹ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ⁴ (∘-assocˡ ; elimˡ (second-inverse μ⁻¹∘μ)) ⟩
+      μ ∘ first ⟦ f ⟧ₖ ∘ first μ ∘ assocˡ ∘ first (Fₚ p) ∘ assocʳ ∘ first μ⁻¹ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ³ ∘-assocˡ³ ⟩
+      μ ∘ first ⟦ f ⟧ₖ ∘ first μ ∘ (assocˡ ∘ first (Fₚ p) ∘ assocʳ) ∘ first μ⁻¹ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ³ (∘≈ˡ (sym first-first)) ⟩
+      μ ∘ first ⟦ f ⟧ₖ ∘ first μ ∘ first (first (Fₚ p)) ∘ first μ⁻¹ ∘ first (Fᵣ r) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ ∘-assocˡ⁵ ⟩
+      μ ∘ (first ⟦ f ⟧ₖ ∘ first μ ∘ first (first (Fₚ p)) ∘ first μ⁻¹ ∘ first (Fᵣ r)) ∘ μ⁻¹
+    ≈⟨ ∘≈ʳ (∘≈ˡ (∘≈ʳ (∘≈ʳ (∘≈ʳ first∘first ; first∘first) ; first∘first) ; first∘first)) ⟩
+      μ ∘ first (⟦ f ⟧ₖ ∘ μ ∘ first (Fₚ p) ∘ μ⁻¹ ∘ Fᵣ r) ∘ μ⁻¹
+    ≡⟨⟩
       μ ∘ first ⟦ f ∘·first p ∘ r ⟧ₖ ∘ μ⁻¹
     ∎
 
 
-
-  -- -- ⟦first⟧ (f ∘·first p ∘ r) =
-  -- --   begin
-  -- --     ⟦ firstₖ (f ∘·first p ∘ r) ⟧ₖ
-  -- --   ≡⟨⟩
-  -- --     ⟦ (firstₖ f ∘ ⌞ assocˡ ⌟) ∘·first p ∘ (assocʳ ∘ first r) ⟧ₖ
-  -- --   ≡⟨⟩
-  -- --     ⟦ firstₖ f ∘ ⌞ assocˡ ⌟ ⟧ₖ ∘ first (Fₘ p) ∘ Fₘ (assocʳ ∘ first r)
-  -- --   ≈⟨ ∘≈ {_⇨′_ = _⇨ₘ_} (firstₖ f ⟦∘⟧ ⌞ assocˡ ⌟)
-  -- --         (∘≈ʳ {_⇨′_ = _⇨ₘ_} (F-∘ assocʳ (first r))) ⟩
-  -- --     (⟦ firstₖ f ⟧ₖ ∘ ⟦ assocˡ ⟧ᵣ) ∘ first (Fₘ p) ∘ (⟦ assocʳ ⟧ᵣ ∘ ⟦ first r ⟧ᵣ)
-  -- --   ≈˘⟨ ∘≈ʳ {_⇨′_ = _⇨ₘ_} (assoc {_⇨′_ = _⇨ₘ_}) ⟩
-  -- --     (⟦ firstₖ f ⟧ₖ ∘ ⟦ assocˡ ⟧ᵣ) ∘ (first (Fₘ p) ∘ ⟦ assocʳ ⟧ᵣ) ∘ ⟦ first r ⟧ᵣ
-  -- --   ≈⟨ assoc {_⇨′_ = _⇨ₘ_} ⟩
-  -- --     ⟦ firstₖ f ⟧ₖ ∘ ⟦ assocˡ ⟧ᵣ ∘ (first (Fₘ p) ∘ ⟦ assocʳ ⟧ᵣ) ∘ ⟦ first r ⟧ᵣ
-  -- --   ≈˘⟨ ∘≈ʳ {_⇨′_ = _⇨ₘ_} (assoc {_⇨′_ = _⇨ₘ_}) ⟩
-  -- --     ⟦ firstₖ f ⟧ₖ ∘ (⟦ assocˡ ⟧ᵣ ∘ first (Fₘ p) ∘ ⟦ assocʳ ⟧ᵣ) ∘ ⟦ first r ⟧ᵣ
-  -- --   ≈⟨ ∘≈ʳ {_⇨′_ = _⇨ₘ_} (∘≈ {_⇨′_ = _⇨ₘ_} (∘≈ {_⇨′_ = _⇨ₘ_} F-assocˡ (∘≈ʳ {_⇨′_ = _⇨ₘ_} F-assocʳ)) (F-first r)) ⟩
-  -- --     ⟦ firstₖ f ⟧ₖ ∘ (assocᴴˡ ∘ first (Fₘ p) ∘ assocᴴʳ) ∘ firstᴴ ⟦ r ⟧ᵣ
-  -- --   ≈⟨ ∘≈ʳ (∘≈ˡ {!!}) ⟩
-  -- --     firstᴴ ⟦ f ⟧ₖ ∘ firstᴴ (first (Fₘ p)) ∘ firstᴴ ⟦ r ⟧ᵣ
-  -- --   ≈⟨ ∘≈ʳ {_⇨′_ = _⇨ₘ_} first∘firstᴴ ⟩
-  -- --     firstᴴ ⟦ f ⟧ₖ ∘ firstᴴ (first (Fₘ p) ∘ ⟦ r ⟧ᵣ)
-  -- --   ≈⟨ first∘firstᴴ ⟩
-  -- --     firstᴴ (⟦ f ⟧ₖ ∘ first (Fₘ p) ∘ ⟦ r ⟧ᵣ)
-  -- --   ≡⟨⟩
-  -- --     first ⟦ f ∘·first p ∘ r ⟧ₖ
-  -- --   ∎
+{-
 
   -- ⟦second⟧ : (g : b ⇨ d) → ⟦ secondₖ {a = a} g ⟧ₖ ≈ secondᴴ ⟦ g ⟧ₖ
   -- ⟦second⟧ g = {!!}
@@ -185,7 +214,11 @@ private
   --     ⟦ f ⟧ₖ ⊗ᴴ ⟦ g ⟧ₖ
   --   ∎
 
+-}
 
+  ⟦exl⟧ : ∀ {a b : obj} → ⟦ exl ⟧ₖ ∘ μ {a = a}{b} ≈ exl
+  ⟦exl⟧ = F-exl
+  
 module linearize-homomorphism-instances where
 
   instance
@@ -200,10 +233,10 @@ module linearize-homomorphism-instances where
 
     cartesianH : CartesianH _⇨_ _⇨ₘ_
     cartesianH = record
-      { F-! = {!!}
+      { F-! = F-! {_⇨₁_ = _⇨ᵣ_}
       ; F-▵ = {!!}
-      ; F-exl = {!!}
-      ; F-exr = {!!}
+      ; F-exl = F-exl {_⇨₁_ = _⇨ᵣ_}
+      ; F-exr = F-exr {_⇨₁_ = _⇨ᵣ_}
       }
 
 {-

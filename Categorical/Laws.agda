@@ -80,7 +80,7 @@ open import Data.Product using (_,_) renaming (_×_ to _×ₚ_)
 
 record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
                  (_⇨′_ : obj → obj → Set ℓ)
-                 {q} ⦃ _ : Equivalent q _⇨′_ ⦄
+                 {q} ⦃ equiv : Equivalent q _⇨′_ ⦄
                  ⦃ _ : R.Category _⇨′_ ⦄ ⦃ _ : R.Cartesian _⇨′_ ⦄
                  ⦃ ⇨Category : Category _⇨′_ ⦄
        : Set (suc o ⊔ ℓ ⊔ suc q) where
@@ -213,8 +213,21 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
       → second k ∘ (f ⊗ g) ≈ f ⊗ k ∘ g
   second∘⊗ = ⊗∘⊗ ; ⊗≈ˡ identityˡ
 
-  -- Note that first∘first specializes first∘⊗ and ⊗∘first, whie second∘second
-  -- specializes second∘⊗ and ⊗∘second.
+  first∘first : ∀ {b : obj}{f : a ⇨ c}{h : c ⇨ c′}
+      → first h ∘ first f ≈ first (h ∘ f)
+  first∘first {b = b} = first∘⊗ {b = b}   -- = ⊗∘first
+
+  second∘second : ∀ {c : obj}{g : b ⇨ d}{k : d ⇨ d′}
+      → second k ∘ second g ≈ second (k ∘ g)
+  second∘second {c = c} = second∘⊗ {c = c}   -- = ⊗∘second
+
+  first∘second : ∀ {f : a ⇨ c}{g : b ⇨ d}
+      → first f ∘ second g ≈ f ⊗ g
+  first∘second = first∘⊗ ; ⊗≈ˡ identityʳ
+
+  second∘first : ∀ {f : a ⇨ c}{g : b ⇨ d}
+      → second g ∘ first f ≈ f ⊗ g
+  second∘first = second∘⊗ ; ⊗≈ʳ identityʳ
 
   -- TODO: redefine first f and second g via ▵ to avoid id ∘ exr and id ∘ exl.
   -- There many be broad consequences.

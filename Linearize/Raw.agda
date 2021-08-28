@@ -28,6 +28,8 @@ mutual
   ⟦ ⌞ r ⌟ ⟧ₖ = Fₘ r
   ⟦ f ∘·first p ∘ r ⟧ₖ = ⟦ f ⟧ₖ ∘ μ ∘ first (Fₘ p) ∘ μ⁻¹ ∘ Fₘ r
 
+-- TODO: Maybe parenthesize `μ ∘ first (Fₘ p) ∘ μ⁻¹`
+
 -- TODO: maybe move semantics to Type (for all categories in the project)
 
 route : (a ⇨ᵣ b) → (a ⇨ b)
