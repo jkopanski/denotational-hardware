@@ -10,7 +10,8 @@ open import Level using (Level)
 
 open import Categorical.Raw
 open import Categorical.Homomorphism
-open import Categorical.Laws as L hiding (Category)
+open import Categorical.Laws as L hiding (Category; Cartesian; CartesianClosed)
+open import Categorical.Reasoning
 
 open ≈-Reasoning
 
@@ -79,3 +80,24 @@ LawfulCategoryᶠ F = record
 
 -- TODO: Cartesian, etc.
 
+{-
+
+LawfulCartesianᶠ :
+    {obj₁ : Set o₁} ⦃ _ : Products obj₁ ⦄ {_⇨₁_ : obj₁ → obj₁ → Set ℓ₁}
+    {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂)
+    {q : Level} ⦃ _ : Equivalent q _⇨₂_ ⦄
+    ⦃ _ : Category _⇨₁_ ⦄ ⦃ _ : Category _⇨₂_ ⦄
+    ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄
+    ⦃ _ : L.Category _⇨₂_ ⦄ ⦃ _ : L.Cartesian _⇨₂_ ⦄
+    ⦃ _ : Homomorphismₒ obj₁ obj₂ ⦄ ⦃ _ : ProductsH obj₁ _⇨₂_ ⦄
+    ⦃ H : Homomorphism _⇨₁_ _⇨₂_ ⦄ ⦃ _ : CartesianH _⇨₁_ _⇨₂_ ⦄
+    ⦃ _ : CategoryH _⇨₁_ _⇨₂_ ⦄
+  → L.Cartesian _⇨₁_ ⦃ equiv = H-equiv H ⦄ ⦃ lCat = LawfulCategoryᶠ _⇨₂_ ⦄
+LawfulCartesianᶠ F =
+  record
+    { ∀⊤ = λ {a} {f} → {!!}
+    ; ∀× = {!!}
+    ; ▵≈ = {!!}
+    }
+
+-}

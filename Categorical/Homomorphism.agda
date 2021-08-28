@@ -144,6 +144,10 @@ record CartesianH
                → Fₘ (first {b = b} f) ∘ μ ≈ μ ∘ first (Fₘ f)
       F-first = F-⊗ ; ∘≈ʳ (⊗≈ʳ F-id)
 
+      F-first′ : ∀ {a b c : obj₁}{f : a ⇨₁ c}
+               → Fₘ (first {b = b} f) ≈ μ ∘ first (Fₘ f) ∘ μ⁻¹
+      F-first′ = introʳ μ∘μ⁻¹ ; ∘-assocˡʳ′ F-first
+
       F-second : ∀ {a b d : obj₁}{g : b ⇨₁ d}
                → Fₘ (second {a = a} g) ∘ μ ≈ μ ∘ second (Fₘ g)
       F-second = F-⊗ ; ∘≈ʳ (⊗≈ˡ F-id)
@@ -151,31 +155,6 @@ record CartesianH
       F-second′ : ∀ {a b d : obj₁}{g : b ⇨₁ d}
                 → Fₘ (second {a = a} g) ≈ μ ∘ second (Fₘ g) ∘ μ⁻¹
       F-second′ = F-⊗′ ; ∘≈ʳ (∘≈ˡ (⊗≈ˡ F-id))
-
-      -- F-assocˡ′ : ∀ {a b c : obj₁}
-      --    → Fₘ (assocˡ {a = a}{b}{c}) ≈ μ ∘ first μ ∘ assocˡ ∘ second μ⁻¹ ∘ μ⁻¹
-      -- F-assocˡ′ =
-      --   begin
-      --     Fₘ assocˡ
-      --   ≡⟨⟩
-      --     Fₘ (second exl ▵ exr ∘ exr)
-      --   ≈⟨ F-▵ ⟩
-      --     μ ∘ (Fₘ (second exl) ▵ Fₘ (exr ∘ exr))
-      --   ≈⟨ ∘≈ʳ (▵≈ʳ F-∘) ⟩
-      --     μ ∘ (Fₘ (second exl) ▵ Fₘ exr ∘ Fₘ exr)
-      --   ≈⟨ ∘≈ʳ (▵≈ˡ F-second′) ⟩
-      --     μ ∘ (μ ∘ second (Fₘ exl) ∘ μ⁻¹ ▵ Fₘ exr ∘ Fₘ exr)
-      --   ≈⟨ ∘≈ʳ (▵≈ˡ (∘≈ʳ (∘≈ˡ (⊗≈ʳ F-exl′)))) ⟩
-      --     μ ∘ (μ ∘ second (exl ∘ μ⁻¹) ∘ μ⁻¹ ▵ Fₘ exr ∘ Fₘ exr)
-      --   ≈⟨ ∘≈ʳ (▵≈ʳ {!!}) ⟩
-      --     μ ∘ (μ ∘ second (exl ∘ μ⁻¹) ∘ μ⁻¹ ▵ (exr ∘ μ⁻¹) ∘ (exr ∘ μ⁻¹))
-      --   ≈⟨ ∘≈ʳ (▵≈ˡ {!!}) ⟩
-      --     μ ∘ (μ ∘ second exl ∘ second μ⁻¹ ∘ μ⁻¹ ▵ (exr ∘ μ⁻¹) ∘ (exr ∘ μ⁻¹))
-      --   ≈⟨ {!!} ⟩
-      --     μ ∘ first μ ∘ (second exl ▵ exr ∘ exr) ∘ second μ⁻¹ ∘ μ⁻¹
-      --   ≡⟨⟩
-      --     μ ∘ first μ ∘ assocˡ ∘ second μ⁻¹ ∘ μ⁻¹
-      --   ∎
 
       F-assocˡ : ∀ {a b c : obj₁}
          → Fₘ (assocˡ {a = a}{b}{c}) ∘ μ ∘ second μ ≈ μ ∘ first μ ∘ assocˡ
@@ -200,9 +179,62 @@ record CartesianH
           μ ∘ first μ ∘ assocˡ
         ∎
 
-      -- F-assocʳ : ∀ {a b c : obj₁}
-      --    → Fₘ (assocʳ {a = a}{b}{c}) ∘ μ ∘ first μ ≈ μ ∘ second μ ∘ assocʳ
-      -- F-assocʳ = {!!}
+      F-assocˡ′ : ∀ {a b c : obj₁}
+         → Fₘ (assocˡ {a = a}{b}{c}) ≈ μ ∘ first μ ∘ assocˡ ∘ second μ⁻¹ ∘ μ⁻¹
+      F-assocˡ′ =
+        begin
+          Fₘ assocˡ
+        ≈⟨ sym (∘≈ʳ (∘≈ʳ (∘-assocˡ ; elimˡ (second-inverse μ∘μ⁻¹))) ; elimʳ μ∘μ⁻¹) ⟩
+          Fₘ assocˡ ∘ μ ∘ second μ ∘ second μ⁻¹ ∘ μ⁻¹
+        ≈⟨ ∘-assocˡ³ ; ∘≈ˡ F-assocˡ ; ∘-assocʳ³ ⟩
+          μ ∘ first μ ∘ assocˡ ∘ second μ⁻¹ ∘ μ⁻¹
+        ∎
+
+      F-assocʳ : ∀ {a b c : obj₁}
+         → Fₘ (assocʳ {a = a}{b}{c}) ∘ μ ∘ first μ ≈ μ ∘ second μ ∘ assocʳ
+      F-assocʳ =
+        begin
+          Fₘ assocʳ ∘ μ ∘ first μ
+        ≡⟨⟩
+          Fₘ (exl ∘ exl ▵ first exr) ∘ μ ∘ first μ
+        ≈⟨ ∘≈ˡ F-▵ ⟩
+          (μ ∘ (Fₘ (exl ∘ exl) ▵ Fₘ (first exr))) ∘ μ ∘ first μ
+        ≈⟨ ∘-assocʳ ⟩
+          μ ∘ (Fₘ (exl ∘ exl) ▵ Fₘ (first exr)) ∘ μ ∘ first μ
+        ≈⟨ ∘≈ʳ ∘-assocˡ ⟩
+          μ ∘ ((Fₘ (exl ∘ exl) ▵ Fₘ (first exr)) ∘ μ) ∘ first μ
+        ≈⟨ ∘≈ʳ (∘≈ˡ ▵∘) ⟩
+          μ ∘ (Fₘ (exl ∘ exl) ∘ μ ▵ Fₘ (first exr) ∘ μ) ∘ first μ
+        ≈⟨ ∘≈ʳ (∘≈ˡ (▵≈ (∘≈ˡ F-∘ ; ∘-assocʳ) F-first)) ⟩
+          μ ∘ (Fₘ exl ∘ Fₘ exl ∘ μ ▵ μ ∘ first (Fₘ exr)) ∘ first μ
+        ≈⟨ ∘≈ʳ ▵∘ ⟩
+          μ ∘ ((Fₘ exl ∘ Fₘ exl ∘ μ) ∘ first μ ▵ (μ ∘ first (Fₘ exr)) ∘ first μ)
+        ≈⟨ ∘≈ʳ (▵≈ ∘-assocʳ³ ∘-assocʳ) ⟩
+          μ ∘ (Fₘ exl ∘ Fₘ exl ∘ μ ∘ first μ ▵ μ ∘ first (Fₘ exr) ∘ first μ)
+        ≈⟨ ∘≈ʳ (▵≈ʳ (∘≈ʳ first∘first)) ⟩
+          μ ∘ (Fₘ exl ∘ Fₘ exl ∘ μ ∘ first μ ▵ μ ∘ first (Fₘ exr ∘ μ))
+        ≈⟨ ∘≈ʳ (▵≈ (∘≈ʳ ( ∘-assocˡ′ F-exl)) (∘≈ʳ (⊗≈ˡ F-exr))) ⟩
+          μ ∘ (Fₘ exl ∘ exl ∘ first μ ▵ μ ∘ first exr)
+        ≈⟨ ∘≈ʳ (▵≈ˡ (∘≈ʳ exl∘first)) ⟩
+          μ ∘ (Fₘ exl ∘ μ ∘ exl ▵ μ ∘ first exr)
+        ≈⟨ ∘≈ʳ (▵≈ˡ (∘-assocˡ′ F-exl)) ⟩
+          μ ∘ (exl ∘ exl ▵ μ ∘ first exr)
+        ≈⟨ ∘≈ʳ (sym second∘▵) ⟩
+          μ ∘ second μ ∘ (exl ∘ exl ▵ first exr)
+        ≡⟨⟩
+          μ ∘ second μ ∘ assocʳ
+        ∎
+
+      F-assocʳ′ : ∀ {a b c : obj₁}
+         → Fₘ (assocʳ {a = a}{b}{c}) ≈ μ ∘ second μ ∘ assocʳ ∘ first μ⁻¹ ∘ μ⁻¹
+      F-assocʳ′ =
+        begin
+          Fₘ assocʳ
+        ≈⟨ sym (∘≈ʳ (∘≈ʳ (∘-assocˡ ; elimˡ (first-inverse μ∘μ⁻¹))) ; elimʳ μ∘μ⁻¹) ⟩
+          Fₘ assocʳ ∘ μ ∘ first μ ∘ first μ⁻¹ ∘ μ⁻¹
+        ≈⟨ (∘-assocˡ³ ; ∘≈ˡ F-assocʳ ; ∘-assocʳ³) ⟩
+          μ ∘ second μ ∘ assocʳ ∘ first μ⁻¹ ∘ μ⁻¹
+        ∎
 
 open CartesianH ⦃ … ⦄ public
 
