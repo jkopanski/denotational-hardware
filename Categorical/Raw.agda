@@ -25,7 +25,7 @@ open Category ⦃ … ⦄ public
 
 record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
          (_⇨′_ : obj → obj → Set ℓ)
-         ⦃ ⇨Category : Category _⇨′_ ⦄
+         ⦃ _ : Category _⇨′_ ⦄
     : Set (o ⊔ ℓ) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   infixr 7 _▵_
@@ -128,8 +128,8 @@ open Cartesian ⦃ … ⦄ public
 record CartesianClosed {obj : Set o}
          ⦃ _ : Products obj ⦄ ⦃ _ : Exponentials obj ⦄
          (_⇨′_ : obj → obj → Set ℓ)
-         ⦃ ⇨Category : Category _⇨′_ ⦄
-         ⦃ ⇨Cartesian : Cartesian _⇨′_ ⦄
+         ⦃ _ : Category _⇨′_ ⦄
+         ⦃ _ : Cartesian _⇨′_ ⦄
     : Set (o ⊔ ℓ) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field

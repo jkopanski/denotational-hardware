@@ -119,6 +119,24 @@ module IntroElim {i : b ⇨ b} (i≈id : i ≈ id) where
 
 open IntroElim public
 
+module Inverse
+   ⦃ _ : Products obj ⦄ ⦃ _ : Cartesian _⇨_ ⦄ ⦃ _ : L.Cartesian _⇨_ ⦄ where
+
+  ⊗-inverse : ∀ {f : a ⇨ c}{f⁻¹ : c ⇨ a}{g : b ⇨ d}{g⁻¹ : d ⇨ b}
+    → f⁻¹ ∘ f ≈ id → g⁻¹ ∘ g ≈ id → (f⁻¹ ⊗ g⁻¹) ∘ (f ⊗ g) ≈ id
+  ⊗-inverse f⁻¹∘f≈id g⁻¹∘g≈id =
+    ⊗∘⊗ ; ⊗≈ f⁻¹∘f≈id g⁻¹∘g≈id ; id⊗id
+
+  first-inverse : ∀ {b : obj}{f : a ⇨ c}{f⁻¹ : c ⇨ a}
+    → f⁻¹ ∘ f ≈ id → first {b = b} f⁻¹ ∘ first f ≈ id
+  first-inverse {b = b} f⁻¹∘f≈id = ⊗-inverse f⁻¹∘f≈id (identityˡ {b = b})
+
+  second-inverse : ∀ {a : obj}{g : b ⇨ d}{g⁻¹ : d ⇨ b}
+    → g⁻¹ ∘ g ≈ id → second {a = a} g⁻¹ ∘ second g ≈ id
+  second-inverse {a = a} g⁻¹∘g≈id = ⊗-inverse (identityˡ {a = a}) g⁻¹∘g≈id
+
+open Inverse public
+
 
 module ∘-Assoc where
 
@@ -171,6 +189,11 @@ module ∘-Assoc where
    → (f₆ ∘ f₅ ∘ f₄ ∘ f₃ ∘ f₂) ∘ f₁ ≈ f₆ ∘ f₅ ∘ f₄ ∘ f₃ ∘ f₂ ∘ f₁
   ∘-assocʳ⁵ = ∘≈ʳ ∘-assocʳ⁴ • ∘-assocʳ
 
+  ∘-assocʳ⁶ : {a₀ a₁ a₂ a₃ a₄ a₅ a₆ a₇ : obj}
+     {f₁ : a₀ ⇨ a₁}{f₂ : a₁ ⇨ a₂}{f₃ : a₂ ⇨ a₃}{f₄ : a₃ ⇨ a₄}{f₅ : a₄ ⇨ a₅}{f₆ : a₅ ⇨ a₆}{f₇ : a₆ ⇨ a₇}
+   → (f₇ ∘ f₆ ∘ f₅ ∘ f₄ ∘ f₃ ∘ f₂) ∘ f₁ ≈ f₇ ∘ f₆ ∘ f₅ ∘ f₄ ∘ f₃ ∘ f₂ ∘ f₁
+  ∘-assocʳ⁶ = ∘≈ʳ ∘-assocʳ⁵ • ∘-assocʳ
+
   ∘-assocˡ³ : {a₀ a₁ a₂ a₃ a₄ : obj}
            {f₁ : a₀ ⇨ a₁}{f₂ : a₁ ⇨ a₂}{f₃ : a₂ ⇨ a₃}{f₄ : a₃ ⇨ a₄}
          → f₄ ∘ f₃ ∘ f₂ ∘ f₁ ≈ (f₄ ∘ f₃ ∘ f₂) ∘ f₁
@@ -182,9 +205,42 @@ module ∘-Assoc where
   ∘-assocˡ⁴ = sym ∘-assocʳ⁴
 
   ∘-assocˡ⁵ : {a₀ a₁ a₂ a₃ a₄ a₅ a₆ : obj}
-     {f₁ : a₀ ⇨ a₁}{f₂ : a₁ ⇨ a₂}{f₃ : a₂ ⇨ a₃}{f₄ : a₃ ⇨ a₄}{f₅ : a₄ ⇨ a₅}{f₆ : a₅ ⇨ a₆}
+     {f₁ : a₀ ⇨ a₁}{f₂ : a₁ ⇨ a₂}{f₃ : a₂ ⇨ a₃}{f₄ : a₃ ⇨ a₄}{f₅ : a₄ ⇨ a₅}
+       {f₆ : a₅ ⇨ a₆}
    → f₆ ∘ f₅ ∘ f₄ ∘ f₃ ∘ f₂ ∘ f₁ ≈ (f₆ ∘ f₅ ∘ f₄ ∘ f₃ ∘ f₂) ∘ f₁
   ∘-assocˡ⁵ = sym ∘-assocʳ⁵
+
+  ∘-assocˡ⁶ : {a₀ a₁ a₂ a₃ a₄ a₅ a₆ a₇ : obj}
+     {f₁ : a₀ ⇨ a₁}{f₂ : a₁ ⇨ a₂}{f₃ : a₂ ⇨ a₃}{f₄ : a₃ ⇨ a₄}{f₅ : a₄ ⇨ a₅}
+       {f₆ : a₅ ⇨ a₆}{f₇ : a₆ ⇨ a₇}
+   → f₇ ∘ f₆ ∘ f₅ ∘ f₄ ∘ f₃ ∘ f₂ ∘ f₁ ≈ (f₇ ∘ f₆ ∘ f₅ ∘ f₄ ∘ f₃ ∘ f₂) ∘ f₁
+  ∘-assocˡ⁶ = sym ∘-assocʳ⁶
+
+  ∘≈ʳ² : ∀ {a₀ a₁ a₂ a₃ : obj}{f₁ g₁ : a₀ ⇨ a₁}{f₂ : a₁ ⇨ a₂}{f₃ : a₂ ⇨ a₃}
+    → f₁ ≈ g₁ → f₃ ∘ f₂ ∘ f₁ ≈ f₃ ∘ f₂ ∘ g₁
+  ∘≈ʳ² = ∘≈ʳ ∘′ ∘≈ʳ
+
+  ∘≈ʳ³ : {a₀ a₁ a₂ a₃ a₄ : obj}
+     {f₁ g₁ : a₀ ⇨ a₁}{f₂ : a₁ ⇨ a₂}{f₃ : a₂ ⇨ a₃}{f₄ : a₃ ⇨ a₄}
+   → f₁ ≈ g₁ → f₄ ∘ f₃ ∘ f₂ ∘ f₁ ≈ f₄ ∘ f₃ ∘ f₂ ∘ g₁
+  ∘≈ʳ³ = ∘≈ʳ² ∘′ ∘≈ʳ
+
+  ∘≈ʳ⁴ : {a₀ a₁ a₂ a₃ a₄ a₅ : obj}
+     {f₁ g₁ : a₀ ⇨ a₁}{f₂ : a₁ ⇨ a₂}{f₃ : a₂ ⇨ a₃}{f₄ : a₃ ⇨ a₄}{f₅ : a₄ ⇨ a₅}
+   → f₁ ≈ g₁ → f₅ ∘ f₄ ∘ f₃ ∘ f₂ ∘ f₁ ≈ f₅ ∘ f₄ ∘ f₃ ∘ f₂ ∘ g₁
+  ∘≈ʳ⁴ = ∘≈ʳ³ ∘′ ∘≈ʳ
+
+  ∘≈ʳ⁵ : {a₀ a₁ a₂ a₃ a₄ a₅ a₆ : obj}
+     {f₁ g₁ : a₀ ⇨ a₁}{f₂ : a₁ ⇨ a₂}{f₃ : a₂ ⇨ a₃}{f₄ : a₃ ⇨ a₄}{f₅ : a₄ ⇨ a₅}
+       {f₆ : a₅ ⇨ a₆}
+   → f₁ ≈ g₁ → f₆ ∘ f₅ ∘ f₄ ∘ f₃ ∘ f₂ ∘ f₁ ≈ f₆ ∘ f₅ ∘ f₄ ∘ f₃ ∘ f₂ ∘ g₁
+  ∘≈ʳ⁵ = ∘≈ʳ⁴ ∘′ ∘≈ʳ
+
+  ∘≈ʳ⁶ : {a₀ a₁ a₂ a₃ a₄ a₅ a₆ a₇ : obj}
+     {f₁ g₁ : a₀ ⇨ a₁}{f₂ : a₁ ⇨ a₂}{f₃ : a₂ ⇨ a₃}{f₄ : a₃ ⇨ a₄}{f₅ : a₄ ⇨ a₅}
+       {f₆ : a₅ ⇨ a₆}{f₇ : a₆ ⇨ a₇}
+   → f₁ ≈ g₁ → f₇ ∘ f₆ ∘ f₅ ∘ f₄ ∘ f₃ ∘ f₂ ∘ f₁ ≈ f₇ ∘ f₆ ∘ f₅ ∘ f₄ ∘ f₃ ∘ f₂ ∘ g₁
+  ∘≈ʳ⁶ = ∘≈ʳ⁵ ∘′ ∘≈ʳ
 
 open ∘-Assoc public
 
