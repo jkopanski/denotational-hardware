@@ -4,33 +4,35 @@
 -- source to be lawful, assuming that source equivalence is defined
 -- homomorphically.
 
-module Categorical.MakeLawful where
-
 open import Level using (Level)
+open import Categorical.Homomorphism
+
+module Categorical.MakeLawful
+         {o₁}{obj₁ : Set o₁} {ℓ₁}(_⇨₁_ : obj₁ → obj₁ → Set ℓ₁)
+         {o₂}{obj₂ : Set o₂} {ℓ₂}(_⇨₂_ : obj₂ → obj₂ → Set ℓ₂)
+         {q : Level} ⦃ _ : Equivalent q _⇨₂_ ⦄
+         ⦃ _ : Homomorphismₒ obj₁ obj₂ ⦄
+         ⦃ H : Homomorphism _⇨₁_ _⇨₂_ ⦄
+ where
 
 open import Categorical.Raw
-open import Categorical.Homomorphism
-open import Categorical.Laws as L hiding (Category)
+open import Categorical.Laws as L hiding (Category; Cartesian; CartesianClosed)
+open import Categorical.Reasoning
 
 open ≈-Reasoning
 
 private
   variable
-    o ℓ o₁ ℓ₁ o₂ ℓ₂ : Level
-    obj obj₁ obj₂ : Set o
-    a b c : obj
+    -- o ℓ o₁ ℓ₁ o₂ ℓ₂ : Level
+    -- obj obj₁ obj₂ : Set o
+    a b c : obj₂
 
-LawfulCategoryᶠ : {obj₁ : Set o₁} {_⇨₁_ : obj₁ → obj₁ → Set ℓ₁}
-                  {obj₂ : Set o₂} (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂)
-                  {q : Level} ⦃ _ : Equivalent q _⇨₂_ ⦄
-                  ⦃ _ : Category _⇨₁_ ⦄ ⦃ _ : Category _⇨₂_ ⦄
+LawfulCategoryᶠ : ⦃ _ : Category _⇨₁_ ⦄ ⦃ _ : Category _⇨₂_ ⦄
                   ⦃ _ : L.Category _⇨₂_ ⦄
-                  ⦃ _ : Homomorphismₒ obj₁ obj₂ ⦄
-                  ⦃ H : Homomorphism _⇨₁_ _⇨₂_ ⦄
-                  ⦃ F : CategoryH _⇨₁_ _⇨₂_ ⦄
+                  ⦃ _ : CategoryH _⇨₁_ _⇨₂_ ⦄
                 → L.Category _⇨₁_ ⦃ equiv = H-equiv H ⦄
 
-LawfulCategoryᶠ F = record
+LawfulCategoryᶠ = record
   { identityˡ = λ {a b} {f} →
       begin
         Fₘ (id ∘ f)
@@ -79,3 +81,21 @@ LawfulCategoryᶠ F = record
 
 -- TODO: Cartesian, etc.
 
+{-
+
+LawfulCartesianᶠ :
+    ⦃ _ : Products obj₁ ⦄ ⦃ _ : Products obj₂ ⦄
+    ⦃ _ : Category _⇨₁_ ⦄ ⦃ _ : Category _⇨₂_ ⦄
+    ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄
+    ⦃ _ : L.Category _⇨₂_ ⦄ ⦃ _ : L.Cartesian _⇨₂_ ⦄
+    ⦃ _ : ProductsH obj₁ _⇨₂_ ⦄
+    ⦃ _ : CategoryH _⇨₁_ _⇨₂_ ⦄ ⦃ _ : CartesianH _⇨₁_ _⇨₂_ ⦄
+  → L.Cartesian _⇨₁_ ⦃ equiv = H-equiv H ⦄ ⦃ lCat = LawfulCategoryᶠ ⦄
+LawfulCartesianᶠ =
+  record
+    { ∀⊤ = {!!}
+    ; ∀× = {!!}
+    ; ▵≈ = {!!}
+    }
+
+-}

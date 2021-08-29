@@ -82,7 +82,7 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
                  (_⇨′_ : obj → obj → Set ℓ)
                  {q} ⦃ equiv : Equivalent q _⇨′_ ⦄
                  ⦃ _ : R.Category _⇨′_ ⦄ ⦃ _ : R.Cartesian _⇨′_ ⦄
-                 ⦃ ⇨Category : Category _⇨′_ ⦄
+                 ⦃ lCat : Category _⇨′_ ⦄
        : Set (suc o ⊔ ℓ ⊔ suc q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
 
@@ -241,7 +241,7 @@ record CartesianClosed {obj : Set o} ⦃ _ : Products obj ⦄
                        ⦃ _ : R.Category _⇨′_ ⦄
                        ⦃ _ : R.Cartesian _⇨′_ ⦄
                        ⦃ _ : R.CartesianClosed _⇨′_ ⦄
-                       ⦃ ⇨Category : Category _⇨′_ ⦄ ⦃ ⇨Cartesian : Cartesian _⇨′_ ⦄
+                       ⦃ lCat : Category _⇨′_ ⦄ ⦃ lCart : Cartesian _⇨′_ ⦄
        : Set (suc o ⊔ ℓ ⊔ suc q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
