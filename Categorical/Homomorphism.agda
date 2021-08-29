@@ -286,13 +286,14 @@ record BooleanH
 
 open BooleanH ⦃ … ⦄ public
 
-id-booleanH : {obj : Set o} ⦃ _ : Boolean obj ⦄
-              {_⇨₁_ : obj → obj → Set ℓ₁} {_⇨₂_ : obj → obj → Set ℓ₂}
+id-BooleanH : {obj : Set o} ⦃ _ : Boolean obj ⦄
+              -- {_⇨₁_ : obj → obj → Set ℓ₁}
+              {_⇨₂_ : obj → obj → Set ℓ₂}
               ⦃ _ : Category _⇨₂_ ⦄
               -- {q : Level} ⦃ _ : Equivalent q _⇨₂_ ⦄
               -- ⦃ _ : L.Category _⇨₂_ ⦃ rcat = cat₂ ⦄ ⦄
             → BooleanH obj _⇨₂_ ⦃ Hₒ = id-Hₒ ⦄
-id-booleanH = record
+id-BooleanH = record
   { β   = id
   ; β⁻¹ = id
   -- ; β⁻¹∘β = {!identityˡ!}
