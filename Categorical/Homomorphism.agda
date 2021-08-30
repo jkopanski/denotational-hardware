@@ -33,6 +33,31 @@ record CategoryH {obj₁ : Set o₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ�
     F-∘  : ∀ {g : b ⇨₁ c} {f : a ⇨₁ b} → Fₘ (g ∘ f) ≈ Fₘ g ∘ Fₘ f
     -- TODO: make g and f explicit arguments? Wait and see.
 
+  module _ ⦃ _ : L.Category _⇨₂_ ⦄ where
+
+    F-∘³ : {a₀ a₁ a₂ a₃ : obj₁}
+           {f₁ : a₀ ⇨₁ a₁}{f₂ : a₁ ⇨₁ a₂}{f₃ : a₂ ⇨₁ a₃}
+         → Fₘ (f₃ ∘ f₂ ∘ f₁) ≈ Fₘ f₃ ∘ Fₘ f₂ ∘ Fₘ f₁
+    F-∘³ = F-∘ ; ∘≈ʳ F-∘
+
+    F-∘⁴ : {a₀ a₁ a₂ a₃ a₄ : obj₁}
+           {f₁ : a₀ ⇨₁ a₁}{f₂ : a₁ ⇨₁ a₂}{f₃ : a₂ ⇨₁ a₃}{f₄ : a₃ ⇨₁ a₄}
+         → Fₘ (f₄ ∘ f₃ ∘ f₂ ∘ f₁) ≈ Fₘ f₄ ∘ Fₘ f₃ ∘ Fₘ f₂ ∘ Fₘ f₁
+    F-∘⁴ = F-∘ ; ∘≈ʳ F-∘³
+
+    F-∘⁵ : {a₀ a₁ a₂ a₃ a₄ a₅ : obj₁}
+           {f₁ : a₀ ⇨₁ a₁}{f₂ : a₁ ⇨₁ a₂}{f₃ : a₂ ⇨₁ a₃}{f₄ : a₃ ⇨₁ a₄}
+             {f₅ : a₄ ⇨₁ a₅}
+         → Fₘ (f₅ ∘ f₄ ∘ f₃ ∘ f₂ ∘ f₁) ≈ Fₘ f₅ ∘ Fₘ f₄ ∘ Fₘ f₃ ∘ Fₘ f₂ ∘ Fₘ f₁
+    F-∘⁵ = F-∘ ; ∘≈ʳ F-∘⁴
+
+    F-∘⁶ : {a₀ a₁ a₂ a₃ a₄ a₅ a₆ : obj₁}
+           {f₁ : a₀ ⇨₁ a₁}{f₂ : a₁ ⇨₁ a₂}{f₃ : a₂ ⇨₁ a₃}{f₄ : a₃ ⇨₁ a₄}
+             {f₅ : a₄ ⇨₁ a₅}{f₆ : a₅ ⇨₁ a₆}
+         → Fₘ (f₆ ∘ f₅ ∘ f₄ ∘ f₃ ∘ f₂ ∘ f₁) ≈
+           Fₘ f₆ ∘ Fₘ f₅ ∘ Fₘ f₄ ∘ Fₘ f₃ ∘ Fₘ f₂ ∘ Fₘ f₁
+    F-∘⁶ = F-∘ ; ∘≈ʳ F-∘⁵
+
 open CategoryH ⦃ … ⦄ public
 
 id-CategoryH : {obj : Set o} {_⇨_ : obj → obj → Set ℓ}
