@@ -100,6 +100,10 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   mapⱽ  zero   f = !
   mapⱽ (suc n) f = f ⊗ mapⱽ n f
 
+  zipⱽ : ∀ n → (V a n × V b n ⇨ V (a × b) n)
+  zipⱽ  zero   = !
+  zipⱽ (suc n) = second (zipⱽ n) ∘ transpose
+
   unzipⱽ : ∀ n → (V (a × b) n ⇨ V a n × V b n)
   unzipⱽ  zero   = ! ▵ !
   unzipⱽ (suc n) = transpose ∘ second (unzipⱽ n)
@@ -113,6 +117,10 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   mapᵀ : ∀ n → (a ⇨ b) → (T a n ⇨ T b n)
   mapᵀ  zero   f = f
   mapᵀ (suc n) f = mapᵀ n f ⊗ mapᵀ n f
+
+  zipᵀ : ∀ n → (T a n × T b n ⇨ T (a × b) n)
+  zipᵀ  zero   = id
+  zipᵀ (suc n) = (zipᵀ n ⊗ zipᵀ n) ∘ transpose
 
   unzipᵀ : ∀ n → (T (a × b) n ⇨ T a n × T b n)
   unzipᵀ  zero   = id
