@@ -96,14 +96,10 @@ comp (mk comp# op {i} ins o) = comp′ comp# name i ins o ++ᴸ subs
    subs = case op of λ
      { (primₒ _)  → []
      ; applyₒ     → []
-     ; (curryₒ f) → -- subgraph comp# (concatᴸ (mapᴸ comp f))  -- termination :(
-                    subgraph comp# (concatᴸ (mapᴸ-comp f))
+     ; (curryₒ f) → subgraph comp# (concatᴸ (mapᴸ-comp f))
      } where mapᴸ-comp : SSA → List (List String)
              mapᴸ-comp []       = []
              mapᴸ-comp (s ∷ ss) = comp s ∷ mapᴸ-comp ss
-
--- TODO: How can I persuade the termination checker that the "mapᴸ comp f" form
--- terminates?
 
 dot : SSA → String
 dot = package ∘ concatᴸ ∘ mapᴸ comp

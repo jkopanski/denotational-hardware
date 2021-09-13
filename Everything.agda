@@ -9,9 +9,9 @@ import Categorical.Raw
 import Categorical.Homomorphism
 import Categorical.Laws
 import Categorical.MakeLawful
-
 import Categorical.Comma
 import Categorical.Arrow
+import Categorical.Free
 
 import Functions
 import Ty

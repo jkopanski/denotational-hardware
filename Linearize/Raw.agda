@@ -69,8 +69,11 @@ f ⊗ₖ g = secondₖ g ∘ₖ firstₖ f
 
 instance
 
-  homomorphism : Homomorphism _⇨_ _⇨ₘ_
-  homomorphism = record { Fₘ = ⟦_⟧ₖ }
+  H : Homomorphism _⇨_ _⇨ₘ_
+  H = record { Fₘ = ⟦_⟧ₖ }
+
+  equivalent : Equivalent q _⇨_
+  equivalent = H-equiv H
 
   category : Category _⇨_
   category = record { id = route id ; _∘_ = _∘ₖ_ }
