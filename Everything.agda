@@ -14,6 +14,7 @@ import Categorical.Arrow
 import Categorical.Free
 
 import Functions
+import Equality
 import Ty
 import Primitive
 import Routing
