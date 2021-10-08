@@ -41,7 +41,7 @@ mutual
     constructor mk
     field
       comp# : ℕ
-      op : Op
+      op : String
       {i} : Ty
       ins : Ref i
       o   : Ty
@@ -49,19 +49,11 @@ mutual
   SSA : Set
   SSA = List Statement
 
-  data Op : Set where
-    primₒ : String → Op
-    applyₒ : Op
-    curryₒ : SSA → Op
+  stat : ∀ {i}{o} → ℕ → (i ⇨ₚ o) → Ref i → Statement
+  stat {i}{o} comp# p r = mk comp# (show p) r o
 
-  mk′ : ∀ {i}{o} → ℕ → (i ⇨ᵤ o) → Ref i → Statement × ℕ
-  mk′ {i}{o} comp# u r = first (λ op → mk comp# op r o) (mkOp u)
-   where
-     next = suc comp#
-     mkOp : (i ⇨ᵤ o) → Op × ℕ
-     mkOp (`prim p)  = primₒ (show p) , next
-     mkOp `apply     = applyₒ , next
-     mkOp (`curry f) = first curryₒ (ssa′ next f)
+  mk′ : ∀ {i}{o} → ℕ → (i ⇨ₚ o) → Ref i → Statement × ℕ
+  mk′ {i}{o} comp# p r = first (λ op → mk comp# (show p) r o) (p , suc comp#)
 
   refs : ℕ → Ref b
   refs comp# = tabulate′ (mk comp#)
@@ -70,14 +62,13 @@ mutual
   ssa f = exl (ssa′ 0 f)
 
   ssa′ : ℕ → (a ⇨ₖ b) → SSA × ℕ
-  ssa′ {a} comp# f = ssaᵏ (suc comp#) (refs comp#) f [ mk comp# (primₒ "In") † a ]
+  ssa′ {a} comp# f = ssaᵏ (suc comp#) (refs comp#) f [ mk comp# "In" † a ]
    where
     ssaᵏ : ∀ {a b} → ℕ → Ref a → (a ⇨ₖ b) → List Statement → SSA × ℕ
-    ssaᵏ comp# ins ⌞ r ⌟ ss = reverse (mk comp# (primₒ "Out") (⟦ r ⟧′ ins) ⊤ ∷ ss) , suc comp#
-    ssaᵏ comp# ins (f ∘·first u ∘ r) ss with ⟦ r ⟧′ ins
-    ... | x ､ y with mk′ comp# u x
-    ...            | s , comp#′ =
-      ssaᵏ comp#′ (refs comp# ､ y) f (s ∷ ss)
+    ssaᵏ comp# ins ⌞ r ⌟ ss =
+      reverse (mk comp# "Out" (⟦ r ⟧′ ins) ⊤ ∷ ss) , suc comp#
+    ssaᵏ comp# ins (f ∘·first p ∘ r) ss with ⟦ r ⟧′ ins ; ... | x ､ y =
+      ssaᵏ (suc comp#) (refs comp# ､ y) f (stat comp# p x ∷ ss)
 
 instance
   Show-Id : Show (Id z)
@@ -90,15 +81,9 @@ private
 
   mutual
 
-    show-Op : Op → String
-    show-Op (primₒ s) = s
-    show-Op applyₒ = "apply"
-    show-Op (curryₒ f) =
-      "curry " ++ parensIfSpace ("\n" ++ indent-lines (show-SSA f))
-
     show-Stmt : Statement → String
     show-Stmt (mk comp# op ins o) =
-      show (refs {o} comp#) ++ " = " ++ show-Op op ++ " "
+      show (refs {o} comp#) ++ " = " ++ op ++ " "
               ++ parensIfSpace (show ins)
 
     show-SSA : SSA → String
@@ -110,9 +95,6 @@ private
        show-SSA′ (s ∷ ss) = show-Stmt s ∷ show-SSA′ ss
 
 instance
-
-  Show-Op : Show Op
-  Show-Op = record { show = show-Op }
 
   Show-Stmt : Show Statement
   Show-Stmt = record { show = show-Stmt }

@@ -86,20 +86,7 @@ comp′ comp# p i ins o with #atoms i + #atoms o
   ∷ toList (zipWith (λ x i → wire x (mk comp# i)) ins indices)
 
 comp : Statement → List String
-comp (mk comp# op {i} ins o) = comp′ comp# name i ins o ++ᴸ subs
- where
-   name : String
-   name = case op of λ
-     { (primₒ str) → str ; applyₒ → "apply" ; (curryₒ f) → "curry " ++ subgraph-name comp# }
-
-   subs : List String
-   subs = case op of λ
-     { (primₒ _)  → []
-     ; applyₒ     → []
-     ; (curryₒ f) → subgraph comp# (concatᴸ (mapᴸ-comp f))
-     } where mapᴸ-comp : SSA → List (List String)
-             mapᴸ-comp []       = []
-             mapᴸ-comp (s ∷ ss) = comp s ∷ mapᴸ-comp ss
+comp (mk comp# name {i} ins o) = comp′ comp# name i ins o
 
 dot : SSA → String
 dot = package ∘ concatᴸ ∘ mapᴸ comp
