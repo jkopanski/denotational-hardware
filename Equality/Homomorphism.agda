@@ -26,5 +26,5 @@ module equality-homomorphism-subst (P : A → Set) where
    categoryH : CategoryH _⇨_ Function
    categoryH = record
      { F-id = λ _ → ≡.refl
-     ; F-∘  = λ { {f = x≡y} Px → ≡.sym (subst-subst x≡y) }
+     ; F-∘  = λ { {f = x≡y} _ → ≡.sym (subst-subst x≡y) }
      }

@@ -14,10 +14,7 @@ module equality-raw where
  instance
 
   category : Category _⇨_
-  category = record
-    { id = ≡.refl
-    ; _∘_ = flip ≡.trans
-    }
+  category = record { id = ≡.refl ; _∘_ = flip ≡.trans }
 
   -- If we specialize A itself to Set a, I think we can give Cartesian and
   -- Cocartesian instances.
