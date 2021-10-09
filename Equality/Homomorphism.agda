@@ -21,10 +21,10 @@ module equality-homomorphism-subst (P : A → Set) where
    Hₒ = record { Fₒ = P }
 
    H : Homomorphism _⇨_ Function
-   H = record { Fₘ = λ { (mk x≡y) → subst P x≡y } }
+   H = record { Fₘ = subst P  }
 
    categoryH : CategoryH _⇨_ Function
    categoryH = record
      { F-id = λ _ → ≡.refl
-     ; F-∘  = λ { {f = mk x≡y} Px → ≡.sym (subst-subst x≡y) }
+     ; F-∘  = λ { {f = x≡y} Px → ≡.sym (subst-subst x≡y) }
      }

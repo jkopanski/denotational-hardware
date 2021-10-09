@@ -3,7 +3,7 @@
 module Equality.Raw {ℓ} {A : Set ℓ} where
 
 open import Function using (flip)
-import Relation.Binary.PropositionalEquality as ≡
+open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
 
 open import Categorical.Raw
 
@@ -15,8 +15,8 @@ module equality-raw where
 
   category : Category _⇨_
   category = record
-    { id = mk ≡.refl
-    ; _∘_ = λ { (mk y≡z) (mk x≡y) → mk (≡.trans x≡y y≡z) }
+    { id = ≡.refl
+    ; _∘_ = flip ≡.trans
     }
 
   -- If we specialize A itself to Set a, I think we can give Cartesian and
