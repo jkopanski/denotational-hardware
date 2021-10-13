@@ -9,7 +9,6 @@ open import Function.Equality using (_⟨$⟩_)
 
 open import Categorical.Raw as R hiding (Category; Cartesian; CartesianClosed)
 open import Categorical.Equiv
-open import Functions.Raw
 
 open Equivalence
 open ≈-Reasoning
