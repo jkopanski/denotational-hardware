@@ -8,18 +8,18 @@ open import Categorical.Laws as L hiding (Category; Cartesian)
 open import Categorical.Homomorphism
 
 module Categorical.Comma
+   {o₀}{obj₀ : Set o₀} {ℓ₀} (_⇨₀_ : obj₀ → obj₀ → Set ℓ₀) ⦃ _ : Category _⇨₀_ ⦄
    {o₁}{obj₁ : Set o₁} {ℓ₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁) ⦃ _ : Category _⇨₁_ ⦄ 
    {o₂}{obj₂ : Set o₂} {ℓ₂} (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂) ⦃ _ : Category _⇨₂_ ⦄
-   {o₃}{obj₃ : Set o₃} {ℓ₃} (_⇨₃_ : obj₃ → obj₃ → Set ℓ₃) ⦃ _ : Category _⇨₃_ ⦄
-   {q} ⦃ _ : Equivalent q _⇨₁_ ⦄ ⦃ _ : L.Category _⇨₁_ ⦄
+   {q} ⦃ _ : Equivalent q _⇨₀_ ⦄ ⦃ _ : L.Category _⇨₀_ ⦄
+       ⦃ _ : Equivalent q _⇨₁_ ⦄ ⦃ _ : L.Category _⇨₁_ ⦄
        ⦃ _ : Equivalent q _⇨₂_ ⦄ ⦃ _ : L.Category _⇨₂_ ⦄
-       ⦃ _ : Equivalent q _⇨₃_ ⦄ ⦃ _ : L.Category _⇨₃_ ⦄
-   ⦃ _ : Homomorphismₒ obj₁ obj₃ ⦄ ⦃ _ : Homomorphism _⇨₁_ _⇨₃_ ⦄
-     ⦃ _ : CategoryH _⇨₁_ _⇨₃_ ⦄
-   ⦃ _ : Homomorphismₒ obj₂ obj₃ ⦄ ⦃ _ : Homomorphism _⇨₂_ _⇨₃_ ⦄
-     ⦃ _ : CategoryH _⇨₂_ _⇨₃_ ⦄
+   ⦃ _ : Homomorphismₒ obj₁ obj₀ ⦄ ⦃ _ : Homomorphism _⇨₁_ _⇨₀_ ⦄
+     ⦃ _ : CategoryH _⇨₁_ _⇨₀_ ⦄
+   ⦃ _ : Homomorphismₒ obj₂ obj₀ ⦄ ⦃ _ : Homomorphism _⇨₂_ _⇨₀_ ⦄
+     ⦃ _ : CategoryH _⇨₂_ _⇨₀_ ⦄
  where
 
 -- Comma.Type and Comma.Raw are re-exported by Comma.Homomorphism
-open import Categorical.Comma.Homomorphism _⇨₁_ _⇨₂_ _⇨₃_ public
+open import Categorical.Comma.Homomorphism _⇨₀_ _⇨₁_ _⇨₂_ public
 
