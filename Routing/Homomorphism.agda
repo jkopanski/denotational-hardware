@@ -1,5 +1,6 @@
 {-# OPTIONS --safe --without-K #-}
 
+open import Level using (0ℓ)
 open import Function using (id) renaming (_∘_ to _∙_)
 open import Data.Product using (_,_)
 open import Relation.Binary.PropositionalEquality
@@ -7,8 +8,7 @@ open import Relation.Binary.PropositionalEquality
 
 module Routing.Homomorphism where
 
-open import Functions.Raw
-open import Functions.Laws
+open import Functions.Laws 0ℓ
 open import Routing.Raw public
 open import Ty
 open import Index

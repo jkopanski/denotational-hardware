@@ -2,7 +2,7 @@
 
 open import Level
 
-module Functions.Raw where
+module Functions.Raw (ℓ : Level) where
 
 import Function as F
 open import Data.Product as × using (_,_; proj₁; proj₂; <_,_>)
@@ -11,7 +11,7 @@ import Data.Bool as B
 open import Categorical.Raw
 open import Categorical.Equiv
 
-open import Functions.Type public
+open import Functions.Type ℓ public
 
 module →-raw-instances where
 
@@ -30,16 +30,17 @@ module →-raw-instances where
     logic = record
               { false = λ tt → 𝕗
               ; true  = λ tt → 𝕥
-              ; not   = B.not
-              ; ∧     = uncurry B._∧_
-              ; ∨     = uncurry B._∨_
-              ; xor   = uncurry B._xor_
-              ; cond  = λ (c , e , t) → B.if c then t else e
+              ; not   = lift₁ B.not
+              ; ∧     = uncurry (lift₂ B._∧_)
+              ; ∨     = uncurry (lift₂ B._∨_)
+              ; xor   = uncurry (lift₂ B._xor_)
+              ; cond  = λ (lift c , e , t) → B.if c then t else e
               }
 
     open import Relation.Binary.PropositionalEquality as ≡ using (_≡_; _≗_)
 
-    equivalent : Equivalent 0ℓ Function
+    -- TODO: move to Relation.Binary.PropositionalEquality.Properties as a PR
+    equivalent : Equivalent ℓ Function
     equivalent = record
       { _≈_ = _≗_
       ; equiv = record
@@ -52,7 +53,7 @@ module →-raw-instances where
     -- Experiment. If we're about to copy this pattern, instead define a
     -- parametrized module that can be imported publicly.
     open import Categorical.Homomorphism
-    Hₒ : Homomorphismₒ Set Set
+    Hₒ : Homomorphismₒ (Set ℓ) (Set ℓ)
     Hₒ = id-Hₒ
     H : Homomorphism Function Function
     H = id-H

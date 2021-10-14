@@ -1,13 +1,15 @@
 {-# OPTIONS --safe --without-K #-}
 
-module Functions.Laws where
+open import Level
+
+module Functions.Laws (ℓ : Level) where
 
 open import Function.Equivalence hiding (id; _∘_)
 
 open import Categorical.Raw hiding (Category; Cartesian; CartesianClosed)
 open import Categorical.Laws
 open import Categorical.Equiv
-open import Functions.Raw public
+open import Functions.Raw ℓ public
 open import Axiom.Extensionality.Propositional
 
 module →-laws-instances where

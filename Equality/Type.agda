@@ -1,6 +1,6 @@
 {-# OPTIONS --safe --without-K #-}
 
-module Equality.Type {ℓ} {A : Set ℓ} where
+module Equality.Type {ℓ} (A : Set ℓ) where
 
 open import Relation.Binary.PropositionalEquality
 

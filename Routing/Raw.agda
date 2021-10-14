@@ -9,7 +9,7 @@ open ⊎
 open import Relation.Binary.PropositionalEquality renaming (refl to refl≡)
 
 open import Categorical.Raw
-open import Functions.Raw
+open import Functions.Raw 0ℓ
 
 open import Ty
 open import Index

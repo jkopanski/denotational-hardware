@@ -5,7 +5,7 @@
 module Index where
 
 open import Level
-open import Data.Unit using (tt)
+-- open import Data.Unit using (tt)
 open import Data.Sum hiding (map)
 open import Data.Product using (_,_; uncurry)
 open import Function using (_∘_)
@@ -13,7 +13,7 @@ open import Function using (_∘_)
 open import Categorical.Object
 open import Categorical.Equiv
 open import Ty
-open import Functions.Type
+open import Functions.Type 0ℓ
 
 private variable a b z : Ty
 
@@ -102,27 +102,31 @@ zipWith f u v = map (uncurry f) (zip u v)
 
 module index-instances where
   instance
-    open import Data.Bool using (if_then_else_)
+    open import Data.Bool as B using (if_then_else_)
+    open import Data.Char using (Char)
     open import Function using (id)
     open import Show
 
     open import Data.String hiding (show) renaming (_++_ to _++ᴸ_)
 
     show-index : Show (Index z a)
-    show-index = record { show = fromList ∘ mapᴸ (bool 'l' 'r') ∘ path }
+    show-index = record { show = fromList ∘ mapᴸ name ∘ path }
      where
-      path : Index z a → List Bool
+      name : B.Bool → Char
+      name B.false = 'l'
+      name B.true  = 'r'
+      path : Index z a → List B.Bool
       path bit       = []
       path fun       = []
-      path (left  i) = 𝕗 ∷ path i
-      path (right j) = 𝕥 ∷ path j
+      path (left  i) = B.false ∷ path i
+      path (right j) = B.true  ∷ path j
 
     show-indexed : ∀ {h} ⦃ _ : ∀ {z} → Show (h z) ⦄ → Show (Indexed h a)
-    show-indexed {h = h} = record { show = go 𝕗 }
+    show-indexed {h = h} = record { show = go B.false }
      where
        -- Flag says we're in the left part of a pair
-       go : Bool → Indexed h a → String
+       go : B.Bool → Indexed h a → String
        go p † = "tt"
        go p [ b ]b = parensIfSpace (show b)
        go p [ f ]f = parensIfSpace (show f)
-       go p (u ､ v) = (if p then parens else id) (go 𝕥 u ++ᴸ " , " ++ᴸ go 𝕗 v)
+       go p (u ､ v) = (if p then parens else id) (go B.true u ++ᴸ " , " ++ᴸ go B.false v)

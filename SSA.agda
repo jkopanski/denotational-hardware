@@ -4,6 +4,7 @@
 
 module SSA where
 
+open import Level using (0ℓ)
 open import Data.Product using (_,_)
 open import Data.Nat using (ℕ; suc; zero)
 open import Data.String hiding (toList; show)
@@ -11,7 +12,7 @@ open import Data.List using (List; []; [_]; _∷_; upTo; reverse; _∷ʳ_)
        renaming (length to lengthᴸ; zipWith to zipWithᴸ; map to mapᴸ)
 
 open import Categorical.Raw
-open import Functions.Raw
+open import Functions.Raw 0ℓ
 open import Show
 
 open import Ty

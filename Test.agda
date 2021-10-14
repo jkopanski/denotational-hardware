@@ -3,8 +3,7 @@
 
 module Test where
 
-open import Level using (0ℓ)
-open import Data.Unit using (tt)
+open import Level using (0ℓ; lift)
 open import Data.Product using (_,_)
 open import Data.String hiding (show)
 open import Data.Nat
@@ -13,8 +12,7 @@ open import IO
 
 open import Show
 open import Categorical.Raw
-open import Functions.Raw
-open import Functions.Laws
+open import Functions.Laws (0ℓ)
 open import Ty
 open import Index
 open import Primitive.Raw Function renaming (_⇨_ to _⇨ₚ_)
@@ -38,7 +36,7 @@ fsr _ f = shiftR⇃ ∘ (f ▵ id)
 
 linear : ∀ n → V Bool (suc n) → V Bool (suc n) ⇨ Bool
 linear zero (c , tt) = unitorᵉʳ
-linear (suc n) (c , cs) = (B.if c then xor else exr) ∘ second (linear n cs)
+linear (suc n) (c , cs) = bool xor exr c ∘ second (linear n cs)
 
 lfsr : ∀ n → V Bool (suc n) → V Bool (suc n) ⇨ V Bool (suc n)
 lfsr n cs = fsr (suc n) (linear n cs)

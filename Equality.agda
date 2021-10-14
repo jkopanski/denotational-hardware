@@ -1,6 +1,5 @@
-module Equality {ℓ} {A : Set ℓ} where
+module Equality {ℓ} (A : Set ℓ) where
 
-open import Equality.Laws         {ℓ} {A} public
+open import Equality.Laws A public
 
--- open import Equality.Homomorphism {ℓ} {A} public
-
+-- Equality.Homomorphism not included here, since it needs a predicate

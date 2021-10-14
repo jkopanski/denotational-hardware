@@ -15,6 +15,7 @@ import Categorical.Free
 
 import Functions
 import Equality
+import Equality.Homomorphism
 import Ty
 import Primitive
 import Routing

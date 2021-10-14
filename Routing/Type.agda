@@ -9,7 +9,7 @@ open import Data.Product using (_,_)
 
 open import Categorical.Raw
 open import Categorical.Equiv
-open import Functions.Raw
+open import Functions.Raw 0ℓ
 -- open import Fun.Type renaming (_⇨_ to _⇨ₜ_)
 
 open import Ty

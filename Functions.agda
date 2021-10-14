@@ -1,5 +1,5 @@
 {-# OPTIONS --safe --without-K #-}
 
-module Functions where
+module Functions ℓ where
 
-open import Functions.Laws public  -- exports Functions.Type & Functions.Raw
+open import Functions.Laws ℓ public  -- exports Functions.Type & Functions.Raw
