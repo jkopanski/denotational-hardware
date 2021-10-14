@@ -1,6 +1,6 @@
 {-# OPTIONS --safe --without-K #-}
 
-module Equality.Homomorphism {ℓ} {A : Set ℓ} where
+module Equality.Homomorphism {ℓ} {A : Set ℓ} (P : A → Set) where
 
 open import Function using (flip)
 open import Relation.Binary.PropositionalEquality as ≡ using (_≡_; subst)
@@ -10,10 +10,9 @@ open import Categorical.Raw
 open import Categorical.Homomorphism
 open import Functions.Raw
 
-open import Equality.Raw {ℓ} {A} public
+open import Equality.Raw {ℓ} {A}
 
--- For any P : A → Set, P and subst P form a functor
-module equality-homomorphism-subst (P : A → Set) where
+module equality-homomorphism-subst where
 
  instance
 

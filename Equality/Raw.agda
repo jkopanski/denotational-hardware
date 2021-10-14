@@ -4,8 +4,10 @@ module Equality.Raw {ℓ} {A : Set ℓ} where
 
 open import Function using (flip)
 open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
+open import Relation.Binary.Construct.Always
 
 open import Categorical.Raw
+open import Categorical.Equiv
 
 open import Equality.Type {ℓ} {A} public
 
@@ -16,5 +18,5 @@ module equality-raw where
   category : Category _⇨_
   category = record { id = ≡.refl ; _∘_ = flip ≡.trans }
 
-  -- If we specialize A itself to Set a, I think we can give Cartesian and
-  -- Cocartesian instances.
+  equivalent : Equivalent ℓ _⇨_
+  equivalent = record { _≈_ = Always }
