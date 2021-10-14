@@ -48,3 +48,13 @@ module →-raw-instances where
           ; trans = λ f∼g g∼h x → ≡.trans (f∼g x) (g∼h x)
           }
       }
+
+    -- Experiment. If we're about to copy this pattern, instead define a
+    -- parametrized module that can be imported publicly.
+    open import Categorical.Homomorphism
+    Hₒ : Homomorphismₒ Set Set
+    Hₒ = id-Hₒ
+    H : Homomorphism Function Function
+    H = id-H
+    catH : CategoryH Function Function
+    catH = id-CategoryH
