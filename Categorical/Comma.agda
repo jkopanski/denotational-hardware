@@ -14,10 +14,10 @@ module Categorical.Comma
    {q₀} ⦃ _ : Equivalent q₀ _⇨₀_ ⦄ ⦃ _ : L.Category _⇨₀_ ⦄
    {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄ ⦃ _ : L.Category _⇨₁_ ⦄
    {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄ ⦃ _ : L.Category _⇨₂_ ⦄
-   ⦃ _ : Homomorphismₒ obj₁ obj₀ ⦄ ⦃ _ : Homomorphism _⇨₁_ _⇨₀_ ⦄
-     ⦃ _ : CategoryH _⇨₁_ _⇨₀_ ⦄
-   ⦃ _ : Homomorphismₒ obj₂ obj₀ ⦄ ⦃ _ : Homomorphism _⇨₂_ _⇨₀_ ⦄
-     ⦃ _ : CategoryH _⇨₂_ _⇨₀_ ⦄
+   ⦃ hₒ₁ : Homomorphismₒ obj₁ obj₀ ⦄ ⦃ h₁ : Homomorphism _⇨₁_ _⇨₀_ ⦄
+     ⦃ catH₁ : CategoryH _⇨₁_ _⇨₀_ ⦄
+   ⦃ hₒ₂ : Homomorphismₒ obj₂ obj₀ ⦄ ⦃ h₂ : Homomorphism _⇨₂_ _⇨₀_ ⦄
+     ⦃ catH₂ : CategoryH _⇨₂_ _⇨₀_ ⦄
  where
 
 -- Comma.Type and Comma.Raw are re-exported by Comma.Homomorphism
