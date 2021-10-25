@@ -9,6 +9,7 @@ import Categorical.Raw
 import Categorical.Homomorphism
 import Categorical.Laws
 import Categorical.MakeLawful
+import Categorical.Subcategory
 import Categorical.Comma
 import Categorical.Arrow
 import Categorical.Free
@@ -16,7 +17,7 @@ import Categorical.Free
 import Functions
 import Equality
 import Equality.Homomorphism
--- import Finite
+import Finite
 import Ty
 import Primitive
 import Routing
