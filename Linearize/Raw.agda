@@ -73,7 +73,7 @@ instance
   H = record { Fₘ = ⟦_⟧ₖ }
 
   equivalent : Equivalent q _⇨_
-  equivalent = H-equiv H
+  equivalent = H-equiv
 
   category : Category _⇨_
   category = record { id = route id ; _∘_ = _∘ₖ_ }

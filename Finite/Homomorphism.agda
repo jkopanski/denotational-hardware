@@ -53,4 +53,4 @@ module finite-homomorphism-instances where
      }
 
    equivalent : Equivalent 0ℓ _⇨_
-   equivalent = H-equiv H
+   equivalent = H-equiv

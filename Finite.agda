@@ -3,4 +3,4 @@
 
 module Finite where
 
-open import Finite.Type public
+open import Finite.Homomorphism public

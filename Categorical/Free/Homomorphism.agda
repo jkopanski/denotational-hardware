@@ -48,7 +48,7 @@ module free-homomorphism-instances where
    H = record { Fₘ = ⟦_⟧ }
 
    equivalent : Equivalent q _⇨_
-   equivalent = H-equiv H
+   equivalent = H-equiv
 
    open Equivalent equiv↠ using () renaming (refl to refl↠; sym to sym↠)
 

@@ -30,7 +30,7 @@ private
 LawfulCategoryᶠ : ⦃ _ : Category _⇨₁_ ⦄ ⦃ _ : Category _⇨₂_ ⦄
                   ⦃ _ : L.Category _⇨₂_ ⦄
                   ⦃ _ : CategoryH _⇨₁_ _⇨₂_ ⦄
-                → L.Category _⇨₁_ ⦃ equiv = H-equiv H ⦄
+                → L.Category _⇨₁_ ⦃ equiv = H-equiv ⦄
 
 LawfulCategoryᶠ = record
   { identityˡ = λ {a b} {f} →
@@ -90,7 +90,7 @@ LawfulCartesianᶠ :
     ⦃ _ : L.Category _⇨₂_ ⦄ ⦃ _ : L.Cartesian _⇨₂_ ⦄
     ⦃ _ : ProductsH obj₁ _⇨₂_ ⦄
     ⦃ _ : CategoryH _⇨₁_ _⇨₂_ ⦄ ⦃ _ : CartesianH _⇨₁_ _⇨₂_ ⦄
-  → L.Cartesian _⇨₁_ ⦃ equiv = H-equiv H ⦄ ⦃ lCat = LawfulCategoryᶠ ⦄
+  → L.Cartesian _⇨₁_ ⦃ equiv = H-equiv ⦄ ⦃ lCat = LawfulCategoryᶠ ⦄
 LawfulCartesianᶠ =
   record
     { ∀⊤ = {!!}
