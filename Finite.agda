@@ -37,8 +37,8 @@ module finite-instances where
                   ; μ∘μ⁻¹ = λ {m n} → combine-remQuot {m} n
                   }
     -- TODO: Construct productsH from 1↔⊤ and *↔×
-
     -- TODO: Coproducts
+    -- TODO: Exponentials
 
 open import Categorical.Subcategory ⟨→⟩ ℕ public
 
