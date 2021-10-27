@@ -14,7 +14,7 @@ module Categorical.Subcategory
   ⦃ _ : Category _↠_ ⦄ {q : Level} ⦃ _ : Equivalent q _↠_ ⦄
  where
 
-infix 4 _⇨_
+infix 0 _⇨_
 record _⇨_ (a b : I) : Set ℓ where
   constructor mk
   field
