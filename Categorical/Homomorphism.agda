@@ -311,19 +311,46 @@ record BooleanH
 
 open BooleanH ⦃ … ⦄ public
 
-id-BooleanH : {obj : Set o} ⦃ _ : Boolean obj ⦄
-              -- {_⇨₁_ : obj → obj → Set ℓ₁}
-              {_⇨₂_ : obj → obj → Set ℓ₂}
+id-BooleanH : {obj₂ : Set o} ⦃ _ : Boolean obj₂ ⦄
+              {_⇨₂_ : obj₂ → obj₂ → Set ℓ₂}
               ⦃ _ : Category _⇨₂_ ⦄
               -- {q : Level} ⦃ _ : Equivalent q _⇨₂_ ⦄
               -- ⦃ _ : L.Category _⇨₂_ ⦃ rcat = cat₂ ⦄ ⦄
-            → BooleanH obj _⇨₂_ ⦃ Hₒ = id-Hₒ ⦄
+            → BooleanH obj₂ _⇨₂_ ⦃ Hₒ = id-Hₒ ⦄
 id-BooleanH = record
   { β   = id
   ; β⁻¹ = id
   -- ; β⁻¹∘β = {!identityˡ!}
   -- ; β∘β⁻¹ = {!identityˡ!}
   }
+
+record StrongBooleanH
+    (obj₁ : Set o₁) ⦃ _ : Boolean obj₁ ⦄
+    {obj₂ : Set o₂} ⦃ _ : Boolean obj₂ ⦄ (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
+    ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
+    {q : Level} ⦃ _ : Equivalent q _⇨₂′_ ⦄
+    ⦃ _ : Category _⇨₂′_ ⦄
+    : Set (o₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
+  private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
+  field
+    ⦃ bH ⦄ : BooleanH obj₁ _⇨₂′_
+    β⁻¹∘β : β⁻¹ ∘ β ≈ id
+    β∘β⁻¹ : β ∘ β⁻¹ ≈ id
+
+open StrongBooleanH ⦃ … ⦄ public
+
+-- id-StrongBooleanH : 
+--       {obj₂ : Set o}  ⦃ _ : Boolean obj₂ ⦄
+--       {_⇨₂_ : obj₂ → obj₂ → Set ℓ₂}
+--       ⦃ _ : Category _⇨₂_ ⦄
+--       {q : Level} ⦃ _ : Equivalent q _⇨₂_ ⦄
+--       ⦃ _ : BooleanH obj₂ _⇨₂_ ⦃ Hₒ = id-Hₒ ⦄ ⦄
+--       -- ⦃ _ : L.Category _⇨₂_ ⦃ rcat = cat₂ ⦄ ⦄
+--   → StrongBooleanH obj₂ _⇨₂_ ⦃ Hₒ = id-Hₒ ⦄
+-- id-StrongBooleanH = record
+--     { β⁻¹∘β = {!β⁻¹∘β!}
+--     ; β∘β⁻¹ = {!identityˡ!}
+--     }
 
 record LogicH
     {obj₁ : Set o₁} (_⇨₁′_ : obj₁ → obj₁ → Set ℓ₁)
@@ -344,8 +371,8 @@ record LogicH
     F-false : Fₘ false ∘ ε ≈ β ∘ false
     F-true  : Fₘ true  ∘ ε ≈ β ∘ true
     F-not   : Fₘ not   ∘ β ≈ β ∘ not
-    F-∧     : Fₘ ∧   ∘ μ ∘ (β ⊗ β) ≈ β ∘ ∧
-    F-∨     : Fₘ ∨   ∘ μ ∘ (β ⊗ β) ≈ β ∘ ∨
+    F-∧     : Fₘ  ∧  ∘ μ ∘ (β ⊗ β) ≈ β ∘ ∧
+    F-∨     : Fₘ  ∨  ∘ μ ∘ (β ⊗ β) ≈ β ∘ ∨
     F-xor   : Fₘ xor ∘ μ ∘ (β ⊗ β) ≈ β ∘ xor
     F-cond  : ∀ {a : obj₁} → Fₘ cond ∘ μ ∘ (β ⊗ μ {a = a}) ≈ cond
 

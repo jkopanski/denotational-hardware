@@ -1,4 +1,5 @@
 {-# OPTIONS --safe --without-K #-}
+-- Category of "finite sets", indexed by cardinality
 
 module Finite where
 
@@ -10,6 +11,8 @@ open import Categorical.Equiv
 open import Categorical.Homomorphism hiding (uncurry)
 
 open import Functions 0ℓ
+
+pattern one = suc zero
 
 module finite-instances where
 
@@ -37,8 +40,18 @@ module finite-instances where
                   ; μ∘μ⁻¹ = λ {m n} → combine-remQuot {m} n
                   }
     -- TODO: Construct productsH from 1↔⊤ and *↔×
+
     -- TODO: Coproducts
     -- TODO: Exponentials
+
+    boolean : Boolean ℕ
+    boolean = record { Bool = 2 }
+
+    booleanH : BooleanH ℕ ⟨→⟩
+    booleanH = record
+      { β   = bool zero one
+      ; β⁻¹ = λ { zero → 𝕗 ; one → 𝕥 }
+      }
 
 open import Categorical.Subcategory ⟨→⟩ ℕ public
 
