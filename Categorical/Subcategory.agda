@@ -140,13 +140,6 @@ module subcategory-instances where
               --     cond
               --   ∎
 
-
--- F-cond  : ∀ {a : obj₁} → (cond ∘ (β⁻¹ ⊗ μ⁻¹) ∘ μ⁻¹) ∘ μ ∘ (β ⊗ μ {a = a}) ≈ cond
-
--- F-cond  : ∀ {a : obj₁} → Fₘ cond ∘ μ ∘ (β ⊗ μ {a = a}) ≈ cond
-
--- cond  = mk (cond ∘ (β⁻¹ ⊗ μ⁻¹) ∘ μ⁻¹)
-
     open import Categorical.MakeLawful _⇨_ _↠_
 
     l-category : ⦃ _ : L.Category _↠_ ⦄ → L.Category _⇨_
