@@ -53,5 +53,11 @@ module finite-instances where
       ; β⁻¹ = λ { zero → 𝕗 ; one → 𝕥 }
       }
 
+    strongBooleanH : StrongBooleanH ℕ ⟨→⟩
+    strongBooleanH = record
+      { β⁻¹∘β = λ { 𝕗 → ≡.refl ; 𝕥 → ≡.refl }
+      ; β∘β⁻¹ = λ { zero → ≡.refl ; one → ≡.refl }
+      }
+
 open import Categorical.Subcategory ⟨→⟩ ℕ public
 
