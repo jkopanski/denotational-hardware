@@ -59,5 +59,6 @@ module finite-instances where
       ; β∘β⁻¹ = λ { zero → ≡.refl ; one → ≡.refl }
       }
 
+-- Define the subcategory of ⟨→⟩ with homomorphisms and laws
 open import Categorical.Subcategory ⟨→⟩ ℕ public
 

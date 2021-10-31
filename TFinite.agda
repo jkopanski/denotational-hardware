@@ -20,21 +20,12 @@ data Ty : Set where
   `Bool : Ty
   _`×_  : Ty → Ty → Ty
 
+-- TODO: Possibly add _`⇛_  : Ty → Ty → Ty
+
 ⟦_⟧ : Ty → Set
 ⟦ `⊤ ⟧ = ⊤
 ⟦ `Bool ⟧ = Bool
 ⟦ s `× t ⟧ = ⟦ s ⟧ × ⟦ t ⟧
-
--- TODO: import the Products instance of ℕ, and use × in place of * throughout
--- this module. I think I want to change the precedence of × to match *.
--- Similarly for "+", and use it for coproducts. I'll probably have to make a
--- lot of changes, since products appear a lot.
-
--- Cardinality of a denoted type
-card : Ty → ℕ
-card `⊤ = 1
-card `Bool = 2
-card (s `× t) = card s * card t
 
 open import Finite renaming (_⇨_ to _↠_)
 
@@ -44,8 +35,16 @@ module tfinite-instances where
 
   instance
 
-    Hₒ : Homomorphismₒ Ty ℕ
-    Hₒ = record { Fₒ = card }
+    Hₒ : ∀ {o}{obj : Set o} ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄ →
+         Homomorphismₒ Ty obj
+    Hₒ {obj = obj} = record { Fₒ = h }
+      where
+        h : Ty → obj
+        h   `⊤     = ⊤
+        h  `Bool   = Bool
+        h (a `× b) = h a × h b
+
+    -- Note: for obj = ℕ, Fₒ t computes the cardinality of ⟦ t ⟧
 
     products : Products Ty
     products = record { ⊤ = `⊤ ; _×_ = _`×_ }
@@ -65,16 +64,26 @@ module tfinite-instances where
     -- TODO: Coproducts
     -- TODO: Exponentials
 
+    boolean : Boolean Ty
+    boolean = record { Bool = `Bool }
+
+    booleanH : BooleanH Ty ⟨→⟩
+    booleanH = record { β   = id ; β⁻¹ = id }
+
+    strongBooleanH : StrongBooleanH Ty ⟨→⟩
+    strongBooleanH = record { β⁻¹∘β = λ _ → ≡.refl ; β∘β⁻¹ = λ _ → ≡.refl }
+
+-- Define the subcategory of Ty with homomorphisms and laws
 open import Categorical.Subcategory _↠_ Ty public
 
 open import Categorical.Reasoning
 
-fin : {t : Ty} → ⟦ t ⟧ → Fin (card t)
+fin : {t : Ty} → ⟦ t ⟧ → Fin (Fₒ t)
 fin {`⊤} = ε
 fin {`Bool} = β
 fin {s `× t} = μ ∘ (fin ⊗ fin)
 
-fin⁻¹ : {t : Ty} → Fin (card t) → ⟦ t ⟧
+fin⁻¹ : {t : Ty} → Fin (Fₒ t) → ⟦ t ⟧
 fin⁻¹ {`⊤} = ε⁻¹
 fin⁻¹ {`Bool} = β⁻¹
 fin⁻¹ {s `× t} = (fin⁻¹ ⊗ fin⁻¹) ∘ μ⁻¹
@@ -105,4 +114,5 @@ fin⁻¹∘fin {s `× t} =
 
 -- TODO: Simplify proof. Try using ⊗-inverse
 
--- I haven't yet needed fin⁻¹∘fin
+-- I haven't yet needed fin⁻¹∘fin or fin∘fin⁻¹.
+
