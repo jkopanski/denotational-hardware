@@ -22,11 +22,6 @@ data Ty : Set where
 
 -- TODO: Possibly add _`⇛_  : Ty → Ty → Ty
 
-⟦_⟧ : Ty → Set
-⟦ `⊤ ⟧ = ⊤
-⟦ `Bool ⟧ = Bool
-⟦ s `× t ⟧ = ⟦ s ⟧ × ⟦ t ⟧
-
 open import Finite renaming (_⇨_ to _↠_)
 
 import Relation.Binary.PropositionalEquality as ≡
@@ -76,7 +71,13 @@ module tfinite-instances where
 -- Define the subcategory of Ty with homomorphisms and laws
 open import Categorical.Subcategory _↠_ Ty public
 
+
 open import Categorical.Reasoning
+
+⟦_⟧ : Ty → Set
+⟦ `⊤ ⟧ = ⊤
+⟦ `Bool ⟧ = Bool
+⟦ s `× t ⟧ = ⟦ s ⟧ × ⟦ t ⟧
 
 fin : {t : Ty} → ⟦ t ⟧ → Fin (Fₒ t)
 fin {`⊤} = ε
@@ -115,4 +116,3 @@ fin⁻¹∘fin {s `× t} =
 -- TODO: Simplify proof. Try using ⊗-inverse
 
 -- I haven't yet needed fin⁻¹∘fin or fin∘fin⁻¹.
-
