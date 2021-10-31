@@ -25,6 +25,11 @@ data Ty : Set where
 ⟦ `Bool ⟧ = Bool
 ⟦ s `× t ⟧ = ⟦ s ⟧ × ⟦ t ⟧
 
+-- TODO: import the Products instance of ℕ, and use × in place of * throughout
+-- this module. I think I want to change the precedence of × to match *.
+-- Similarly for "+", and use it for coproducts. I'll probably have to make a
+-- lot of changes, since products appear a lot.
+
 -- Cardinality of a denoted type
 card : Ty → ℕ
 card `⊤ = 1
