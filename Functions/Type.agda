@@ -23,13 +23,14 @@ pattern 𝕥 = lift B.true
 
 pattern tt = lift U.tt
 
-bool : ∀ {a}{A : Set a} → A → A → Lift ℓ B.Bool → A
-bool e t (lift c) = B.if c then t else e
--- bool e t 𝕗 = e
--- bool e t 𝕥 = t
+infix  0 if_then_else_
 
--- liftB₁ : (B.Bool → B.Bool) → (Lift ℓ B.Bool → Lift ℓ B.Bool)
--- liftB₁ f (lift x) = lift (f x)
+if_then_else_ :  ∀ {a}{A : Set a} → Lift ℓ B.Bool → A → A → A
+if 𝕥 then t else f = t
+if 𝕗 then t else f = f
+
+bool : ∀ {a}{A : Set a} → A → A → Lift ℓ B.Bool → A
+bool e t c = if c then t else e
 
 lift₁ : ∀ {a b}{A : Set a}{B : Set b}{a′ b′}
       → (A → B) → (Lift a′ A → Lift b′ B)
