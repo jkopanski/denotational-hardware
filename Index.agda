@@ -5,7 +5,6 @@
 module Index where
 
 open import Level
--- open import Data.Unit using (tt)
 open import Data.Sum hiding (map)
 open import Data.Product using (_,_; uncurry)
 open import Function using (_∘_)
@@ -102,7 +101,6 @@ zipWith f u v = map (uncurry f) (zip u v)
 
 module index-instances where
   instance
-    open import Data.Bool as B using (if_then_else_)
     open import Data.Char using (Char)
     open import Function using (id)
     open import Show
@@ -112,21 +110,21 @@ module index-instances where
     show-index : Show (Index z a)
     show-index = record { show = fromList ∘ mapᴸ name ∘ path }
      where
-      name : B.Bool → Char
-      name B.false = 'l'
-      name B.true  = 'r'
-      path : Index z a → List B.Bool
+      name : Bool → Char
+      name 𝕗 = 'l'
+      name 𝕥  = 'r'
+      path : Index z a → List Bool
       path bit       = []
       path fun       = []
-      path (left  i) = B.false ∷ path i
-      path (right j) = B.true  ∷ path j
+      path (left  i) = 𝕗 ∷ path i
+      path (right j) = 𝕥  ∷ path j
 
     show-indexed : ∀ {h} ⦃ _ : ∀ {z} → Show (h z) ⦄ → Show (Indexed h a)
-    show-indexed {h = h} = record { show = go B.false }
+    show-indexed {h = h} = record { show = go 𝕗 }
      where
        -- Flag says we're in the left part of a pair
-       go : B.Bool → Indexed h a → String
+       go : Bool → Indexed h a → String
        go p † = "tt"
        go p [ b ]b = parensIfSpace (show b)
        go p [ f ]f = parensIfSpace (show f)
-       go p (u ､ v) = (if p then parens else id) (go B.true u ++ᴸ " , " ++ᴸ go B.false v)
+       go p (u ､ v) = (if p then parens else id) (go 𝕗 u ++ᴸ " , " ++ᴸ go 𝕗 v)
