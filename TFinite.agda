@@ -5,7 +5,7 @@ module TFinite where
 
 open import Level using (0ℓ)
 open import Data.Nat
-open import Data.Fin hiding (_+_)
+open import Data.Fin hiding (_+_; #_)
 open import Data.Product using (_,_)
 
 open import Categorical.Equiv
@@ -24,7 +24,8 @@ data Ty : Set where
 
 open import Finite renaming (_⇨_ to _↠_)
 
-import Relation.Binary.PropositionalEquality as ≡
+open import Relation.Binary.PropositionalEquality
+  using (cong; cong₂) renaming (refl to refl≡)
 
 module tfinite-instances where
 
@@ -50,10 +51,10 @@ module tfinite-instances where
                   ; μ     = mk id
                   ; ε⁻¹   = mk id
                   ; μ⁻¹   = mk id
-                  ; ε⁻¹∘ε = λ _ → ≡.refl
-                  ; ε∘ε⁻¹ = λ _ → ≡.refl
-                  ; μ⁻¹∘μ = λ _ → ≡.refl
-                  ; μ∘μ⁻¹ = λ _ → ≡.refl
+                  ; ε⁻¹∘ε = λ _ → refl≡
+                  ; ε∘ε⁻¹ = λ _ → refl≡
+                  ; μ⁻¹∘μ = λ _ → refl≡
+                  ; μ∘μ⁻¹ = λ _ → refl≡
                   }
 
     -- TODO: Coproducts
@@ -63,10 +64,10 @@ module tfinite-instances where
     boolean = record { Bool = `Bool }
 
     booleanH : BooleanH Ty ⟨→⟩
-    booleanH = record { β   = id ; β⁻¹ = id }
+    booleanH = record { β = id ; β⁻¹ = id }
 
     strongBooleanH : StrongBooleanH Ty ⟨→⟩
-    strongBooleanH = record { β⁻¹∘β = λ _ → ≡.refl ; β∘β⁻¹ = λ _ → ≡.refl }
+    strongBooleanH = record { β⁻¹∘β = λ _ → refl≡ ; β∘β⁻¹ = λ _ → refl≡ }
 
 -- Define the subcategory of Ty with homomorphisms and laws
 open import Categorical.Subcategory _↠_ Ty public
@@ -79,12 +80,19 @@ open import Categorical.Reasoning
 ⟦ `Bool ⟧ = Bool
 ⟦ s `× t ⟧ = ⟦ s ⟧ × ⟦ t ⟧
 
-fin : {t : Ty} → ⟦ t ⟧ → Fin (Fₒ t)
+-- ⟦_⟧ = Fₒ
+
+# : Ty → ℕ
+# = Fₒ
+
+-- TODO: Why doesn't ⟦_⟧ = Fₒ work out?
+
+fin : {t : Ty} → ⟦ t ⟧ → Fin (# t)
 fin {`⊤} = ε
 fin {`Bool} = β
 fin {s `× t} = μ ∘ (fin ⊗ fin)
 
-fin⁻¹ : {t : Ty} → Fin (Fₒ t) → ⟦ t ⟧
+fin⁻¹ : {t : Ty} → Fin (# t) → ⟦ t ⟧
 fin⁻¹ {`⊤} = ε⁻¹
 fin⁻¹ {`Bool} = β⁻¹
 fin⁻¹ {s `× t} = (fin⁻¹ ⊗ fin⁻¹) ∘ μ⁻¹
@@ -102,11 +110,11 @@ fin⁻¹∘fin {s `× t} =
     (fin⁻¹ ⊗ fin⁻¹) ∘ μ⁻¹ ∘ μ ∘ (fin ⊗ fin)
   ≡⟨⟩
     (fin⁻¹ ⊗ fin⁻¹) ∘ (μ⁻¹ ∘ μ) ∘ (fin ⊗ fin)
-  ≈⟨ (λ (x , y) → ≡.cong (fin⁻¹ ⊗ fin⁻¹) (μ⁻¹∘μ (fin x , fin y))) ⟩
+  ≈⟨ (λ (x , y) → cong (fin⁻¹ ⊗ fin⁻¹) (μ⁻¹∘μ (fin x , fin y))) ⟩
     (fin⁻¹ ⊗ fin⁻¹) ∘ (fin ⊗ fin)
   ≡⟨⟩
     (λ (x , y) → fin⁻¹ (fin x) , fin⁻¹ (fin y))
-  ≈⟨ (λ (x , y) → ≡.cong₂ _,_ (fin⁻¹∘fin x) (fin⁻¹∘fin y)) ⟩
+  ≈⟨ (λ (x , y) → cong₂ _,_ (fin⁻¹∘fin x) (fin⁻¹∘fin y)) ⟩
     (λ (x , y) → x , y)
   ≡⟨⟩
     id
