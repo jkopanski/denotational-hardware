@@ -8,8 +8,6 @@ import Data.Unit as U
 open import Data.Unit.Polymorphic using () renaming (⊤ to ⊤′)
 open import Data.Product using () renaming (_×_ to _×′_)
 
-open import Categorical.Raw
-
 import Data.Bool as B
 
 ⟨→⟩ : Set ℓ → Set ℓ → Set ℓ
@@ -40,7 +38,27 @@ lift₂ : ∀ {a b c}{A : Set a}{B : Set b}{C : Set c}{a′ b′ c′}
       → (A → B → C) → (Lift a′ A → Lift b′ B → Lift c′ C)
 lift₂ f (lift x) (lift y) = lift (f x y)
 
+open import Function
+open import Relation.Binary.PropositionalEquality
+open ≡-Reasoning
+
+-- Functions with left inverses are injective. TODO: maybe generalize to monic morphisms.
+invertible-injective : ∀ {A B : Set ℓ} (f : A → B) (f⁻¹ : B → A) (f⁻¹∘f≗id : f⁻¹ ∘ f ≗ id) →
+  ∀ {x y} → f x ≡ f y → x ≡ y
+invertible-injective f f⁻¹ f⁻¹∘f≗id {x} {y} fx≡fy =
+  begin
+    x
+  ≡⟨ sym (f⁻¹∘f≗id x) ⟩
+    f⁻¹ (f x)
+  ≡⟨ cong f⁻¹ fx≡fy ⟩
+    f⁻¹ (f y)
+  ≡⟨ f⁻¹∘f≗id y ⟩
+    y
+  ∎
+
 module →-instances where
+
+  open import Categorical.Object
 
   instance
 
