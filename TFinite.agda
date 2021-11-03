@@ -80,6 +80,8 @@ open import Categorical.Reasoning
 ⟦ `Bool ⟧ = Bool
 ⟦ s `× t ⟧ = ⟦ s ⟧ × ⟦ t ⟧
 
+private variable s t : Ty
+
 -- ⟦_⟧ = Fₒ
 
 # : Ty → ℕ
@@ -87,17 +89,20 @@ open import Categorical.Reasoning
 
 -- TODO: Why doesn't ⟦_⟧ = Fₒ work out?
 
-fin : {t : Ty} → ⟦ t ⟧ → Fin (# t)
+fin : ⟦ t ⟧ → Fin (# t)
 fin {`⊤} = ε
 fin {`Bool} = β
 fin {s `× t} = μ ∘ (fin ⊗ fin)
 
-fin⁻¹ : {t : Ty} → Fin (# t) → ⟦ t ⟧
+fin² : ⟦ s ⟧ × ⟦ t ⟧ → Fin (# s) × Fin (# t)
+fin² = fin ⊗ fin
+
+fin⁻¹ : Fin (# t) → ⟦ t ⟧
 fin⁻¹ {`⊤} = ε⁻¹
 fin⁻¹ {`Bool} = β⁻¹
 fin⁻¹ {s `× t} = (fin⁻¹ ⊗ fin⁻¹) ∘ μ⁻¹
 
-fin⁻¹∘fin : ∀ {t} → fin⁻¹ ∘ fin {t} ≈ id
+fin⁻¹∘fin : fin⁻¹ ∘ fin {t} ≈ id
 fin⁻¹∘fin {`⊤} = ε⁻¹∘ε
 fin⁻¹∘fin {`Bool} = β⁻¹∘β
 
