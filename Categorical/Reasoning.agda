@@ -1,20 +1,7 @@
 {-# OPTIONS --safe --without-K #-}
 
 -- Utilities for reasoning about morphism equivalence.
-
--- Inspired by Categories.Morphism.Reasoning in agda-categories. Quoting that
--- module:
-
-{-
-  Helper routines most often used in reasoning with commutative squares,
-  at the level of arrows in categories.
-
-  Basic  : reasoning about identity
-  Pulls  : use a ∘ b ≈ c as left-to-right rewrite
-  Pushes : use c ≈ a ∘ b as a left-to-right rewrite
-  IntroElim : introduce/eliminate an equivalent-to-id arrow
-  Extend : 'extends' a commutative square with an equality on left/right/both
--}
+-- Inspired by Categories.Morphism.Reasoning in agda-categories.
 
 open import Categorical.Equiv
 open import Categorical.Raw
@@ -49,42 +36,6 @@ module Misc where
 open Misc public
 
 
-module Pulls {i : b ⇨ c}{j : c ⇨ d}{k : b ⇨ d} (j∘i≈k : j ∘ i ≈ k) where
-
-  pullˡ : {f : a ⇨ b} → j ∘ i ∘ f ≈ k ∘ f
-  pullˡ {f = f} = begin
-                    j ∘ (i ∘ f)
-                  ≈⟨ ∘-assocˡ ⟩
-                    (j ∘ i) ∘ f
-                  ≈⟨ ∘≈ˡ j∘i≈k ⟩
-                    k ∘ f
-                  ∎
-
-  pullʳ : {f : d ⇨ e} → (f ∘ j) ∘ i ≈ f ∘ k
-  pullʳ {f = f} = begin
-                    (f ∘ j) ∘ i
-                  ≈⟨ ∘-assocʳ ⟩
-                    f ∘ (j ∘ i)
-                  ≈⟨ ∘≈ʳ j∘i≈k ⟩
-                    f ∘ k
-                  ∎
-
-open Pulls public
-
-
-module Pushes {i : b ⇨ c}{j : c ⇨ d}{k : b ⇨ d} (k≈j∘i : k ≈ j ∘ i) where
-
-  private j∘i≈k = sym k≈j∘i
-
-  pushˡ : {f : a ⇨ b} → k ∘ f ≈ j ∘ i ∘ f
-  pushˡ = sym (pullˡ j∘i≈k)
-
-  pushʳ : {f : d ⇨ e} → f ∘ k ≈ (f ∘ j) ∘ i
-  pushʳ = sym (pullʳ j∘i≈k)
-
-open Pushes public
-
-
 module IntroElim {i : b ⇨ b} (i≈id : i ≈ id) where
 
   elimˡ  : ∀ {f : a ⇨ b} → i ∘ f ≈ f
@@ -111,13 +62,14 @@ module IntroElim {i : b ⇨ b} (i≈id : i ≈ id) where
   introʳ : ∀ {f : b ⇨ c} → f ≈ f ∘ i
   introʳ = sym elimʳ
 
-  intro-center : ∀ {f : a ⇨ b} {g : b ⇨ c} → g ∘ f ≈ g ∘ i ∘ f
-  intro-center = ∘≈ʳ introˡ
-
   elim-center  : ∀ {f : a ⇨ b} {g : b ⇨ c} → g ∘ i ∘ f ≈ g ∘ f
-  elim-center  = sym intro-center
+  elim-center = ∘≈ʳ elimˡ
+
+  intro-center : ∀ {f : a ⇨ b} {g : b ⇨ c} → g ∘ f ≈ g ∘ i ∘ f
+  intro-center  = sym elim-center
 
 open IntroElim public
+
 
 module Inverse
    ⦃ _ : Products obj ⦄ ⦃ _ : Cartesian _⇨_ ⦄ ⦃ _ : L.Cartesian _⇨_ ⦄ where
@@ -168,11 +120,6 @@ module ∘-Assoc where
                 → j ∘ i ≈ id → (f ∘ j) ∘ i ≈ f
   ∘-assoc-elimʳ {i = i}{f}{j} j∘i≈id = ∘-assocʳ ; elimʳ j∘i≈id
 
-
-  -- ∘-assocʳ² : {a₀ a₁ a₂ a₃ : obj}
-  --          {f₁ : a₀ ⇨ a₁}{f₂ : a₁ ⇨ a₂}{f₃ : a₂ ⇨ a₃}
-  --        → (f₃ ∘ f₂) ∘ f₁ ≈ f₃ ∘ f₂ ∘ f₁
-  -- ∘-assocʳ² = ∘-assocʳ
 
   ∘-assocʳ³ : {a₀ a₁ a₂ a₃ a₄ : obj}
            {f₁ : a₀ ⇨ a₁}{f₂ : a₁ ⇨ a₂}{f₃ : a₂ ⇨ a₃}{f₄ : a₃ ⇨ a₄}
@@ -243,6 +190,46 @@ module ∘-Assoc where
   ∘≈ʳ⁶ = ∘≈ʳ⁵ ∘′ ∘≈ʳ
 
 open ∘-Assoc public
+
+
+-- Stolen nearly intact from agda-categories
+module Cancel {i : b ⇨ c} {h : c ⇨ b} (inv : h ∘ i ≈ id) where
+
+  cancelʳ : {f : b ⇨ d} → (f ∘ h) ∘ i ≈ f
+  cancelʳ {f = f} =
+    begin
+      (f ∘ h) ∘ i
+    ≈⟨ ∘-assocʳ′ inv ⟩
+      f ∘ id
+    ≈⟨ identityʳ ⟩
+      f
+    ∎
+
+  -- insertʳ : {f : b ⇨ d} → f ≈ (f ∘ h) ∘ i
+  -- insertʳ = sym cancelʳ
+
+  cancelˡ : {f : a ⇨ b} →  h ∘ (i ∘ f) ≈ f
+  cancelˡ {f = f} =
+    begin
+      h ∘ (i ∘ f)
+    ≈⟨ ∘-assocˡ′ inv ⟩
+      id ∘ f
+    ≈⟨ identityˡ ⟩
+      f
+    ∎
+
+  -- insertˡ : {f : a ⇨ b} →  f ≈ h ∘ (i ∘ f)
+  -- insertˡ = Equiv.sym cancelˡ
+
+  cancelInner : {f : b ⇨ d} {g : a ⇨ b} → (f ∘ h) ∘ (i ∘ g) ≈ f ∘ g
+  cancelInner {f = f} {g = g} =
+    begin
+      (f ∘ h) ∘ (i ∘ g)
+    ≈⟨ ∘-assocˡ′ cancelʳ ⟩
+      f ∘ g
+    ∎
+
+open Cancel public
 
 
 module Assoc
@@ -372,7 +359,7 @@ module Assoc
   first-first {f = f} =
     begin
       first (first f)
-    ≈⟨ introʳ assocˡ∘assocʳ ⟩
+    ≈⟨ sym (elimʳ assocˡ∘assocʳ) ⟩
       first (first f) ∘ assocˡ ∘ assocʳ
     ≈⟨ ∘-assocˡʳ′ first-first∘assocˡ ⟩
       assocˡ ∘ first f ∘ assocʳ

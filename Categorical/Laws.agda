@@ -46,33 +46,6 @@ record Category {obj : Set o} (_⇨′_ : obj → obj → Set ℓ)
   ∘≈ʳ : ∀ {f g : a ⇨ b} {h : b ⇨ c} → f ≈ g → h ∘ f ≈ h ∘ g
   ∘≈ʳ f≈g = ∘≈ refl f≈g
 
-  -- Taken from Categories.Morphism.Reasoning.Core in agda-categories.
-  -- I'll probably add more and move them to another module.
-
-  center : ∀ {f : a ⇨ b}{g : b ⇨ c}{h : c ⇨ d}{i : d ⇨ e}{hg : b ⇨ d}
-         → h ∘ g ≈ hg → (i ∘ h) ∘ (g ∘ f) ≈ i ∘ hg ∘ f
-  center {f = f}{g}{h}{i}{hg} h∘g≈hg =
-    begin
-      (i ∘ h) ∘ (g ∘ f)
-    ≈⟨ assoc ⟩
-      i ∘ h ∘ (g ∘ f)
-    ≈˘⟨ ∘≈ʳ assoc ⟩
-      i ∘ (h ∘ g) ∘ f
-    ≈⟨ ∘≈ʳ (∘≈ˡ h∘g≈hg) ⟩
-      i ∘ hg ∘ f
-    ∎
-
-  cancelInner : ∀ {f : a ⇨ b}{g : b ⇨ c}{h : c ⇨ b}{i : b ⇨ d}
-              → h ∘ g ≈ id → (i ∘ h) ∘ (g ∘ f) ≈ i ∘ f
-  cancelInner {f = f}{g}{h}{i} h∘g≈id =
-    begin
-      (i ∘ h) ∘ (g ∘ f)
-    ≈⟨ center h∘g≈id ⟩
-      i ∘ id ∘ f
-    ≈⟨ ∘≈ʳ identityˡ ⟩
-      i ∘ f
-    ∎
-
 open Category ⦃ … ⦄ public
 
 open import Data.Product using (_,_) renaming (_×_ to _×ₚ_)
