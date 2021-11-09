@@ -5,7 +5,7 @@ open import Level using (0ℓ)
 
 open import Data.Nat
 open import Data.Fin
-open import Data.Fin.Patterns
+open import Data.Fin.Patterns using (0F; 1F)
 open import Data.Fin.Properties
 import Relation.Binary.PropositionalEquality as ≡
 open import Data.Product using (uncurry) -- for μ⁻¹∘μ
@@ -48,7 +48,7 @@ module finite-object-instances where
     booleanH : BooleanH ℕ ⟨→⟩
     booleanH = record
       { β   = bool 0F 1F
-      ; β⁻¹ = λ { zero → 𝕗 ; one → 𝕥 }
+      ; β⁻¹ = λ { 0F → 𝕗 ; 1F → 𝕥 }
       }
 
     strongBooleanH : StrongBooleanH ℕ ⟨→⟩
