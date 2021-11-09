@@ -89,7 +89,6 @@ module subcategory-instances where
                ; F-xor   = F-2
                ; F-cond  = F-c
                }
-
         where 
               F-0 : ∀ {f : ⊤ ↠ Bool} → (β ∘ f ∘ ε⁻¹) ∘ ε ≈ β ∘ f
               F-0 = ∘-assocʳ³ ; ∘-assocˡ ; elimʳ ε⁻¹∘ε
