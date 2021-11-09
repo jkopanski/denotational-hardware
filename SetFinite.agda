@@ -52,7 +52,7 @@ module set-finite-instances where
                     (μ ∘ (f⁻¹ ⊗ g⁻¹)) ∘ ((f ⊗ g) ∘ μ⁻¹)
                   ≈⟨ cancelInner {i = f ⊗ g} {f⁻¹ ⊗ g⁻¹}
                        (⊗-inverse {f = f} {f⁻¹} {g} {g⁻¹} f⁻¹∘f g⁻¹∘g)
-                       {f = μ} {μ⁻¹} ⟩
+                       {f = μ} {μ⁻¹ {a = m} {n}} ⟩
                     μ ∘ μ⁻¹ {a = m}
                   ≈⟨ μ∘μ⁻¹ {a = m} ⟩
                     id
@@ -61,7 +61,7 @@ module set-finite-instances where
      where
        open ≈-Reasoning
        -- 1↔⊤ will be in agda-stdlib 2.0, but only the level-monomorphic version.
-       -- TODO: Add level-polymorphic versions.
+       -- TODO: Add level-polymorphic versions of 0↔⊥ and 1↔⊤ in a PR.
        1↔⊤ : 𝔽 1 ↔ ⊤
        1↔⊤ = mk↔′ (λ { 0F → tt }) (λ { tt → 0F }) (λ { tt → refl≡ }) λ { 0F → refl≡ }
 
