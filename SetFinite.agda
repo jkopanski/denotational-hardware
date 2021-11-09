@@ -80,13 +80,11 @@ module set-finite-instances where
     -- TODO: Coproducts
     -- TODO: Exponentials
 
-    2↔Bool : 𝔽 2 ↔ Bool
-    2↔Bool = mk↔′ (two 𝕗 𝕥) (bool 0F 1F)
-                  (λ { 𝕗  → refl≡ ; 𝕥  → refl≡ })
-                  (λ { 0F → refl≡ ; 1F → refl≡ })
-
     boolean : Boolean SetFinite
-    boolean = record { Bool = mk 2↔Bool }
+    boolean = record
+      { Bool = mk (mk↔′ (two 𝕗 𝕥) (bool 0F 1F)
+                        (λ { 𝕗  → refl≡ ; 𝕥  → refl≡ })
+                        (λ { 0F → refl≡ ; 1F → refl≡ })) }
 
     booleanH : BooleanH SetFinite ⟨→⟩
     booleanH = record { β = id ; β⁻¹ = id }
