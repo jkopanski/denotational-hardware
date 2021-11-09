@@ -1,29 +1,28 @@
 module SetFinite where
 
--- Full subcategory of Function restricted to finite sets. Finiteness of a type
--- A is demonstrated by a number n and proof that A ≅ 𝔽 n.
+-- Full subcategory of Function restricted to finite sets.
 
 open import Level using (0ℓ)
 open import Function using (_↔_; mk↔′; Inverse)
-open import Data.Product using (Σ; _,_) renaming (_×_ to _×′_)
+open import Data.Product using (Σ; _,_)
 open import Data.Nat
 open import Data.Fin renaming (Fin to 𝔽)
 open import Data.Fin.Properties
-open import Data.Fin.Patterns
-open import Relation.Binary.PropositionalEquality using () renaming (refl to refl≡)
+open import Data.Fin.Patterns using (0F; 1F)
+open import Relation.Binary.PropositionalEquality using (refl)
 
 open import Categorical.Homomorphism hiding (refl)
 open import Categorical.Laws
 open import Functions 0ℓ
 import Finite.Object
 
+-- A finite set, demonstrated by a number n and proof that A ≅ 𝔽 n.
 record SetFinite : Set₁ where
   constructor mk
   field
     { A } : Set
     { n } : ℕ
     iso : A ↔ 𝔽 n
-
 
 module set-finite-instances where
 
@@ -65,7 +64,7 @@ module set-finite-instances where
        -- 1↔⊤ will be in agda-stdlib 2.0, but only the level-monomorphic version.
        -- TODO: Add level-polymorphic versions of 0↔⊥ and 1↔⊤ in a PR.
        ⊤↔1 : ⊤ ↔ 𝔽 1
-       ⊤↔1 = mk↔′ (λ { tt → 0F }) (λ { 0F → tt }) (λ { 0F → refl≡ }) (λ { tt → refl≡ })
+       ⊤↔1 = mk↔′ (λ { tt → 0F }) (λ { 0F → tt }) (λ { 0F → refl }) (λ { tt → refl })
 
     productsH : ProductsH SetFinite ⟨→⟩
     productsH = record
@@ -73,10 +72,10 @@ module set-finite-instances where
                   ; μ     = id
                   ; ε⁻¹   = id
                   ; μ⁻¹   = id
-                  ; ε⁻¹∘ε = λ _ → refl≡
-                  ; ε∘ε⁻¹ = λ _ → refl≡
-                  ; μ⁻¹∘μ = λ _ → refl≡
-                  ; μ∘μ⁻¹ = λ _ → refl≡
+                  ; ε⁻¹∘ε = λ _ → refl
+                  ; ε∘ε⁻¹ = λ _ → refl
+                  ; μ⁻¹∘μ = λ _ → refl
+                  ; μ∘μ⁻¹ = λ _ → refl
                   }
 
     -- TODO: Coproducts
@@ -85,14 +84,14 @@ module set-finite-instances where
     boolean : Boolean SetFinite
     boolean = record
       { Bool = mk (mk↔′ (bool 0F 1F) (two 𝕗 𝕥)
-                        (λ { 0F → refl≡ ; 1F → refl≡ })
-                        (λ { 𝕗  → refl≡ ; 𝕥  → refl≡ })) }
+                        (λ { 0F → refl ; 1F → refl })
+                        (λ { 𝕗  → refl ; 𝕥  → refl })) }
 
     booleanH : BooleanH SetFinite ⟨→⟩
     booleanH = record { β = id ; β⁻¹ = id }
 
     strongBooleanH : StrongBooleanH SetFinite ⟨→⟩
-    strongBooleanH = record { β⁻¹∘β = λ _ → refl≡ ; β∘β⁻¹ = λ _ → refl≡ }
+    strongBooleanH = record { β⁻¹∘β = λ _ → refl ; β∘β⁻¹ = λ _ → refl }
 
 -- Define the subcategory of ⟨→⟩ with homomorphisms and laws
 open import Categorical.Subcategory ⟨→⟩ SetFinite public
