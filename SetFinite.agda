@@ -96,4 +96,3 @@ module set-finite-instances where
 
 -- Define the subcategory of ⟨→⟩ with homomorphisms and laws
 open import Categorical.Subcategory ⟨→⟩ SetFinite public
-
