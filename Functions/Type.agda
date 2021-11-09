@@ -7,6 +7,8 @@ module Functions.Type (ℓ : Level) where
 import Data.Unit as U
 open import Data.Unit.Polymorphic using () renaming (⊤ to ⊤′)
 open import Data.Product using () renaming (_×_ to _×′_)
+open import Data.Fin using (Fin)
+open import Data.Fin.Patterns using (0F; 1F)
 
 import Data.Bool as B
 
@@ -29,6 +31,10 @@ if 𝕗 then t else f = f
 
 bool : ∀ {a}{A : Set a} → A → A → Lift ℓ B.Bool → A
 bool e t c = if c then t else e
+
+two : ∀ {a}{A : Set a} → A → A → (Fin 2 → A)
+two z o 0F = z
+two z o 1F = o
 
 lift₁ : ∀ {a b}{A : Set a}{B : Set b}{a′ b′}
       → (A → B) → (Lift a′ A → Lift b′ B)
