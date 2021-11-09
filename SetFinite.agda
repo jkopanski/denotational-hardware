@@ -37,9 +37,10 @@ module set-finite-instances where
 
     products : Products SetFinite
     products = record
-      { ⊤ = mk ⊤↔1
+      { ⊤ = mk (mk↔′ ε ε⁻¹ ε∘ε⁻¹ ε⁻¹∘ε)
       ; _×_ = λ (mk {A} {m} record {f = f; f⁻¹ = f⁻¹; inverse = f∘f⁻¹ , f⁻¹∘f})
                 (mk {B} {n} record {f = g; f⁻¹ = g⁻¹; inverse = g∘g⁻¹ , g⁻¹∘g}) →
+                let open ≈-Reasoning in
          mk {A × B} {m × n}
            (mk↔′ (μ ∘ (f ⊗ g)) ((f⁻¹ ⊗ g⁻¹) ∘ μ⁻¹)
              (begin
@@ -61,12 +62,6 @@ module set-finite-instances where
               ∎)
            )
       }
-     where
-       open ≈-Reasoning
-       -- 1↔⊤ will be in agda-stdlib 2.0, but only the level-monomorphic version.
-       -- TODO: Add level-polymorphic versions of 0↔⊥ and 1↔⊤ in a PR.
-       ⊤↔1 : ⊤ ↔ 𝔽 1
-       ⊤↔1 = mk↔′ ε ε⁻¹ ε∘ε⁻¹ ε⁻¹∘ε
 
     productsH : ProductsH SetFinite ⟨→⟩
     productsH = record
