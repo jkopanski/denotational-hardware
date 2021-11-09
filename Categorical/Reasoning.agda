@@ -22,7 +22,7 @@ private
     a′ b′ c′ d′ e′ : obj
     f g h i j k : a ⇨ b
 
-open import Categorical.Equiv  public
+open import Categorical.Equiv
 open ≈-Reasoning
 
 module Misc where
@@ -69,25 +69,6 @@ module IntroElim {i : b ⇨ b} (i≈id : i ≈ id) where
   intro-center  = sym elim-center
 
 open IntroElim public
-
-
-module Inverse
-   ⦃ _ : Products obj ⦄ ⦃ _ : Cartesian _⇨_ ⦄ ⦃ _ : L.Cartesian _⇨_ ⦄ where
-
-  ⊗-inverse : ∀ {f : a ⇨ c}{f⁻¹ : c ⇨ a}{g : b ⇨ d}{g⁻¹ : d ⇨ b}
-    → f⁻¹ ∘ f ≈ id → g⁻¹ ∘ g ≈ id → (f⁻¹ ⊗ g⁻¹) ∘ (f ⊗ g) ≈ id
-  ⊗-inverse f⁻¹∘f≈id g⁻¹∘g≈id =
-    ⊗∘⊗ ; ⊗≈ f⁻¹∘f≈id g⁻¹∘g≈id ; id⊗id
-
-  first-inverse : ∀ {b : obj}{f : a ⇨ c}{f⁻¹ : c ⇨ a}
-    → f⁻¹ ∘ f ≈ id → first {b = b} f⁻¹ ∘ first f ≈ id
-  first-inverse {b = b} f⁻¹∘f≈id = ⊗-inverse f⁻¹∘f≈id (identityˡ {b = b})
-
-  second-inverse : ∀ {a : obj}{g : b ⇨ d}{g⁻¹ : d ⇨ b}
-    → g⁻¹ ∘ g ≈ id → second {a = a} g⁻¹ ∘ second g ≈ id
-  second-inverse {a = a} g⁻¹∘g≈id = ⊗-inverse (identityˡ {a = a}) g⁻¹∘g≈id
-
-open Inverse public
 
 
 module ∘-Assoc where
@@ -230,6 +211,25 @@ module Cancel {i : b ⇨ c} {h : c ⇨ b} (inv : h ∘ i ≈ id) where
     ∎
 
 open Cancel public
+
+
+module Inverses
+   ⦃ _ : Products obj ⦄ ⦃ _ : Cartesian _⇨_ ⦄ ⦃ _ : L.Cartesian _⇨_ ⦄ where
+
+  ⊗-inverse : ∀ {f : a ⇨ c}{f⁻¹ : c ⇨ a}{g : b ⇨ d}{g⁻¹ : d ⇨ b}
+    → f⁻¹ ∘ f ≈ id → g⁻¹ ∘ g ≈ id → (f⁻¹ ⊗ g⁻¹) ∘ (f ⊗ g) ≈ id
+  ⊗-inverse f⁻¹∘f≈id g⁻¹∘g≈id =
+    ⊗∘⊗ ; ⊗≈ f⁻¹∘f≈id g⁻¹∘g≈id ; id⊗id
+
+  first-inverse : ∀ {b : obj}{f : a ⇨ c}{f⁻¹ : c ⇨ a}
+    → f⁻¹ ∘ f ≈ id → first {b = b} f⁻¹ ∘ first f ≈ id
+  first-inverse {b = b} f⁻¹∘f≈id = ⊗-inverse f⁻¹∘f≈id (identityˡ {b = b})
+
+  second-inverse : ∀ {a : obj}{g : b ⇨ d}{g⁻¹ : d ⇨ b}
+    → g⁻¹ ∘ g ≈ id → second {a = a} g⁻¹ ∘ second g ≈ id
+  second-inverse {a = a} g⁻¹∘g≈id = ⊗-inverse (identityˡ {a = a}) g⁻¹∘g≈id
+
+open Inverses public
 
 
 module Assoc
