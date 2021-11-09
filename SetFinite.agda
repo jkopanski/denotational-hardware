@@ -2,6 +2,8 @@ module SetFinite where
 
 -- Full subcategory of Function restricted to finite sets.
 
+-- TODO: Try generalizing from functions to any category with sets as objects.
+
 open import Level using (0ℓ)
 open import Function using (_↔_; mk↔′; Inverse)
 open import Data.Product using (Σ; _,_)
@@ -64,7 +66,7 @@ module set-finite-instances where
        -- 1↔⊤ will be in agda-stdlib 2.0, but only the level-monomorphic version.
        -- TODO: Add level-polymorphic versions of 0↔⊥ and 1↔⊤ in a PR.
        ⊤↔1 : ⊤ ↔ 𝔽 1
-       ⊤↔1 = mk↔′ (λ { tt → 0F }) (λ { 0F → tt }) (λ { 0F → refl }) (λ { tt → refl })
+       ⊤↔1 = mk↔′ ε ε⁻¹ ε∘ε⁻¹ ε⁻¹∘ε
 
     productsH : ProductsH SetFinite ⟨→⟩
     productsH = record
@@ -82,10 +84,7 @@ module set-finite-instances where
     -- TODO: Exponentials
 
     boolean : Boolean SetFinite
-    boolean = record
-      { Bool = mk (mk↔′ (bool 0F 1F) (two 𝕗 𝕥)
-                        (λ { 0F → refl ; 1F → refl })
-                        (λ { 𝕗  → refl ; 𝕥  → refl })) }
+    boolean = record { Bool = mk (mk↔′ β β⁻¹ β∘β⁻¹ β⁻¹∘β) }
 
     booleanH : BooleanH SetFinite ⟨→⟩
     booleanH = record { β = id ; β⁻¹ = id }
