@@ -12,6 +12,7 @@ open import Categorical.Equiv
 open import Categorical.Homomorphism hiding (uncurry)
 open import Categorical.Laws
 
+-- TODO: parametrize this module by function level
 open import Functions 0ℓ
 
 infixr 2 _`×_
@@ -22,7 +23,7 @@ data Ty : Set where
 
 -- TODO: Possibly add _`⇛_  : Ty → Ty → Ty
 
-open import Finite renaming (_⇨_ to _↠_)
+open import Finite renaming (_⇨_ to _↠_; mk to mk↠)
 
 open import Relation.Binary.PropositionalEquality
   using (cong; cong₂) renaming (refl to refl≡)
@@ -47,10 +48,10 @@ module tfinite-instances where
 
     productsH : ProductsH Ty _↠_
     productsH = record
-                  { ε     = mk id
-                  ; μ     = mk id
-                  ; ε⁻¹   = mk id
-                  ; μ⁻¹   = mk id
+                  { ε     = id
+                  ; μ     = id
+                  ; ε⁻¹   = id
+                  ; μ⁻¹   = id
                   ; ε⁻¹∘ε = λ _ → refl≡
                   ; ε∘ε⁻¹ = λ _ → refl≡
                   ; μ⁻¹∘μ = λ _ → refl≡
@@ -70,7 +71,7 @@ module tfinite-instances where
     strongBooleanH = record { β⁻¹∘β = λ _ → refl≡ ; β∘β⁻¹ = λ _ → refl≡ }
 
 -- Define the subcategory of Ty with homomorphisms and laws
-open import Categorical.Subcategory _↠_ Ty public
+open import Categorical.Subcategory _↠_ Ty renaming (mk to mk⇨) public
 
 
 open import Categorical.Reasoning
@@ -128,4 +129,15 @@ fin⁻¹∘fin {s `× t} =
 
 -- TODO: Simplify proof. Try using ⊗-inverse
 
--- I haven't yet needed fin⁻¹∘fin or fin∘fin⁻¹.
+-- fin is the object mapping of a functor. What is the morphism mapping?
+
+-- fin : ⟦ t ⟧ → Fin (# t)
+
+open import Function using (_∘′_)
+
+-- TODO: use the TFinite and Finite categories.
+finF : (⟦ s ⟧ → ⟦ t ⟧) → (Fin (# s) → Fin (# t))
+finF f = fin ∘ f ∘ fin⁻¹
+
+finF⁻¹ : (Fin (# s) → Fin (# t)) → (⟦ s ⟧ → ⟦ t ⟧)
+finF⁻¹ g = fin⁻¹ ∘ g ∘ fin
