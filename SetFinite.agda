@@ -16,32 +16,38 @@ open import Relation.Binary.PropositionalEquality using (refl)
 open import Categorical.Homomorphism hiding (refl)
 open import Categorical.Laws
 open import Functions 0ℓ
-import Finite.Object
+
+open import Finite renaming (_⇨_ to _↠_; mk to mk↠)
 
 -- A finite set, demonstrated by a number n and proof that A ≅ 𝔽 n.
 record SetFinite : Set₁ where
-  constructor mk
+  constructor mkS               -- TODO: rename later
   field
     { A } : Set
     { n } : ℕ
     iso : A ↔ 𝔽 n
 
-module set-finite-instances where
+private
+
+    pattern mk↔″ f f⁻¹ f∘f⁻¹ f⁻¹∘f =
+      record { f = f ; f⁻¹ = f⁻¹ ; inverse = f∘f⁻¹ , f⁻¹∘f }
+
+module SetFinite-Set-instances where
 
   instance
+
+    open import Categorical.Reasoning
 
     Hₒ : Homomorphismₒ SetFinite Set
     Hₒ = record { Fₒ = SetFinite.A }
 
-    open import Categorical.Reasoning
-
     products : Products SetFinite
     products = record
-      { ⊤ = mk (mk↔′ ε ε⁻¹ ε∘ε⁻¹ ε⁻¹∘ε)
-      ; _×_ = λ (mk {A} {m} record {f = f; f⁻¹ = f⁻¹; inverse = f∘f⁻¹ , f⁻¹∘f})
-                (mk {B} {n} record {f = g; f⁻¹ = g⁻¹; inverse = g∘g⁻¹ , g⁻¹∘g}) →
+      { ⊤ = mkS (mk↔′ ε ε⁻¹ ε∘ε⁻¹ ε⁻¹∘ε)
+      ; _×_ = λ (mkS {A} {m} (mk↔″ f f⁻¹ f∘f⁻¹ f⁻¹∘f))
+                (mkS {B} {n} (mk↔″ g g⁻¹ g∘g⁻¹ g⁻¹∘g)) →
                 let open ≈-Reasoning in
-         mk {A × B} {m × n}
+         mkS {A × B} {m × n}
            (mk↔′ (μ ∘ (f ⊗ g)) ((f⁻¹ ⊗ g⁻¹) ∘ μ⁻¹)
              (begin
                 (μ ∘ (f ⊗ g)) ∘ ((f⁻¹ ⊗ g⁻¹) ∘ μ⁻¹)
@@ -60,26 +66,25 @@ module set-finite-instances where
               ≈⟨ (⊗-inverse {f = f} {f⁻¹} {g} {g⁻¹} f⁻¹∘f g⁻¹∘g) ⟩
                 id
               ∎)
-           )
+           )  -- TODO: simplify with a monoidal category of isomorphisms.
       }
 
     productsH : ProductsH SetFinite ⟨→⟩
-    productsH = record
-                  { ε     = id
-                  ; μ     = id
-                  ; ε⁻¹   = id
-                  ; μ⁻¹   = id
-                  ; ε⁻¹∘ε = λ _ → refl
-                  ; ε∘ε⁻¹ = λ _ → refl
-                  ; μ⁻¹∘μ = λ _ → refl
-                  ; μ∘μ⁻¹ = λ _ → refl
-                  }
+    productsH = record { ε     = id
+                       ; μ     = id
+                       ; ε⁻¹   = id
+                       ; μ⁻¹   = id
+                       ; ε⁻¹∘ε = λ _ → refl
+                       ; ε∘ε⁻¹ = λ _ → refl
+                       ; μ⁻¹∘μ = λ _ → refl
+                       ; μ∘μ⁻¹ = λ _ → refl
+                       }
 
     -- TODO: Coproducts
     -- TODO: Exponentials
 
     boolean : Boolean SetFinite
-    boolean = record { Bool = mk (mk↔′ β β⁻¹ β∘β⁻¹ β⁻¹∘β) }
+    boolean = record { Bool = mkS (mk↔′ β β⁻¹ β∘β⁻¹ β⁻¹∘β) }
 
     booleanH : BooleanH SetFinite ⟨→⟩
     booleanH = record { β = id ; β⁻¹ = id }
@@ -89,3 +94,60 @@ module set-finite-instances where
 
 -- Define the subcategory of ⟨→⟩ with homomorphisms and laws
 open import Categorical.Subcategory ⟨→⟩ SetFinite public
+
+
+module SetFinite-ℕ-instances where
+
+  instance
+
+    Hₒ : Homomorphismₒ SetFinite ℕ
+    Hₒ = record { Fₒ = SetFinite.n }
+
+    productsH : ProductsH SetFinite _↠_
+    productsH = record
+               { ε     = id
+               ; μ     = id
+               ; ε⁻¹   = id
+               ; μ⁻¹   = id
+               ; ε⁻¹∘ε = λ _ → refl
+               ; ε∘ε⁻¹ = λ _ → refl
+               ; μ⁻¹∘μ = λ _ → refl
+               ; μ∘μ⁻¹ = λ _ → refl
+               }
+
+    -- TODO: Coproducts
+    -- TODO: Exponentials
+
+    booleanH : BooleanH SetFinite _↠_
+    booleanH = record { β = id ; β⁻¹ = id }
+
+    strongBooleanH : StrongBooleanH SetFinite _↠_
+    strongBooleanH = record { β⁻¹∘β = λ _ → refl ; β∘β⁻¹ = λ _ → refl }
+
+    H : Homomorphism _⇨_ _↠_
+    H = record { Fₘ = λ {
+      {mkS (mk↔″ _ fin₁⁻¹ _ _)} {mkS (mk↔″ fin₂ _ _ _)} (mk g) → mk↠ (fin₂ ∘ g ∘ fin₁⁻¹) } }
+
+    categoryH : CategoryH _⇨_ _↠_
+    categoryH = record
+      { F-id = λ { {a = mkS {A} {n} (mk↔″ fin fin⁻¹ fin∘fin⁻¹ _)} x →
+                   begin
+                     fin (id (fin⁻¹ x))
+                   ≡⟨⟩
+                     fin (fin⁻¹ x)
+                   ≡⟨ fin∘fin⁻¹ x ⟩
+                     x
+                   ∎
+                 }
+      ; F-∘ = λ { {b = mkS (mk↔″ fin₂ fin⁻¹₂ fin∘fin⁻¹₂ fin⁻¹∘fin₂)}
+                  {c = mkS (mk↔″ fin₃ fin⁻¹₃ fin∘fin⁻¹₃ fin⁻¹∘fin₃)}
+                  {a = mkS (mk↔″ fin₁ fin⁻¹₁ fin∘fin⁻¹₁ fin⁻¹∘fin₁)}
+                  {g = mk g} {mk f} x →
+                  begin
+                    fin₃ (g (f (fin⁻¹₁ x)))
+                  ≡˘⟨ cong (fin₃ ∘ g) (fin⁻¹∘fin₂ (f (fin⁻¹₁ x))) ⟩
+                    fin₃ (g (fin⁻¹₂ (fin₂ (f (fin⁻¹₁ x)))))
+                  ∎
+                }
+      } where open import Relation.Binary.PropositionalEquality ; open ≡-Reasoning
+              open import Categorical.Reasoning
