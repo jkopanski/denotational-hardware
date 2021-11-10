@@ -139,9 +139,9 @@ module SetFinite-ℕ-instances where
                      x
                    ∎
                  }
-      ; F-∘ = λ { {b = mkS (mk↔″ fin₂ fin⁻¹₂ fin∘fin⁻¹₂ fin⁻¹∘fin₂)}
-                  {c = mkS (mk↔″ fin₃ fin⁻¹₃ fin∘fin⁻¹₃ fin⁻¹∘fin₃)}
-                  {a = mkS (mk↔″ fin₁ fin⁻¹₁ fin∘fin⁻¹₁ fin⁻¹∘fin₁)}
+      ; F-∘ = λ { {b = mkS (mk↔″ fin₂ fin⁻¹₂ _ fin⁻¹∘fin₂)}
+                  {c = mkS (mk↔″ fin₃ _ _ _)}
+                  {a = mkS (mk↔″ _ fin⁻¹₁ _ _)}
                   {g = mk g} {mk f} x →
                   begin
                     fin₃ (g (f (fin⁻¹₁ x)))
@@ -149,5 +149,7 @@ module SetFinite-ℕ-instances where
                     fin₃ (g (fin⁻¹₂ (fin₂ (f (fin⁻¹₁ x)))))
                   ∎
                 }
-      } where open import Relation.Binary.PropositionalEquality ; open ≡-Reasoning
-              open import Categorical.Reasoning
+      } where open import Relation.Binary.PropositionalEquality
+              open ≡-Reasoning
+
+-- We could now define a subcategory of Finite.

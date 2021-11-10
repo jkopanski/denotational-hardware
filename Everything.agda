@@ -18,6 +18,7 @@ import Functions
 import Equality
 import Equality.Homomorphism
 import Finite
+import SetFinite
 import Ty
 import Primitive
 import Routing
