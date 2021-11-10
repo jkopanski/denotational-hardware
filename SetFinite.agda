@@ -139,9 +139,9 @@ module SetFinite-ℕ-instances where
                      x
                    ∎
                  }
-      ; F-∘ = λ { {b = mkS (mk↔″ fin₂ fin⁻¹₂ _ fin⁻¹∘fin₂)}
+      ; F-∘ = λ { {a = mkS (mk↔″ _ fin⁻¹₁ _ _)}
+                  {b = mkS (mk↔″ fin₂ fin⁻¹₂ _ fin⁻¹∘fin₂)}
                   {c = mkS (mk↔″ fin₃ _ _ _)}
-                  {a = mkS (mk↔″ _ fin⁻¹₁ _ _)}
                   {g = mk g} {mk f} x →
                   begin
                     fin₃ (g (f (fin⁻¹₁ x)))

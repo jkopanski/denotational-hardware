@@ -30,7 +30,7 @@ record CategoryH {obj₁ : Set o₁} (_⇨₁_ : obj₁ → obj₁ → Set ℓ�
        : Set (o₁ ⊔ ℓ₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
   field
     F-id : Fₘ (id {_⇨_ = _⇨₁_}{a = a}) ≈ id
-    F-∘  : ∀ {g : b ⇨₁ c} {f : a ⇨₁ b} → Fₘ (g ∘ f) ≈ Fₘ g ∘ Fₘ f
+    F-∘  : ∀ {a b c} {g : b ⇨₁ c} {f : a ⇨₁ b} → Fₘ (g ∘ f) ≈ Fₘ g ∘ Fₘ f
     -- TODO: make g and f explicit arguments? Wait and see.
 
   module _ ⦃ _ : L.Category _⇨₂_ ⦄ where
