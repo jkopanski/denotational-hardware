@@ -21,7 +21,7 @@ open import Finite renaming (_⇨_ to _↠_; mk to mk↠)
 
 -- A finite set, demonstrated by a number n and proof that A ≅ 𝔽 n.
 record SetFinite : Set₁ where
-  constructor mkS               -- TODO: rename later
+  constructor mk               -- TODO: rename later
   field
     { A } : Set
     { n } : ℕ
@@ -29,7 +29,7 @@ record SetFinite : Set₁ where
 
 private
 
-    pattern mk↔″ f f⁻¹ f∘f⁻¹ f⁻¹∘f =
+    pattern mk↔ f f⁻¹ f∘f⁻¹ f⁻¹∘f =
       record { f = f ; f⁻¹ = f⁻¹ ; inverse = f∘f⁻¹ , f⁻¹∘f }
 
 module SetFinite-Set-instances where
@@ -43,11 +43,11 @@ module SetFinite-Set-instances where
 
     products : Products SetFinite
     products = record
-      { ⊤ = mkS (mk↔′ ε ε⁻¹ ε∘ε⁻¹ ε⁻¹∘ε)
-      ; _×_ = λ (mkS {A} {m} (mk↔″ f f⁻¹ f∘f⁻¹ f⁻¹∘f))
-                (mkS {B} {n} (mk↔″ g g⁻¹ g∘g⁻¹ g⁻¹∘g)) →
+      { ⊤ = mk (mk↔′ ε ε⁻¹ ε∘ε⁻¹ ε⁻¹∘ε)
+      ; _×_ = λ (mk {A} {m} (mk↔ f f⁻¹ f∘f⁻¹ f⁻¹∘f))
+                (mk {B} {n} (mk↔ g g⁻¹ g∘g⁻¹ g⁻¹∘g)) →
                 let open ≈-Reasoning in
-         mkS {A × B} {m × n}
+         mk {A × B} {m × n}
            (mk↔′ (μ ∘ (f ⊗ g)) ((f⁻¹ ⊗ g⁻¹) ∘ μ⁻¹)
              (begin
                 (μ ∘ (f ⊗ g)) ∘ ((f⁻¹ ⊗ g⁻¹) ∘ μ⁻¹)
@@ -84,7 +84,7 @@ module SetFinite-Set-instances where
     -- TODO: Exponentials
 
     boolean : Boolean SetFinite
-    boolean = record { Bool = mkS (mk↔′ β β⁻¹ β∘β⁻¹ β⁻¹∘β) }
+    boolean = record { Bool = mk (mk↔′ β β⁻¹ β∘β⁻¹ β⁻¹∘β) }
 
     booleanH : BooleanH SetFinite ⟨→⟩
     booleanH = record { β = id ; β⁻¹ = id }
@@ -125,12 +125,13 @@ module SetFinite-ℕ-instances where
     strongBooleanH = record { β⁻¹∘β = λ _ → refl ; β∘β⁻¹ = λ _ → refl }
 
     H : Homomorphism _⇨_ _↠_
-    H = record { Fₘ = λ {
-      {mkS (mk↔″ _ fin₁⁻¹ _ _)} {mkS (mk↔″ fin₂ _ _ _)} (mk g) → mk↠ (fin₂ ∘ g ∘ fin₁⁻¹) } }
+    H = record
+      { Fₘ = λ { {mk (mk↔ _ fin₁⁻¹ _ _)} {mk (mk↔ fin₂ _ _ _)} (mk g) →
+               mk↠ (fin₂ ∘ g ∘ fin₁⁻¹) } }
 
     categoryH : CategoryH _⇨_ _↠_
     categoryH = record
-      { F-id = λ { {a = mkS {A} {n} (mk↔″ fin fin⁻¹ fin∘fin⁻¹ _)} x →
+      { F-id = λ { {mk {A} {n} (mk↔ fin fin⁻¹ fin∘fin⁻¹ _)} x →
                    begin
                      fin (id (fin⁻¹ x))
                    ≡⟨⟩
@@ -139,10 +140,10 @@ module SetFinite-ℕ-instances where
                      x
                    ∎
                  }
-      ; F-∘ = λ { {a = mkS (mk↔″ _ fin⁻¹₁ _ _)}
-                  {b = mkS (mk↔″ fin₂ fin⁻¹₂ _ fin⁻¹∘fin₂)}
-                  {c = mkS (mk↔″ fin₃ _ _ _)}
-                  {g = mk g} {mk f} x →
+      ; F-∘ = λ { {mk (mk↔ _ fin⁻¹₁ _ _)}
+                  {mk (mk↔ fin₂ fin⁻¹₂ _ fin⁻¹∘fin₂)}
+                  {mk (mk↔ fin₃ _ _ _)}
+                  {mk g} {mk f} x →
                   begin
                     fin₃ (g (f (fin⁻¹₁ x)))
                   ≡˘⟨ cong (fin₃ ∘ g) (fin⁻¹∘fin₂ (f (fin⁻¹₁ x))) ⟩
