@@ -21,7 +21,7 @@ open import Finite renaming (_⇨_ to _↠_; mk to mk↠)
 
 -- A finite set, demonstrated by a number n and proof that A ≅ 𝔽 n.
 record SetFinite : Set₁ where
-  constructor mk               -- TODO: rename later
+  constructor mk
   field
     { A } : Set
     { n } : ℕ
