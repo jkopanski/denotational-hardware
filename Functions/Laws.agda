@@ -5,23 +5,22 @@ open import Level
 module Functions.Laws (ℓ : Level) where
 
 open import Function.Equivalence hiding (id; _∘_)
+open import Data.Product using (_,_)
 
 open import Categorical.Raw hiding (Category; Cartesian; CartesianClosed)
 open import Categorical.Laws
 open import Categorical.Equiv
 open import Functions.Raw ℓ public
 open import Axiom.Extensionality.Propositional
+open import Relation.Binary.PropositionalEquality
+     hiding (Extensionality)
+     renaming ( refl to refl≡
+              ; trans to trans≡
+              ; sym to sym≡
+              )
 
 module →-laws-instances where
 
-  open import Level
-  open import Data.Product using (_,_)
-  open import Relation.Binary.PropositionalEquality
-       hiding (Extensionality)
-       renaming ( refl to refl≡
-                ; trans to trans≡
-                ; sym to sym≡
-                )
   instance
 
     category : Category Function
@@ -51,3 +50,8 @@ module →-laws-instances where
             (λ f≈uncurry-g x → extensionality λ y → sym≡ (f≈uncurry-g (x , y)))
         ; curry≈ = λ f≈g x → extensionality λ y → f≈g (x , y)
         }
+
+-- TODO: Probably add as a law in lawful logic
+f∘cond→ : ∀ {A B : Set ℓ} {f : A → B} → f ∘ cond ≈ cond ∘ second (f ⊗ f)
+f∘cond→ {f = f} (𝕗 , _) = refl≡
+f∘cond→ {f = f} (𝕥 , _) = refl≡

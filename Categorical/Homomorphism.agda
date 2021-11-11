@@ -374,7 +374,7 @@ record LogicH
     F-∧     : Fₘ  ∧  ∘ μ ∘ (β ⊗ β) ≈ β ∘ ∧
     F-∨     : Fₘ  ∨  ∘ μ ∘ (β ⊗ β) ≈ β ∘ ∨
     F-xor   : Fₘ xor ∘ μ ∘ (β ⊗ β) ≈ β ∘ xor
-    F-cond  : ∀ {a : obj₁} → Fₘ cond ∘ μ ∘ (β ⊗ μ {a = a}) ≈ cond
+    F-cond  : ∀ {a : obj₁} → Fₘ cond ∘ μ ∘ (β ⊗ μ {a = a} {a}) ≈ cond
 
 open LogicH ⦃ … ⦄ public
 

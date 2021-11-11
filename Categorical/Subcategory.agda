@@ -19,7 +19,8 @@ infix 0 _⇨_
 record _⇨_ (a b : I) : Set ℓ where
   constructor mk
   field
-    f : Fₒ a ↠ Fₒ b
+    un : Fₒ a ↠ Fₒ b
+open _⇨_ public
 
 module subcategory-instances where
 

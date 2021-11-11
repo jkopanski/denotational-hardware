@@ -7,11 +7,10 @@ open import Data.Nat
 open import Data.Fin
 open import Data.Fin.Patterns using (0F; 1F)
 open import Data.Fin.Properties
-import Relation.Binary.PropositionalEquality as ≡
+open import Relation.Binary.PropositionalEquality using (refl)
 open import Data.Product using (uncurry) -- for μ⁻¹∘μ
 
-open import Categorical.Equiv
-open import Categorical.Homomorphism hiding (uncurry)
+open import Categorical.Homomorphism hiding (uncurry; refl)
 
 open import Functions 0ℓ
 
@@ -32,8 +31,8 @@ module finite-object-instances where
                   ; μ     = uncurry combine
                   ; ε⁻¹   = λ { zero → tt }
                   ; μ⁻¹   = λ {m n} → remQuot n
-                  ; ε⁻¹∘ε = λ { tt → ≡.refl }
-                  ; ε∘ε⁻¹ = λ { zero → ≡.refl }
+                  ; ε⁻¹∘ε = λ { tt → refl }
+                  ; ε∘ε⁻¹ = λ { zero → refl }
                   ; μ⁻¹∘μ = uncurry remQuot-combine
                   ; μ∘μ⁻¹ = λ {m n} → combine-remQuot {m} n
                   }
@@ -46,13 +45,11 @@ module finite-object-instances where
     boolean = record { Bool = 2 }
 
     booleanH : BooleanH ℕ ⟨→⟩
-    booleanH = record
-      { β   = bool 0F 1F
-      ; β⁻¹ = λ { 0F → 𝕗 ; 1F → 𝕥 }
-      }
+    booleanH = record { β = bool 0F 1F ; β⁻¹ = two 𝕗 𝕥}
+    -- As @JacquesCarette noted there are two *different* such isomorphisms.
 
     strongBooleanH : StrongBooleanH ℕ ⟨→⟩
     strongBooleanH = record
-      { β⁻¹∘β = λ { 𝕗  → ≡.refl ; 𝕥  → ≡.refl }
-      ; β∘β⁻¹ = λ { 0F → ≡.refl ; 1F → ≡.refl }
+      { β⁻¹∘β = λ { 𝕗  → refl ; 𝕥  → refl }
+      ; β∘β⁻¹ = λ { 0F → refl ; 1F → refl }
       }
