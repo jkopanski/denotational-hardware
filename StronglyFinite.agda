@@ -199,27 +199,16 @@ module StronglyFinite-ℕ-instances where
       ; F-∧     = cong (un↠  ∧ ) ∘′ μ∘μ⁻¹ {a = 2} {2}
       ; F-∨     = cong (un↠  ∨ ) ∘′ μ∘μ⁻¹ {a = 2} {2}
       ; F-xor   = cong (un↠ xor) ∘′ μ∘μ⁻¹ {a = 2} {2}
-
       ; F-cond  = λ { a@{mkO {A} {n} (mk↔ fin fin⁻¹ fin∘fin⁻¹ fin⁻¹∘fin)} x →
-          let Fₘ-cond₁ : 𝔹 × n × n ↠ n
-              Fₘ-cond₁ = Fₘ {_⇨₁_ = _⇨_} {_⇨₂_ = _↠_} (cond {_⇨′_ = _⇨_} {a = a})
-              cond→ : {t : Set} → 𝔹 × t × t → t
-              cond→ = cond
-              fin⁻¹-𝔹×a×a = Inverse.f⁻¹ (StronglyFinite.iso (𝔹 × a × a))
-              fin⁻¹-a×a = Inverse.f⁻¹ (StronglyFinite.iso (a × a))
-              Fₘ-cond₂ : 𝔹 × n × n ↠ n
-              Fₘ-cond₂ = Fₘ {_⇨₁_ = _⇨_} {_⇨₂_ = _↠_} {a = 𝔹 × a × a} {b = a}
-                (mk⇨ (cond ∘ (β⁻¹ ⊗ μ⁻¹ {a = a}{a}) ∘ μ⁻¹ {a = 𝔹}{a × a}))
-              Fₘ-cond₃ : 𝔹 × n × n ↠ n
-              Fₘ-cond₃ =
-                mk↠ ( fin
-                    ∘ (cond ∘ (β⁻¹ ⊗ μ⁻¹ {a = a}{a}) ∘ μ⁻¹ {a = 𝔹}{a × a})
-                    ∘ fin⁻¹-𝔹×a×a )
+          let fin⁻¹-𝔹×a×a = Inverse.f⁻¹ (StronglyFinite.iso (𝔹 × a × a))
+              Fₘ-cond : 𝔹 × n × n ↠ n
+              Fₘ-cond = mk↠ (fin ∘ cond ∘ fin⁻¹-𝔹×a×a)
               c , pq = μ𝔽⁻¹ {𝔹} {n × n} x
               p , q = μ𝔽⁻¹ {n} {n} pq
           in
           begin
             un↠ (Fₘ (cond {a = a}) ∘ μ {a = 𝔹} {b = a × a} ∘ (β ⊗ μ {a = a} {a})) x
+
           ≡⟨⟩
             un↠ (Fₘ (cond {a = a}) ∘ (β ⊗ μ {a = a} {a})) x
           ≡⟨⟩
@@ -227,48 +216,22 @@ module StronglyFinite-ℕ-instances where
           ≡⟨ cong (un↠ (Fₘ (cond {a = a}))) (μ∘μ⁻¹ {a = 2} {n × n} x) ⟩
             un↠ (Fₘ (cond {a = a})) x
           ≡⟨⟩
-            un↠ Fₘ-cond₁ x
+            un↠ Fₘ-cond x
           ≡⟨⟩
-            un↠ Fₘ-cond₂ x
+            fin (cond (fin⁻¹-𝔹×a×a x))
           ≡⟨⟩
-            un↠ Fₘ-cond₃ x
+            fin (cond (β⁻¹ c , fin⁻¹ p , fin⁻¹ q))
+
+          ≡˘⟨ cong fin (f∘cond {f = fin⁻¹} _) ⟩
+            fin (fin⁻¹ (cond (β⁻¹ c , p , q)))
+          ≡⟨ fin∘fin⁻¹ _ ⟩
+            cond (β⁻¹ c , p , q)
           ≡⟨⟩
-            (fin ∘ (cond→ ∘ (β⁻¹ ⊗ μ⁻¹ {a = a}{a}) ∘ μ⁻¹ {a = 𝔹}{a × a}) ∘ fin⁻¹-𝔹×a×a) x
-          ≡⟨⟩
-            fin (cond→ ((β⁻¹ ⊗ μ⁻¹ {a = a}{a}) (μ⁻¹ {a = 𝔹}{a × a} (fin⁻¹-𝔹×a×a x))))
-          ≡⟨ f∘cond→ {f = fin} _ ⟩
-            cond→ ((β⁻¹ ⊗ (fin ⊗ fin) ∘ μ⁻¹ {a = a}{a}) (μ⁻¹ {a = 𝔹}{a × a} (fin⁻¹-𝔹×a×a x)))
-          ≡⟨⟩
-            cond→ ((β⁻¹ ⊗ (fin ⊗ fin) ∘ μ⁻¹ {a = a}{a}) (μ⁻¹ {a = 𝔹}{a × a} ((β⁻¹ ⊗ fin⁻¹-a×a) (μ⁻¹ x))))
-          ≡⟨⟩
-            cond→ ((β⁻¹ ⊗ (fin ⊗ fin) ∘ μ⁻¹ {a = a}{a}) (μ⁻¹ {a = 𝔹}{a × a} ((β⁻¹ ⊗ ((fin⁻¹ ⊗ fin⁻¹) ∘ μ⁻¹)) (μ⁻¹ x))))
-          ≡⟨⟩
-            cond→ ((β⁻¹ ⊗ (fin ⊗ fin) ∘ μ⁻¹ {a = a}{a}) (μ⁻¹ {a = 𝔹}{a × a} ((β⁻¹ ⊗ ((fin⁻¹ ⊗ fin⁻¹) ∘ μ⁻¹)) (c , pq))))
-          ≡⟨⟩
-            cond→ ((β⁻¹ ⊗ (fin ⊗ fin) ∘ μ⁻¹ {a = a}{a}) (μ⁻¹ {a = 𝔹}{a × a} (β⁻¹ c , ((fin⁻¹ ⊗ fin⁻¹) ∘ μ⁻¹) pq)))
-          ≡⟨⟩
-            cond→ ((β⁻¹ ⊗ (fin ⊗ fin) ∘ μ⁻¹ {a = a}{a}) (μ⁻¹ {a = 𝔹}{a × a} (β⁻¹ c , fin⁻¹ p , fin⁻¹ q)))
-          ≡⟨⟩
-            cond→ ((id ⊗ (fin ⊗ fin)) (β⁻¹ c , fin⁻¹ p , fin⁻¹ q))
-          ≡⟨⟩
-            cond→ (β⁻¹ c , fin (fin⁻¹ p) , fin (fin⁻¹ q))
-          ≡⟨ cong₂ (λ ○ ● → cond→ (β⁻¹ c , ○ , ●)) (fin∘fin⁻¹ p) (fin∘fin⁻¹ q) ⟩
-            cond→ (β⁻¹ c , p , q)
-          ≡⟨⟩
-            cond→ (β⁻¹ c , μ⁻¹ pq)
-          ≡⟨⟩
-            cond→ ((β⁻¹ ⊗ μ⁻¹) (c , pq))
-          ≡⟨⟩
-            (cond→ ∘ (β⁻¹ ⊗ μ⁻¹) ∘ μ⁻¹) x
-          ≡⟨⟩
-            un↠ (mk↠ (cond→ ∘ (β⁻¹ ⊗ μ⁻¹) ∘ μ⁻¹)) x
+            un↠ (mk↠ (cond ∘ (β⁻¹ ⊗ μ⁻¹) ∘ μ⁻¹)) x
           ≡⟨⟩
             un↠ cond x
           ∎
           }
-
-          -- TODO: simplify this proof enormously! For one thing, keep the outer
-          -- fin outside, and move the pair of fins out via cond→.
 
 {-
       ; F-∧     = λ (x : 𝔽 (2 × 2)) →
@@ -285,12 +248,8 @@ module StronglyFinite-ℕ-instances where
           ∎
 -}
 
-      } where -- open import Data.Bool using () renaming (Bool to B)
-              -- open ≈-Reasoning
-              -- open import Categorical.Reasoning
-              open import Relation.Binary.PropositionalEquality
+      } where open import Relation.Binary.PropositionalEquality
               open ≡-Reasoning
-
               μ𝔽 : {m n : ℕ} → 𝔽 m × 𝔽 n → 𝔽 (m × n)
               μ𝔽 = μ
               μ𝔽⁻¹ : {m n : ℕ} → 𝔽 (m × n) → 𝔽 m × 𝔽 n
