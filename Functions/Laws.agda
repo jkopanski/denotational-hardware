@@ -51,7 +51,7 @@ module →-laws-instances where
         ; curry≈ = λ f≈g x → extensionality λ y → f≈g (x , y)
         }
 
--- TODO: Probably add as a law in lawful logic
-f∘cond→ : ∀ {A B : Set ℓ} {f : A → B} → f ∘ cond ≈ cond ∘ second (f ⊗ f)
-f∘cond→ {f = f} (𝕗 , _) = refl≡
-f∘cond→ {f = f} (𝕥 , _) = refl≡
+-- TODO: Probably add as a law in lawful logic. Better: replace Bool by ⊤ + ⊤.
+f∘cond : ∀ {A B : Set ℓ} {f : A → B} → f ∘ cond ≈ cond ∘ second (f ⊗ f)
+f∘cond {f = f} (𝕗 , _) = refl≡
+f∘cond {f = f} (𝕥 , _) = refl≡

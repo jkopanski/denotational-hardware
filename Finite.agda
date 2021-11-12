@@ -13,5 +13,5 @@ module finite-instances where
 open import Finite.Object public -- instances
 
 -- Define the subcategory of ⟨→⟩ with homomorphisms and laws
-open import Categorical.Subcategory ⟨→⟩ ℕ public
+open import Categorical.Subcategory ℕ ⟨→⟩ public
 

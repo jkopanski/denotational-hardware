@@ -9,10 +9,11 @@ open import Categorical.Laws as L hiding (Category; Cartesian)
 open import Categorical.Reasoning
 
 module Categorical.Subcategory
+  {i} (I : Set i)
   {o ℓ} {obj : Set o}
   (_↠_ : obj → obj → Set ℓ) (let infix 0 _↠_; _↠_ = _↠_)
-  {i} (I : Set i) ⦃ _ : Homomorphismₒ I obj ⦄
   ⦃ _ : Category _↠_ ⦄ {q : Level} ⦃ _ : Equivalent q _↠_ ⦄
+  ⦃ _ : Homomorphismₒ I obj ⦄
  where
 
 infix 0 _⇨_
