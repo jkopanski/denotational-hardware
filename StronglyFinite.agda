@@ -28,7 +28,7 @@ open import Functions 0ℓ
 open import Finite renaming (_⇨_ to _↠_; mk to mk↠; un to un↠)
 
 -- A finite set, demonstrated by a number n and proof that A ≅ 𝔽 n.
-record StronglyFinite : Set₁ where
+record Obj : Set₁ where
   constructor mkO
   field
     { A } : Set
@@ -47,10 +47,10 @@ module StronglyFinite-Set-instances where
 
     open import Categorical.Reasoning
 
-    Hₒ : Homomorphismₒ StronglyFinite Set
-    Hₒ = record { Fₒ = StronglyFinite.A }
+    Hₒ : Homomorphismₒ Obj Set
+    Hₒ = record { Fₒ = Obj.A }
 
-    products : Products StronglyFinite
+    products : Products Obj
     products = record
       { ⊤ = mkO (mk↔′ ε ε⁻¹ ε∘ε⁻¹ ε⁻¹∘ε)
       ; _×_ = λ (mkO {A} {m} (mk↔ f f⁻¹ f∘f⁻¹ f⁻¹∘f))
@@ -78,7 +78,7 @@ module StronglyFinite-Set-instances where
            )  -- TODO: simplify with a monoidal category of isomorphisms.
       }
 
-    productsH : ProductsH StronglyFinite ⟨→⟩
+    productsH : ProductsH Obj ⟨→⟩
     productsH = record { ε     = id
                        ; μ     = id
                        ; ε⁻¹   = id
@@ -92,28 +92,26 @@ module StronglyFinite-Set-instances where
     -- TODO: Coproducts
     -- TODO: Exponentials
 
-    boolean : Boolean StronglyFinite
+    boolean : Boolean Obj
     boolean = record { Bool = mkO (mk↔′ β β⁻¹ β∘β⁻¹ β⁻¹∘β) }
 
-    booleanH : BooleanH StronglyFinite ⟨→⟩
+    booleanH : BooleanH Obj ⟨→⟩
     booleanH = record { β = id ; β⁻¹ = id }
 
-    strongBooleanH : StrongBooleanH StronglyFinite ⟨→⟩
+    strongBooleanH : StrongBooleanH Obj ⟨→⟩
     strongBooleanH = record { β⁻¹∘β = λ _ → refl ; β∘β⁻¹ = λ _ → refl }
 
 -- Define the subcategory of ⟨→⟩ with homomorphisms and laws
-open import Categorical.Subcategory ⟨→⟩ StronglyFinite
-      renaming (mk to mk⇨) -- TEMP
-      public
+open import Categorical.Subcategory Obj ⟨→⟩ public
 
 module StronglyFinite-ℕ-instances where
 
   instance
 
-    Hₒ : Homomorphismₒ StronglyFinite ℕ
-    Hₒ = record { Fₒ = StronglyFinite.n }
+    Hₒ : Homomorphismₒ Obj ℕ
+    Hₒ = record { Fₒ = Obj.n }
 
-    productsH : ProductsH StronglyFinite _↠_
+    productsH : ProductsH Obj _↠_
     productsH = record
                { ε     = id
                ; μ     = id
@@ -128,15 +126,15 @@ module StronglyFinite-ℕ-instances where
     -- TODO: Coproducts
     -- TODO: Exponentials
 
-    booleanH : BooleanH StronglyFinite _↠_
+    booleanH : BooleanH Obj _↠_
     booleanH = record { β = id ; β⁻¹ = id }
 
-    strongBooleanH : StrongBooleanH StronglyFinite _↠_
+    strongBooleanH : StrongBooleanH Obj _↠_
     strongBooleanH = record { β⁻¹∘β = λ _ → refl ; β∘β⁻¹ = λ _ → refl }
 
     H : Homomorphism _⇨_ _↠_
     H = record
-      { Fₘ = λ { {mkO (mk↔ _ fin₁⁻¹ _ _)} {mkO (mk↔ fin₂ _ _ _)} (mk⇨ g) →
+      { Fₘ = λ { {mkO (mk↔ _ fin₁⁻¹ _ _)} {mkO (mk↔ fin₂ _ _ _)} (mk g) →
                mk↠ (fin₂ ∘ g ∘ fin₁⁻¹) } }
 
     categoryH : CategoryH _⇨_ _↠_
@@ -153,7 +151,7 @@ module StronglyFinite-ℕ-instances where
       ; F-∘ = λ { {mkO (mk↔ fin₁ fin⁻¹₁ fin∘fin⁻¹₁ fin⁻¹∘fin₁)}
                   {mkO (mk↔ fin₂ fin⁻¹₂ fin∘fin⁻¹₂ fin⁻¹∘fin₂)}
                   {mkO (mk↔ fin₃ fin⁻¹₃ fin∘fin⁻¹₃ fin⁻¹∘fin₃)}
-                  {mk⇨ g} {mk⇨ f} x →
+                  {mk g} {mk f} x →
                   begin
                     fin₃ (g (f (fin⁻¹₁ x)))
                   ≡˘⟨ cong (fin₃ ∘ g) (fin⁻¹∘fin₂ (f (fin⁻¹₁ x))) ⟩
@@ -200,7 +198,7 @@ module StronglyFinite-ℕ-instances where
       ; F-∨     = cong (un↠  ∨ ) ∘′ μ∘μ⁻¹ {a = 2} {2}
       ; F-xor   = cong (un↠ xor) ∘′ μ∘μ⁻¹ {a = 2} {2}
       ; F-cond  = λ { a@{mkO {A} {n} (mk↔ fin fin⁻¹ fin∘fin⁻¹ fin⁻¹∘fin)} x →
-          let fin⁻¹-𝔹×a×a = Inverse.f⁻¹ (StronglyFinite.iso (𝔹 × a × a))
+          let fin⁻¹-𝔹×a×a = Inverse.f⁻¹ (Obj.iso (𝔹 × a × a))
               Fₘ-cond : 𝔹 × n × n ↠ n
               Fₘ-cond = mk↠ (fin ∘ cond ∘ fin⁻¹-𝔹×a×a)
               c , pq = μ𝔽⁻¹ {𝔹} {n × n} x
@@ -258,4 +256,3 @@ module StronglyFinite-ℕ-instances where
 
 
 -- We could now define a subcategory of Finite.
-
