@@ -7,7 +7,7 @@ module Functions.Laws (ℓ : Level) where
 open import Function.Equivalence hiding (id; _∘_)
 open import Data.Product using (_,_)
 
-open import Categorical.Raw hiding (Category; Cartesian; CartesianClosed)
+open import Categorical.Raw hiding (Category; Cartesian; CartesianClosed; Logic)
 open import Categorical.Laws
 open import Categorical.Equiv
 open import Functions.Raw ℓ public
@@ -51,7 +51,5 @@ module →-laws-instances where
         ; curry≈ = λ f≈g x → extensionality λ y → f≈g (x , y)
         }
 
--- TODO: Probably add as a law in lawful logic. Better: replace Bool by ⊤ + ⊤.
-f∘cond : ∀ {A B : Set ℓ} {f : A → B} → f ∘ cond ≈ cond ∘ second (f ⊗ f)
-f∘cond {f = f} (𝕗 , _) = refl≡
-f∘cond {f = f} (𝕥 , _) = refl≡
+    logic : Logic Function
+    logic = record { f∘cond = λ { (𝕗 , _) → refl≡ ; (𝕥 , _) → refl≡ } }

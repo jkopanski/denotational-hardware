@@ -2,7 +2,8 @@
 -- Free category
 
 open import Categorical.Homomorphism
-open import Categorical.Laws as L hiding (Category; Cartesian; CartesianClosed)
+open import Categorical.Laws as L
+       hiding (Category; Cartesian; CartesianClosed; Logic)
 
 module Categorical.Free.Homomorphism
    {o}{obj : Set o}

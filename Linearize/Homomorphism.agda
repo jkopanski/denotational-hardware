@@ -1,7 +1,7 @@
 {-# OPTIONS --safe --without-K #-}
 
 open import Categorical.Homomorphism
-open import Categorical.Laws as L hiding (Category; Cartesian; CartesianClosed)
+open import Categorical.Laws as L hiding (Category; Cartesian; CartesianClosed; Logic)
 
 module Linearize.Homomorphism {o}{objₘ : Set o} ⦃ _ : Products objₘ ⦄ ⦃ _ : Exponentials objₘ ⦄
              {ℓₘ}(_⇨ₘ_ : objₘ → objₘ → Set ℓₘ) -- (let infix 0 _⇨ₘ_; _⇨ₘ_ = _⇨ₘ_)

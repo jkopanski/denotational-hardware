@@ -206,7 +206,6 @@ module StronglyFinite-ℕ-instances where
           in
           begin
             un↠ (Fₘ (cond {a = a}) ∘ μ {a = 𝔹} {b = a × a} ∘ (β ⊗ μ {a = a} {a})) x
-
           ≡⟨⟩
             un↠ (Fₘ (cond {a = a}) ∘ (β ⊗ μ {a = a} {a})) x
           ≡⟨⟩
@@ -219,7 +218,6 @@ module StronglyFinite-ℕ-instances where
             fin (cond (fin⁻¹-𝔹×a×a x))
           ≡⟨⟩
             fin (cond (β⁻¹ c , fin⁻¹ p , fin⁻¹ q))
-
           ≡˘⟨ cong fin (f∘cond {f = fin⁻¹} _) ⟩
             fin (fin⁻¹ (cond (β⁻¹ c , p , q)))
           ≡⟨ fin∘fin⁻¹ _ ⟩

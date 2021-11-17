@@ -6,7 +6,7 @@
 open import Categorical.Equiv
 open import Categorical.Raw
 open import Categorical.Laws as L
-       hiding (Category; Cartesian; CartesianClosed)
+       hiding (Category; Cartesian; CartesianClosed; Logic)
 
 module Categorical.Reasoning
     {o}{obj : Set o} {ℓ} {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
@@ -216,17 +216,21 @@ open Cancel public
 module Inverses
    ⦃ _ : Products obj ⦄ ⦃ _ : Cartesian _⇨_ ⦄ ⦃ _ : L.Cartesian _⇨_ ⦄ where
 
-  ⊗-inverse : ∀ {f : a ⇨ c}{f⁻¹ : c ⇨ a}{g : b ⇨ d}{g⁻¹ : d ⇨ b}
-    → f⁻¹ ∘ f ≈ id → g⁻¹ ∘ g ≈ id → (f⁻¹ ⊗ g⁻¹) ∘ (f ⊗ g) ≈ id
+  ∘-inverse : ∀ {f : a ⇨ b}{f⁻¹ : b ⇨ a}{g : b ⇨ c}{g⁻¹ : c ⇨ b} →
+    f⁻¹ ∘ f ≈ id → g⁻¹ ∘ g ≈ id → (f⁻¹ ∘ g⁻¹) ∘ (g ∘ f) ≈ id
+  ∘-inverse f⁻¹∘f≈id g⁻¹∘g≈id = cancelInner g⁻¹∘g≈id ; f⁻¹∘f≈id
+
+  ⊗-inverse : ∀ {f : a ⇨ c}{f⁻¹ : c ⇨ a}{g : b ⇨ d}{g⁻¹ : d ⇨ b} →
+     f⁻¹ ∘ f ≈ id → g⁻¹ ∘ g ≈ id → (f⁻¹ ⊗ g⁻¹) ∘ (f ⊗ g) ≈ id
   ⊗-inverse f⁻¹∘f≈id g⁻¹∘g≈id =
     ⊗∘⊗ ; ⊗≈ f⁻¹∘f≈id g⁻¹∘g≈id ; id⊗id
 
-  first-inverse : ∀ {b : obj}{f : a ⇨ c}{f⁻¹ : c ⇨ a}
-    → f⁻¹ ∘ f ≈ id → first {b = b} f⁻¹ ∘ first f ≈ id
+  first-inverse : ∀ {b : obj}{f : a ⇨ c}{f⁻¹ : c ⇨ a} →
+     f⁻¹ ∘ f ≈ id → first {b = b} f⁻¹ ∘ first f ≈ id
   first-inverse {b = b} f⁻¹∘f≈id = ⊗-inverse f⁻¹∘f≈id (identityˡ {b = b})
 
-  second-inverse : ∀ {a : obj}{g : b ⇨ d}{g⁻¹ : d ⇨ b}
-    → g⁻¹ ∘ g ≈ id → second {a = a} g⁻¹ ∘ second g ≈ id
+  second-inverse : ∀ {a : obj}{g : b ⇨ d}{g⁻¹ : d ⇨ b} →
+    g⁻¹ ∘ g ≈ id → second {a = a} g⁻¹ ∘ second g ≈ id
   second-inverse {a = a} g⁻¹∘g≈id = ⊗-inverse (identityˡ {a = a}) g⁻¹∘g≈id
 
 open Inverses public

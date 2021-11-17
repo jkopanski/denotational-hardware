@@ -5,7 +5,7 @@
 open import Level
 
 open import Categorical.Homomorphism
-open import Categorical.Laws as L hiding (Category; Cartesian)
+open import Categorical.Laws as L hiding (Category; Cartesian; CartesianClosed; Logic)
 open import Categorical.Reasoning
 
 module Categorical.Subcategory
@@ -80,7 +80,8 @@ module subcategory-instances where
              ⦃ _ : Cartesian _↠_ ⦄ ⦃ _ : Logic _↠_ ⦄
              ⦃ _ : L.Category _↠_ ⦄ ⦃ _ : L.Cartesian _↠_ ⦄
              ⦃ _ : Boolean I ⦄ ⦃ _ : Products I ⦄
-             ⦃ _ : ProductsH I _↠_ ⦄ ⦃ _ : StrongBooleanH I _↠_ ⦄ →
+             ⦃ _ : ProductsH I _↠_ ⦄
+             ⦃ _ : BooleanH I _↠_ ⦄ ⦃ _ : StrongBooleanH I _↠_ ⦄ →
              LogicH _⇨_ _↠_
     logicH = record
                { F-false = F-0

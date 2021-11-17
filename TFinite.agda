@@ -71,7 +71,7 @@ module tfinite-instances where
     strongBooleanH = record { β⁻¹∘β = λ _ → refl≡ ; β∘β⁻¹ = λ _ → refl≡ }
 
 -- Define the subcategory of Ty with homomorphisms and laws
-open import Categorical.Subcategory _↠_ Ty renaming (mk to mk⇨) public
+open import Categorical.Subcategory Ty _↠_ renaming (mk to mk⇨) public
 
 
 open import Categorical.Reasoning

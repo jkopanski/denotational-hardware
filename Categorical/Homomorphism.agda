@@ -6,7 +6,7 @@ open import Level
 
 open import Categorical.Raw public
 open import Categorical.Laws as L
-       hiding (Category; Cartesian; CartesianClosed)
+       hiding (Category; Cartesian; CartesianClosed; Logic)
 open import Categorical.Reasoning
 
 private
@@ -330,10 +330,10 @@ record StrongBooleanH
     ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
     {q : Level} ⦃ _ : Equivalent q _⇨₂′_ ⦄
     ⦃ _ : Category _⇨₂′_ ⦄
+    ⦃ _ : BooleanH obj₁ _⇨₂′_  ⦄
     : Set (o₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
   private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
   field
-    ⦃ bH ⦄ : BooleanH obj₁ _⇨₂′_
     β⁻¹∘β : β⁻¹ ∘ β ≈ id
     β∘β⁻¹ : β ∘ β⁻¹ ≈ id
 
@@ -375,6 +375,78 @@ record LogicH
     F-∨     : Fₘ  ∨  ∘ μ ∘ (β ⊗ β) ≈ β ∘ ∨
     F-xor   : Fₘ xor ∘ μ ∘ (β ⊗ β) ≈ β ∘ xor
     F-cond  : ∀ {a : obj₁} → Fₘ cond ∘ μ ∘ (β ⊗ μ {a = a} {a}) ≈ cond
+
+  module _ ⦃ _ : L.Category _⇨₂_ ⦄ ⦃ _ : L.Cartesian _⇨₂_ ⦄
+           ⦃ _ : StrongBooleanH obj₁ _⇨₂_ ⦄ where
+
+    F-false′ : Fₘ false ≈ β ∘ false ∘ ε⁻¹
+    F-false′ = sym (∘-assoc-elimʳ ε∘ε⁻¹) ; ∘≈ˡ F-false ; ∘-assocʳ
+
+    -- F-false′ =
+    --   begin
+    --     Fₘ false
+    --   ≈⟨ sym (∘-assoc-elimʳ ε∘ε⁻¹) ⟩
+    --     (Fₘ false ∘ ε) ∘ ε⁻¹
+    --   ≈⟨ ∘≈ˡ F-false ⟩
+    --     (β ∘ false) ∘ ε⁻¹
+    --   ≈⟨ ∘-assocʳ ⟩
+    --     β ∘ false ∘ ε⁻¹
+    --   ∎
+
+    F-true′ : Fₘ true ≈ β ∘ true ∘ ε⁻¹
+    F-true′ = sym (∘-assoc-elimʳ ε∘ε⁻¹) ; ∘≈ˡ F-true ; ∘-assocʳ
+
+    F-not′ : Fₘ not ≈ β ∘ not ∘ β⁻¹
+    F-not′ = sym (∘-assoc-elimʳ β∘β⁻¹) ; ∘≈ˡ F-not ; ∘-assocʳ
+
+    -- F-not′ =
+    --   begin
+    --     Fₘ not
+    --   ≈⟨ sym (∘-assoc-elimʳ β∘β⁻¹) ⟩
+    --     (Fₘ not ∘ β) ∘ β⁻¹
+    --   ≈⟨ ∘≈ˡ F-not ⟩
+    --     (β ∘ not) ∘ β⁻¹
+    --   ≈⟨ ∘-assocʳ ⟩
+    --     β ∘ not ∘ β⁻¹
+    --   ∎
+
+    F-∧′ : Fₘ ∧ ≈ β ∘ ∧ ∘ (β⁻¹ ⊗ β⁻¹) ∘ μ⁻¹
+    F-∧′ = sym (∘-assoc-elimʳ (∘-inverse μ∘μ⁻¹ (⊗-inverse β∘β⁻¹ β∘β⁻¹)))
+         ; ∘≈ˡ F-∧ ; ∘-assocʳ
+
+    -- F-∧′ : Fₘ ∧ ≈ β ∘ ∧ ∘ (β⁻¹ ⊗ β⁻¹) ∘ μ⁻¹
+    -- F-∧′ =
+    --   begin
+    --     Fₘ ∧
+    --   ≈⟨ sym (∘-assoc-elimʳ (∘-inverse μ∘μ⁻¹ (⊗-inverse β∘β⁻¹ β∘β⁻¹))) ⟩
+    --     (Fₘ ∧ ∘ μ ∘ (β ⊗ β)) ∘ ((β⁻¹ ⊗ β⁻¹) ∘ μ⁻¹)
+    --   ≈⟨ ∘≈ˡ F-∧ ⟩
+    --     (β ∘ ∧) ∘ (β⁻¹ ⊗ β⁻¹) ∘ μ⁻¹
+    --   ≈⟨ ∘-assocʳ ⟩
+    --     β ∘ ∧ ∘ (β⁻¹ ⊗ β⁻¹) ∘ μ⁻¹
+    --   ∎
+
+    F-∨′ : Fₘ ∨ ≈ β ∘ ∨ ∘ (β⁻¹ ⊗ β⁻¹) ∘ μ⁻¹
+    F-∨′ = sym (∘-assoc-elimʳ (∘-inverse μ∘μ⁻¹ (⊗-inverse β∘β⁻¹ β∘β⁻¹)))
+         ; ∘≈ˡ F-∨ ; ∘-assocʳ
+
+    F-xor′ : Fₘ xor ≈ β ∘ xor ∘ (β⁻¹ ⊗ β⁻¹) ∘ μ⁻¹
+    F-xor′ = sym (∘-assoc-elimʳ (∘-inverse μ∘μ⁻¹ (⊗-inverse β∘β⁻¹ β∘β⁻¹)))
+           ; ∘≈ˡ F-xor ; ∘-assocʳ
+    
+    F-cond′  : ∀ {a : obj₁} → Fₘ cond ≈ cond ∘ (β⁻¹ ⊗ μ⁻¹ {a = a} {a}) ∘ μ⁻¹
+    F-cond′ = sym (∘-assoc-elimʳ (∘-inverse μ∘μ⁻¹ (⊗-inverse β∘β⁻¹ μ∘μ⁻¹)))
+            ; ∘≈ˡ F-cond
+
+    -- F-cond′  : ∀ {a : obj₁} → Fₘ cond ≈ cond ∘ (β⁻¹ ⊗ μ⁻¹ {a = a} {a}) ∘ μ⁻¹
+    -- F-cond′ =
+    --   begin
+    --     Fₘ cond
+    --   ≈⟨ sym (∘-assoc-elimʳ (∘-inverse μ∘μ⁻¹ (⊗-inverse β∘β⁻¹ μ∘μ⁻¹))) ⟩
+    --     (Fₘ cond ∘ μ ∘ (β ⊗ μ)) ∘ ((β⁻¹ ⊗ μ⁻¹) ∘ μ⁻¹) 
+    --   ≈⟨ ∘≈ˡ F-cond ⟩
+    --     cond ∘ (β⁻¹ ⊗ μ⁻¹) ∘ μ⁻¹
+    --   ∎
 
 open LogicH ⦃ … ⦄ public
 

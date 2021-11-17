@@ -4,7 +4,7 @@ open import Level
 
 open import Categorical.Raw
 open import Categorical.Equiv
-open import Categorical.Laws as L hiding (Category; Cartesian)
+open import Categorical.Laws as L hiding (Category; Cartesian; CartesianClosed; Logic)
 open import Categorical.Homomorphism
 open ≈-Reasoning
 open import Categorical.Reasoning
@@ -88,8 +88,8 @@ module comma-products
   -- !′ : ∀ {a} → a ⇨ ⊤
   -- !′ {a} = mk ! !
   --   (begin
-  --    --   h ⊤ ∘ Fₘ !
-  --    -- ≡⟨⟩
+  --      h ⊤ ∘ Fₘ !
+  --    ≡⟨⟩
   --      (ε ∘ ε⁻¹) ∘ Fₘ !
   --    ≈⟨ ∘≈ʳ F-! ; cancelInner ε⁻¹∘ε ⟩
   --      ε ∘ !
@@ -171,5 +171,177 @@ module comma-products
     cartesian : Cartesian _⇨_
     cartesian = record { ! = !′ ; _▵_ = fork ; exl = exl′ ; exr = exr′ }
 
--- TODO: CartesianClosed and Logic.
 
+module comma-booleans
+    ⦃ _ : Products obj₁ ⦄  ⦃ _ : Products obj₂ ⦄  ⦃ _ : Products obj₀ ⦄
+    ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄ ⦃ _ : Cartesian _⇨₀_ ⦄
+    ⦃ _ : L.Cartesian _⇨₀_ ⦄
+    ⦃ _ : ProductsH obj₁ _⇨₀_ ⦄  ⦃ _ : ProductsH obj₂ _⇨₀_ ⦄
+    ⦃ _ : CartesianH _⇨₁_ _⇨₀_ ⦄ ⦃ _ : CartesianH _⇨₂_ _⇨₀_ ⦄
+    -- TODO: remove cartesian stuff as able
+    ⦃ _ : Boolean obj₁ ⦄  ⦃ _ : Boolean obj₂ ⦄  ⦃ _ : Boolean obj₀ ⦄
+    ⦃ _ : Logic _⇨₁_ ⦄ ⦃ _ : Logic _⇨₂_ ⦄ ⦃ _ : Logic _⇨₀_ ⦄
+    ⦃ _ : L.Logic _⇨₀_ ⦄
+    ⦃ _ : BooleanH obj₁ _⇨₀_ ⦄  ⦃ _ : BooleanH obj₂ _⇨₀_ ⦄
+    ⦃ _ : StrongBooleanH obj₁ _⇨₀_ ⦄  ⦃ _ : StrongBooleanH obj₂ _⇨₀_ ⦄
+    ⦃ _ : LogicH _⇨₁_ _⇨₀_ ⦄ ⦃ _ : LogicH _⇨₂_ _⇨₀_ ⦄
+ where
+
+  instance
+
+    boolean : Boolean Obj
+    boolean = record { Bool = mk (β ∘ β⁻¹) }
+
+  -- false′ : ⊤ ⇨ Bool
+  -- false′ = mk false false
+  --   (begin
+  --     h Bool ∘ Fₘ false
+  --    ≡⟨⟩
+  --     (β ∘ β⁻¹) ∘ Fₘ false
+  --    ≈⟨ ∘≈ʳ F-false′ ⟩
+  --     (β ∘ β⁻¹) ∘ β ∘ false ∘ ε⁻¹
+  --    ≈⟨ ∘-assocˡ′ (∘-assoc-elimʳ β⁻¹∘β) ⟩
+  --     β ∘ false ∘ ε⁻¹
+  --    -- (β ∘ false) ∘ ε⁻¹
+  --    -- ((β ∘ false) ∘ ε⁻¹) ∘ (ε ∘ ε⁻¹)
+  --    -- (β ∘ false ∘ ε⁻¹) ∘ (ε ∘ ε⁻¹)
+  --    ≈˘⟨ (∘≈ˡ ∘-assocˡ ; cancelInner ε⁻¹∘ε ; ∘-assocʳ) ⟩
+  --     (β ∘ false ∘ ε⁻¹) ∘ (ε ∘ ε⁻¹)
+  --    ≈⟨ ∘≈ˡ (sym F-false′) ⟩
+  --     Fₘ false ∘ (ε ∘ ε⁻¹)
+  --    ≡⟨⟩
+  --     Fₘ false ∘ h ⊤
+  --    ∎)
+
+  false′ : ⊤ ⇨ Bool
+  false′ = mk false false
+    ( ∘≈ʳ F-false′
+    ; ∘-assocˡ′ (∘-assoc-elimʳ β⁻¹∘β)
+    ; sym (∘≈ˡ (F-false′ ; ∘-assocˡ) ; cancelInner ε⁻¹∘ε ; ∘-assocʳ)
+    )
+
+  true′ : ⊤ ⇨ Bool
+  true′ = mk true true
+    ( ∘≈ʳ F-true′
+    ; ∘-assocˡ′ (∘-assoc-elimʳ β⁻¹∘β)
+    ; sym (∘≈ˡ (F-true′ ; ∘-assocˡ) ; cancelInner ε⁻¹∘ε ; ∘-assocʳ)
+    )
+
+  -- not′ = mk not not
+  --   (begin
+  --      h Bool ∘ Fₘ not
+  --    ≡⟨⟩
+  --      (β ∘ β⁻¹) ∘ Fₘ not
+  --    ≈⟨ ∘≈ʳ F-not′ ⟩
+  --      (β ∘ β⁻¹) ∘ (β ∘ not ∘ β⁻¹)
+  --    ≈⟨ cancelInner β⁻¹∘β ⟩
+  --      β ∘ not ∘ β⁻¹
+  --    ≈⟨ sym (∘-assocˡʳ′ F-not) ⟩
+  --      Fₘ not ∘ (β ∘ β⁻¹)
+  --    ∎)
+
+  not′ : Bool ⇨ Bool
+  not′ = mk not not
+    ( ∘≈ʳ F-not′
+    ; cancelInner β⁻¹∘β
+    ; sym (∘-assocˡʳ′ F-not)
+    )
+
+  -- ∧′ : Bool × Bool ⇨ Bool
+  -- ∧′ = mk ∧ ∧
+  --   (begin
+  --      h Bool ∘ Fₘ ∧
+  --    ≡⟨⟩
+  --      (β ∘ β⁻¹) ∘ Fₘ ∧
+  --    ≈⟨ ∘≈ʳ F-∧′ ⟩
+  --      (β ∘ β⁻¹) ∘ β ∘ ∧ ∘ (β⁻¹ ⊗ β⁻¹) ∘ μ⁻¹
+  --    ≈⟨ ∘-assocˡ′ (∘-assoc-elimʳ β⁻¹∘β) ⟩
+  --      β ∘ ∧ ∘ (β⁻¹ ⊗ β⁻¹) ∘ μ⁻¹
+  --    ≈⟨ ∘-assocˡ′ (sym F-∧) ⟩
+  --      (Fₘ ∧ ∘ μ ∘ (β ⊗ β)) ∘ (β⁻¹ ⊗ β⁻¹) ∘ μ⁻¹
+  --    ≈⟨ ∘-assocʳ′ ∘-assocʳ ⟩
+  --      Fₘ ∧ ∘ μ ∘ (β ⊗ β) ∘ (β⁻¹ ⊗ β⁻¹) ∘ μ⁻¹
+  --    ≈⟨ ∘≈ʳ² (∘-assocˡ′ ⊗∘⊗) ⟩
+  --      Fₘ ∧ ∘ μ ∘ ((β ∘ β⁻¹) ⊗ (β ∘ β⁻¹)) ∘ μ⁻¹
+  --    ≡⟨⟩
+  --      Fₘ ∧ ∘ μ ∘ (h Bool ⊗ h Bool) ∘ μ⁻¹
+  --    ≡⟨⟩
+  --      Fₘ ∧ ∘ h (Bool × Bool)
+  --    ∎)
+
+  ∧′ : Bool × Bool ⇨ Bool
+  ∧′ = mk ∧ ∧
+          ( ∘≈ʳ F-∧′
+          ; ∘-assocˡ′ (∘-assoc-elimʳ β⁻¹∘β)
+          ; ∘-assocˡ′ (sym F-∧)
+          ; ∘-assocʳ′ ∘-assocʳ
+          ; ∘≈ʳ² (∘-assocˡ′ ⊗∘⊗)
+          )
+
+  ∨′ : Bool × Bool ⇨ Bool
+  ∨′ = mk ∨ ∨
+          ( ∘≈ʳ F-∨′
+          ; ∘-assocˡ′ (∘-assoc-elimʳ β⁻¹∘β)
+          ; ∘-assocˡ′ (sym F-∨)
+          ; ∘-assocʳ′ ∘-assocʳ
+          ; ∘≈ʳ² (∘-assocˡ′ ⊗∘⊗)
+          )
+
+  xor′ : Bool × Bool ⇨ Bool
+  xor′ = mk xor xor
+            ( ∘≈ʳ F-xor′
+            ; ∘-assocˡ′ (∘-assoc-elimʳ β⁻¹∘β)
+            ; ∘-assocˡ′ (sym F-xor)
+            ; ∘-assocʳ′ ∘-assocʳ
+            ; ∘≈ʳ² (∘-assocˡ′ ⊗∘⊗)
+            )
+
+  -- cond′ : ∀ {a} → Bool × (a × a) ⇨ a
+  -- cond′ {a} = mk cond cond
+  --   (begin
+  --      h a ∘ Fₘ cond
+  --    ≈⟨ ∘≈ʳ F-cond′ ⟩
+  --      h a ∘ cond ∘ (β⁻¹ ⊗ μ⁻¹) ∘ μ⁻¹
+  --    ≈⟨ ∘-assocˡ′ f∘cond ; ∘-assocʳ ⟩
+  --      cond ∘ second (h a ⊗ h a) ∘ (β⁻¹ ⊗ μ⁻¹) ∘ μ⁻¹
+  --    ≈⟨ ∘≈ʳ (∘-assocˡ′ ⊗∘⊗) ⟩
+  --      cond ∘ (id ∘ β⁻¹ ⊗ ((h a ⊗ h a) ∘ μ⁻¹)) ∘ μ⁻¹
+  --    ≈⟨ ∘≈ʳ (∘≈ˡ (⊗≈ˡ identityˡ)) ⟩
+  --      cond ∘ (β⁻¹ ⊗ ((h a ⊗ h a) ∘ μ⁻¹)) ∘ μ⁻¹
+  --    ≈⟨ ∘≈ˡ (sym F-cond) ⟩
+  --      (Fₘ cond ∘ μ ∘ (β ⊗ μ)) ∘ (β⁻¹ ⊗ ((h a ⊗ h a) ∘ μ⁻¹)) ∘ μ⁻¹
+  --    ≈⟨ ∘-assocʳ³ ⟩
+  --      Fₘ cond ∘ μ ∘ (β ⊗ μ) ∘ (β⁻¹ ⊗ ((h a ⊗ h a) ∘ μ⁻¹)) ∘ μ⁻¹
+  --    ≈⟨ ∘≈ʳ² ∘-assocˡ ⟩
+  --      Fₘ cond ∘ μ ∘ ((β ⊗ μ) ∘ (β⁻¹ ⊗ ((h a ⊗ h a) ∘ μ⁻¹))) ∘ μ⁻¹
+  --    ≈⟨ ∘≈ʳ² (∘≈ˡ ⊗∘⊗) ⟩
+  --      Fₘ cond ∘ μ ∘ ((β ∘ β⁻¹) ⊗ (μ ∘ (h a ⊗ h a) ∘ μ⁻¹)) ∘ μ⁻¹
+  --    ≡⟨⟩
+  --      Fₘ cond ∘ μ ∘ ((β ∘ β⁻¹) ⊗ h (a × a)) ∘ μ⁻¹
+  --    ≡⟨⟩
+  --      Fₘ cond ∘ μ ∘ (h Bool ⊗ h (a × a)) ∘ μ⁻¹
+  --    ≡⟨⟩
+  --      Fₘ cond ∘ h (Bool × (a × a))
+  --    ∎)
+
+  cond′ : ∀ {a} → Bool × (a × a) ⇨ a
+  cond′ {a} = mk cond cond
+    ( ∘≈ʳ F-cond′
+    ; ∘-assocˡ′ f∘cond ; ∘-assocʳ
+    ; ∘≈ʳ (∘-assocˡ′ ⊗∘⊗ ; ∘≈ˡ (⊗≈ˡ identityˡ))
+    ; ∘≈ˡ (sym F-cond)
+    ; ∘-assocʳ³
+    ; ∘≈ʳ² (∘-assocˡ ; ∘≈ˡ ⊗∘⊗)
+    )
+
+  instance
+
+    logic : Logic _⇨_
+    logic = record { false = false′
+                   ; true = true′
+                   ; not  = not′
+                   ; ∧    = ∧′
+                   ; ∨    = ∨′
+                   ; xor  = xor′
+                   ; cond = cond′
+                   }

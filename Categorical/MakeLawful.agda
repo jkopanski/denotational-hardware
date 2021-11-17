@@ -16,7 +16,8 @@ module Categorical.MakeLawful
  where
 
 open import Categorical.Raw
-open import Categorical.Laws as L hiding (Category; Cartesian; CartesianClosed)
+open import Categorical.Laws as L
+       hiding (Category; Cartesian; CartesianClosed; Logic)
 open import Categorical.Reasoning
 
 open ≈-Reasoning

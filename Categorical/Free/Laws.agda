@@ -2,9 +2,10 @@
 -- Free category
 
 open import Categorical.Homomorphism
-open import Categorical.Laws as L hiding (Category; Cartesian; CartesianClosed)
+open import Categorical.Laws as L
+       hiding (Category; Cartesian; CartesianClosed; Logic)
 
-module Categorical.Free.Law
+module Categorical.Free.Laws
          {o}{obj : Set o} ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄
          (_↠_ : obj → obj → Set o) {q} ⦃ equiv↠ : Equivalent q _↠_ ⦄
          ⦃ _ : Category _↠_ ⦄ ⦃ _ : Cartesian _↠_ ⦄ ⦃ _ : Logic _↠_ ⦄

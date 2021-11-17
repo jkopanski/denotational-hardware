@@ -7,7 +7,8 @@ open import Relation.Binary.PropositionalEquality using (_≡_)
 open import Function.Equivalence using (_⇔_; module Equivalence)
 open import Function.Equality using (_⟨$⟩_)
 
-open import Categorical.Raw as R hiding (Category; Cartesian; CartesianClosed)
+open import Categorical.Raw as R
+       hiding (Category; Cartesian; CartesianClosed; Logic)
 open import Categorical.Equiv
 
 open Equivalence
@@ -57,7 +58,6 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
                  ⦃ lCat : Category _⇨′_ ⦄
        : Set (suc o ⊔ ℓ ⊔ suc q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
-
   field
     ∀⊤ : ∀ {f : a ⇨ ⊤} → f ≈ !
 
@@ -244,4 +244,14 @@ record CartesianClosed {obj : Set o} ⦃ _ : Products obj ⦄
                        uncurry id
                      ∎)
 
--- TODO: Logic
+record Logic {obj : Set o}
+             ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄
+             (_⇨′_ : obj → obj → Set ℓ) {q} ⦃ equiv : Equivalent q _⇨′_ ⦄
+             ⦃ _ : R.Category _⇨′_ ⦄ ⦃ _ : R.Cartesian _⇨′_ ⦄ ⦃ _ : R.Logic _⇨′_ ⦄
+             -- ⦃ _ : Category _⇨′_ ⦄
+       : Set (suc o ⊔ ℓ ⊔ suc q) where
+  private infix 0 _⇨_; _⇨_ = _⇨′_
+  field
+    f∘cond : {f : a ⇨ b} → f ∘ cond ≈ cond ∘ second (f ⊗ f)
+
+open Logic ⦃ … ⦄ public

@@ -4,7 +4,8 @@ open import Level
 
 open import Categorical.Raw
 open import Categorical.Equiv
-open import Categorical.Laws as L hiding (Category; Cartesian)
+open import Categorical.Laws as L
+       hiding (Category; Cartesian; CartesianClosed; Logic)
 open import Categorical.Homomorphism
 
 module Categorical.Comma
