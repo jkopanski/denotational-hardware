@@ -5,7 +5,8 @@
 open import Level
 
 open import Categorical.Homomorphism
-open import Categorical.Laws as L hiding (Category; Cartesian; CartesianClosed; Logic)
+open import Categorical.Laws as L
+       hiding (Category; Cartesian; CartesianClosed; Logic)
 open import Categorical.Reasoning
 
 module Categorical.Subcategory
