@@ -339,10 +339,10 @@ module comma-booleans
 
     logic : Logic _⇨_
     logic = record { false = false′
-                   ; true = true′
-                   ; not  = not′
-                   ; ∧    = ∧′
-                   ; ∨    = ∨′
-                   ; xor  = xor′
-                   ; cond = cond′
+                   ; true  = true′
+                   ; not   = not′
+                   ; ∧     = ∧′
+                   ; ∨     = ∨′
+                   ; xor   = xor′
+                   ; cond  = cond′
                    }

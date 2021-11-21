@@ -330,7 +330,7 @@ record StrongBooleanH
     ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
     {q : Level} ⦃ _ : Equivalent q _⇨₂′_ ⦄
     ⦃ _ : Category _⇨₂′_ ⦄
-    ⦃ _ : BooleanH obj₁ _⇨₂′_  ⦄
+    ⦃ booleanH : BooleanH obj₁ _⇨₂′_  ⦄
     : Set (o₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
   private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
   field
@@ -339,18 +339,18 @@ record StrongBooleanH
 
 open StrongBooleanH ⦃ … ⦄ public
 
--- id-StrongBooleanH : 
---       {obj₂ : Set o}  ⦃ _ : Boolean obj₂ ⦄
---       {_⇨₂_ : obj₂ → obj₂ → Set ℓ₂}
---       ⦃ _ : Category _⇨₂_ ⦄
---       {q : Level} ⦃ _ : Equivalent q _⇨₂_ ⦄
---       ⦃ _ : BooleanH obj₂ _⇨₂_ ⦃ Hₒ = id-Hₒ ⦄ ⦄
---       -- ⦃ _ : L.Category _⇨₂_ ⦃ rcat = cat₂ ⦄ ⦄
---   → StrongBooleanH obj₂ _⇨₂_ ⦃ Hₒ = id-Hₒ ⦄
--- id-StrongBooleanH = record
---     { β⁻¹∘β = {!β⁻¹∘β!}
---     ; β∘β⁻¹ = {!identityˡ!}
---     }
+id-StrongBooleanH : 
+      {obj₂ : Set o}  ⦃ _ : Boolean obj₂ ⦄
+      {_⇨₂_ : obj₂ → obj₂ → Set ℓ₂}
+      ⦃ _ : Category _⇨₂_ ⦄
+      {q : Level} ⦃ _ : Equivalent q _⇨₂_ ⦄
+      ⦃ _ : BooleanH obj₂ _⇨₂_ ⦃ Hₒ = id-Hₒ ⦄ ⦄
+      ⦃ _ : L.Category _⇨₂_ ⦄
+  → StrongBooleanH obj₂ _⇨₂_ ⦃ Hₒ = id-Hₒ ⦄ ⦃ booleanH = id-BooleanH ⦄
+id-StrongBooleanH = record
+    { β⁻¹∘β = identityˡ
+    ; β∘β⁻¹ = identityˡ
+    }
 
 record LogicH
     {obj₁ : Set o₁} (_⇨₁′_ : obj₁ → obj₁ → Set ℓ₁)
@@ -450,4 +450,19 @@ record LogicH
 
 open LogicH ⦃ … ⦄ public
 
--- TODO: id-logicH
+id-LogicH : {obj : Set o} ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄
+            {_⇨_ : obj → obj → Set ℓ}
+            {q : Level} ⦃ _ : Equivalent q _⇨_ ⦄
+            ⦃ _ :   Category _⇨_ ⦄ ⦃ _ :   Cartesian _⇨_ ⦄ ⦃ _ :   Logic _⇨_ ⦄
+            ⦃ _ : L.Category _⇨_ ⦄ ⦃ _ : L.Cartesian _⇨_ ⦄ ⦃ _ : L.Logic _⇨_ ⦄
+          → LogicH _⇨_ _⇨_ ⦃ Hₒ = id-Hₒ ⦄ ⦃ H = id-H ⦄
+               ⦃ productsH = id-ProductsH ⦄ ⦃ booleanH = id-BooleanH ⦄
+id-LogicH = record
+              { F-false = identityʳ ; sym identityˡ
+              ; F-true  = identityʳ ; sym identityˡ
+              ; F-not   = identityʳ ; sym identityˡ
+              ; F-∧     = elimʳ (identityˡ ; id⊗id) ; sym identityˡ
+              ; F-∨     = elimʳ (identityˡ ; id⊗id) ; sym identityˡ
+              ; F-xor   = elimʳ (identityˡ ; id⊗id) ; sym identityˡ
+              ; F-cond  = elimʳ (identityˡ ; id⊗id)
+              }

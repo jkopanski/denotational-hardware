@@ -37,11 +37,17 @@ module arrow-products ⦃ p : Products obj ⦄ ⦃ c : Cartesian _↠_ ⦄ ⦃ l
 
   instance
 
-    prodH : ProductsH obj _↠_
-    prodH = id-ProductsH
+    productsH : ProductsH obj _↠_
+    productsH = id-ProductsH
 
-    cartH : CartesianH _↠_ _↠_
-    cartH = id-CartesianH
+    cartesianH : CartesianH _↠_ _↠_
+    cartesianH = id-CartesianH
+
+    -- booleanH : BooleanH obj _↠_
+    -- booleanH = id-BooleanH
+
+    -- strongBooleanH : StrongBooleanH obj _↠_
+    -- strongBooleanH = id-StrongBooleanH
 
 
 -- Transposition
