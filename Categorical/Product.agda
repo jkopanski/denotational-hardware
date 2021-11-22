@@ -30,9 +30,9 @@ module product-instances where
   products : ⦃ _ : Products obj₁ ⦄ ⦃ _ : Products obj₂ ⦄ → Products Obj
   products = record { ⊤ = ⊤ , ⊤ ; _×_ = λ (a₁ , a₂) (b₁ , b₂) → (a₁ × b₁) , (a₂ × b₂) }
 
-  cartesian : ⦃ _ : Products obj₁ ⦄ ⦃ _ : Products obj₂ ⦄
-              ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄ →
-              Cartesian _⇨_
+  cartesian : ⦃ _ : Products  obj₁ ⦄ ⦃ _ : Products  obj₂ ⦄
+              ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄
+            → Cartesian _⇨_
   cartesian = record
     {  !  = ! , !
     ; _▵_ = λ (f₁ , f₂) (g₁ , g₂) → (f₁ ▵ g₁) , (f₂ ▵ g₂)
@@ -76,8 +76,8 @@ module product-instances where
   l-category = record
     { identityˡ = identityˡ , identityˡ
     ; identityʳ = identityʳ , identityʳ
-    ; assoc = assoc , assoc
-    ; ∘≈ = λ (eq₁ , eq₂) (eq₁′ , eq₂′) → ∘≈ eq₁ eq₁′ , ∘≈ eq₂ eq₂′
+    ; assoc     =   assoc   ,   assoc
+    ; ∘≈        = λ (eq₁ , eq₂) (eq₁′ , eq₂′) → ∘≈ eq₁ eq₁′ , ∘≈ eq₂ eq₂′
     }
 
   open import Function.Equivalence using (Equivalence; equivalence)
@@ -143,10 +143,10 @@ module product-instances where
   productsH₁ : ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄ ⦃ _ : Products obj₁ ⦄ ⦃ _ : Products obj₂ ⦄
               ⦃ _ : L.Category _⇨₁_ ⦄
              → ProductsH Obj _⇨₁_
-  productsH₁ = record { ε = id
-                      ; μ = id
-                      ; ε⁻¹ = id
-                      ; μ⁻¹ = id
+  productsH₁ = record { ε     = id
+                      ; μ     = id
+                      ; ε⁻¹   = id
+                      ; μ⁻¹   = id
                       ; ε⁻¹∘ε = identityˡ
                       ; ε∘ε⁻¹ = identityˡ
                       ; μ⁻¹∘μ = identityˡ
@@ -156,10 +156,10 @@ module product-instances where
   productsH₂ : ∀ {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄ ⦃ _ : Products obj₁ ⦄ ⦃ _ : Products obj₂ ⦄
                ⦃ _ : L.Category _⇨₂_ ⦄
              → ProductsH Obj _⇨₂_
-  productsH₂ = record { ε = id
-                      ; μ = id
-                      ; ε⁻¹ = id
-                      ; μ⁻¹ = id
+  productsH₂                = record { ε = id
+                      ; μ     = id
+                      ; ε⁻¹   = id
+                      ; μ⁻¹   = id
                       ; ε⁻¹∘ε = identityˡ
                       ; ε∘ε⁻¹ = identityˡ
                       ; μ⁻¹∘μ = identityˡ
@@ -171,8 +171,8 @@ module product-instances where
       ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄ ⦃ _ : L.Category _⇨₁_ ⦄
     → CartesianH _⇨_ _⇨₁_
   cartesianH₁ = record
-    { F-! = sym identityˡ
-    ; F-▵ = sym identityˡ
+    { F-!   = sym identityˡ
+    ; F-▵   = sym identityˡ
     ; F-exl = identityʳ
     ; F-exr = identityʳ
     }
@@ -182,8 +182,8 @@ module product-instances where
       ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄ ⦃ _ : L.Category _⇨₂_ ⦄
     → CartesianH _⇨_ _⇨₂_
   cartesianH₂ = record
-    { F-! = sym identityˡ
-    ; F-▵ = sym identityˡ
+    { F-!   = sym identityˡ
+    ; F-▵   = sym identityˡ
     ; F-exl = identityʳ
     ; F-exr = identityʳ
     }
@@ -215,9 +215,9 @@ module product-instances where
       ⦃ _ : Cartesian  _⇨₁_ ⦄ ⦃ _ : L.Category _⇨₁_ ⦄ ⦃ _ : L.Cartesian _⇨₁_ ⦄
     → LogicH _⇨_ _⇨₁_
   logicH₁ = record
-              { F-false = identityʳ ; sym identityˡ
-              ; F-true  = identityʳ ; sym identityˡ
-              ; F-not   = identityʳ ; sym identityˡ
+              { F-false =      identityʳ      ; sym identityˡ
+              ; F-true  =      identityʳ      ; sym identityˡ
+              ; F-not   =      identityʳ      ; sym identityˡ
               ; F-∧     = elimʳ (elimʳ id⊗id) ; sym identityˡ
               ; F-∨     = elimʳ (elimʳ id⊗id) ; sym identityˡ
               ; F-xor   = elimʳ (elimʳ id⊗id) ; sym identityˡ
@@ -232,9 +232,9 @@ module product-instances where
       ⦃ _ : Cartesian  _⇨₂_ ⦄ ⦃ _ : L.Category _⇨₂_ ⦄ ⦃ _ : L.Cartesian _⇨₂_ ⦄
     → LogicH _⇨_ _⇨₂_
   logicH₂ = record
-              { F-false = identityʳ ; sym identityˡ
-              ; F-true  = identityʳ ; sym identityˡ
-              ; F-not   = identityʳ ; sym identityˡ
+              { F-false =      identityʳ      ; sym identityˡ
+              ; F-true  =      identityʳ      ; sym identityˡ
+              ; F-not   =      identityʳ      ; sym identityˡ
               ; F-∧     = elimʳ (elimʳ id⊗id) ; sym identityˡ
               ; F-∨     = elimʳ (elimʳ id⊗id) ; sym identityˡ
               ; F-xor   = elimʳ (elimʳ id⊗id) ; sym identityˡ
