@@ -168,8 +168,7 @@ module product-instances where
 
   cartesianH₁ : ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄
       ⦃ _ : Products  obj₁ ⦄ ⦃ _ : Products  obj₂ ⦄
-      ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄
-      ⦃ _ : L.Category _⇨₁_ ⦄
+      ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄ ⦃ _ : L.Category _⇨₁_ ⦄
     → CartesianH _⇨_ _⇨₁_
   cartesianH₁ = record
     { F-! = sym identityˡ
@@ -180,8 +179,7 @@ module product-instances where
 
   cartesianH₂ : ∀ {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄
       ⦃ _ : Products  obj₁ ⦄ ⦃ _ : Products  obj₂ ⦄
-      ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄
-      ⦃ _ : L.Category _⇨₂_ ⦄
+      ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄ ⦃ _ : L.Category _⇨₂_ ⦄
     → CartesianH _⇨_ _⇨₂_
   cartesianH₂ = record
     { F-! = sym identityˡ
@@ -211,37 +209,36 @@ module product-instances where
   open import Categorical.Reasoning
 
   logicH₁ : ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄
-      ⦃ _ : Products  obj₁ ⦄ ⦃ _ : Products  obj₂ ⦄
-      ⦃ _ : Boolean  obj₁ ⦄ ⦃ _ : Boolean  obj₂ ⦄
-      ⦃ _ : Logic _⇨₁_ ⦄ ⦃ _ : Logic _⇨₂_ ⦄
-      ⦃ _ : Cartesian _⇨₁_ ⦄
-      ⦃ _ : L.Category _⇨₁_ ⦄ ⦃ _ : L.Cartesian _⇨₁_ ⦄
+      ⦃ _ : Products   obj₁ ⦄ ⦃ _ : Products   obj₂ ⦄
+      ⦃ _ : Boolean    obj₁ ⦄ ⦃ _ : Boolean    obj₂ ⦄
+      ⦃ _ : Logic      _⇨₁_ ⦄ ⦃ _ : Logic      _⇨₂_ ⦄
+      ⦃ _ : Cartesian  _⇨₁_ ⦄ ⦃ _ : L.Category _⇨₁_ ⦄ ⦃ _ : L.Cartesian _⇨₁_ ⦄
     → LogicH _⇨_ _⇨₁_
   logicH₁ = record
               { F-false = identityʳ ; sym identityˡ
-              ; F-true = identityʳ ; sym identityˡ
-              ; F-not = identityʳ ; sym identityˡ
-              ; F-∧ = elimʳ (elimʳ id⊗id) ; sym identityˡ
-              ; F-∨ = elimʳ (elimʳ id⊗id) ; sym identityˡ
-              ; F-xor = elimʳ (elimʳ id⊗id) ; sym identityˡ
-              ; F-cond = elimʳ (elimʳ id⊗id)
+              ; F-true  = identityʳ ; sym identityˡ
+              ; F-not   = identityʳ ; sym identityˡ
+              ; F-∧     = elimʳ (elimʳ id⊗id) ; sym identityˡ
+              ; F-∨     = elimʳ (elimʳ id⊗id) ; sym identityˡ
+              ; F-xor   = elimʳ (elimʳ id⊗id) ; sym identityˡ
+              ; F-cond  = elimʳ (elimʳ id⊗id)
               }
 
+
   logicH₂ : ∀ {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄
-      ⦃ _ : Products  obj₁ ⦄ ⦃ _ : Products  obj₂ ⦄
-      ⦃ _ : Boolean  obj₁ ⦄ ⦃ _ : Boolean  obj₂ ⦄
-      ⦃ _ : Logic _⇨₁_ ⦄ ⦃ _ : Logic _⇨₂_ ⦄
-      ⦃ _ : Cartesian _⇨₂_ ⦄
-      ⦃ _ : L.Category _⇨₂_ ⦄ ⦃ _ : L.Cartesian _⇨₂_ ⦄
+      ⦃ _ : Products   obj₁ ⦄ ⦃ _ : Products   obj₂ ⦄
+      ⦃ _ : Boolean    obj₁ ⦄ ⦃ _ : Boolean    obj₂ ⦄
+      ⦃ _ : Logic      _⇨₁_ ⦄ ⦃ _ : Logic      _⇨₂_ ⦄
+      ⦃ _ : Cartesian  _⇨₂_ ⦄ ⦃ _ : L.Category _⇨₂_ ⦄ ⦃ _ : L.Cartesian _⇨₂_ ⦄
     → LogicH _⇨_ _⇨₂_
   logicH₂ = record
               { F-false = identityʳ ; sym identityˡ
-              ; F-true = identityʳ ; sym identityˡ
-              ; F-not = identityʳ ; sym identityˡ
-              ; F-∧ = elimʳ (elimʳ id⊗id) ; sym identityˡ
-              ; F-∨ = elimʳ (elimʳ id⊗id) ; sym identityˡ
-              ; F-xor = elimʳ (elimʳ id⊗id) ; sym identityˡ
-              ; F-cond = elimʳ (elimʳ id⊗id)
+              ; F-true  = identityʳ ; sym identityˡ
+              ; F-not   = identityʳ ; sym identityˡ
+              ; F-∧     = elimʳ (elimʳ id⊗id) ; sym identityˡ
+              ; F-∨     = elimʳ (elimʳ id⊗id) ; sym identityˡ
+              ; F-xor   = elimʳ (elimʳ id⊗id) ; sym identityˡ
+              ; F-cond  = elimʳ (elimʳ id⊗id)
               }
 
 -- TODO: Factor out some of the instance requirements as submodule arguments.
