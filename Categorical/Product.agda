@@ -80,7 +80,7 @@ module product-instances where
     ; ∘≈ = λ (eq₁ , eq₂) (eq₁′ , eq₂′) → ∘≈ eq₁ eq₁′ , ∘≈ eq₂ eq₂′
     }
 
-  open import Function.Equivalence
+  open import Function.Equivalence using (Equivalence; equivalence)
   open import Function.Equality as F using (Π; _⟨$⟩_)
 
   l-cartesian : ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄ {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄
@@ -139,3 +139,107 @@ module product-instances where
 
   categoryH₂ : ∀ {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄ → CategoryH _⇨_ _⇨₂_
   categoryH₂ = record { F-id = refl ; F-∘ = refl }
+
+  productsH₁ : ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄ ⦃ _ : Products obj₁ ⦄ ⦃ _ : Products obj₂ ⦄
+              ⦃ _ : L.Category _⇨₁_ ⦄
+             → ProductsH Obj _⇨₁_
+  productsH₁ = record { ε = id
+                      ; μ = id
+                      ; ε⁻¹ = id
+                      ; μ⁻¹ = id
+                      ; ε⁻¹∘ε = identityˡ
+                      ; ε∘ε⁻¹ = identityˡ
+                      ; μ⁻¹∘μ = identityˡ
+                      ; μ∘μ⁻¹ = identityˡ
+                      }
+
+  productsH₂ : ∀ {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄ ⦃ _ : Products obj₁ ⦄ ⦃ _ : Products obj₂ ⦄
+               ⦃ _ : L.Category _⇨₂_ ⦄
+             → ProductsH Obj _⇨₂_
+  productsH₂ = record { ε = id
+                      ; μ = id
+                      ; ε⁻¹ = id
+                      ; μ⁻¹ = id
+                      ; ε⁻¹∘ε = identityˡ
+                      ; ε∘ε⁻¹ = identityˡ
+                      ; μ⁻¹∘μ = identityˡ
+                      ; μ∘μ⁻¹ = identityˡ
+                      }
+
+  cartesianH₁ : ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄
+      ⦃ _ : Products  obj₁ ⦄ ⦃ _ : Products  obj₂ ⦄
+      ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄
+      ⦃ _ : L.Category _⇨₁_ ⦄
+    → CartesianH _⇨_ _⇨₁_
+  cartesianH₁ = record
+    { F-! = sym identityˡ
+    ; F-▵ = sym identityˡ
+    ; F-exl = identityʳ
+    ; F-exr = identityʳ
+    }
+
+  cartesianH₂ : ∀ {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄
+      ⦃ _ : Products  obj₁ ⦄ ⦃ _ : Products  obj₂ ⦄
+      ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄
+      ⦃ _ : L.Category _⇨₂_ ⦄
+    → CartesianH _⇨_ _⇨₂_
+  cartesianH₂ = record
+    { F-! = sym identityˡ
+    ; F-▵ = sym identityˡ
+    ; F-exl = identityʳ
+    ; F-exr = identityʳ
+    }
+
+  booleanH₁ :
+      ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄ ⦃ _ : Boolean obj₁ ⦄ ⦃ _ : Boolean obj₂ ⦄
+      ⦃ _ : L.Category _⇨₁_ ⦄
+    → BooleanH Obj _⇨₁_
+  booleanH₁ = record { β = id ; β⁻¹ = id }
+
+  booleanH₂ :
+      ∀ {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄ ⦃ _ : Boolean obj₁ ⦄ ⦃ _ : Boolean obj₂ ⦄
+      ⦃ _ : L.Category _⇨₂_ ⦄
+    → BooleanH Obj _⇨₂_
+  booleanH₂ = record { β = id ; β⁻¹ = id }
+
+  strongBooleanH₁ : 
+      ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄ ⦃ _ : Boolean obj₁ ⦄ ⦃ _ : Boolean obj₂ ⦄
+      ⦃ _ : L.Category _⇨₁_ ⦄
+    → StrongBooleanH Obj _⇨₁_
+  strongBooleanH₁ = record { β⁻¹∘β = identityˡ ; β∘β⁻¹ = identityˡ }
+
+  open import Categorical.Reasoning
+
+  logicH₁ : ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄
+      ⦃ _ : Products  obj₁ ⦄ ⦃ _ : Products  obj₂ ⦄
+      ⦃ _ : Boolean  obj₁ ⦄ ⦃ _ : Boolean  obj₂ ⦄
+      ⦃ _ : Logic _⇨₁_ ⦄ ⦃ _ : Logic _⇨₂_ ⦄
+      ⦃ _ : Cartesian _⇨₁_ ⦄
+      ⦃ _ : L.Category _⇨₁_ ⦄ ⦃ _ : L.Cartesian _⇨₁_ ⦄
+    → LogicH _⇨_ _⇨₁_
+  logicH₁ = record
+              { F-false = identityʳ ; sym identityˡ
+              ; F-true = identityʳ ; sym identityˡ
+              ; F-not = identityʳ ; sym identityˡ
+              ; F-∧ = elimʳ (elimʳ id⊗id) ; sym identityˡ
+              ; F-∨ = elimʳ (elimʳ id⊗id) ; sym identityˡ
+              ; F-xor = elimʳ (elimʳ id⊗id) ; sym identityˡ
+              ; F-cond = elimʳ (elimʳ id⊗id)
+              }
+
+  logicH₂ : ∀ {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄
+      ⦃ _ : Products  obj₁ ⦄ ⦃ _ : Products  obj₂ ⦄
+      ⦃ _ : Boolean  obj₁ ⦄ ⦃ _ : Boolean  obj₂ ⦄
+      ⦃ _ : Logic _⇨₁_ ⦄ ⦃ _ : Logic _⇨₂_ ⦄
+      ⦃ _ : Cartesian _⇨₂_ ⦄
+      ⦃ _ : L.Category _⇨₂_ ⦄ ⦃ _ : L.Cartesian _⇨₂_ ⦄
+    → LogicH _⇨_ _⇨₂_
+  logicH₂ = record
+              { F-false = identityʳ ; sym identityˡ
+              ; F-true = identityʳ ; sym identityˡ
+              ; F-not = identityʳ ; sym identityˡ
+              ; F-∧ = elimʳ (elimʳ id⊗id) ; sym identityˡ
+              ; F-∨ = elimʳ (elimʳ id⊗id) ; sym identityˡ
+              ; F-xor = elimʳ (elimʳ id⊗id) ; sym identityˡ
+              ; F-cond = elimʳ (elimʳ id⊗id)
+              }
