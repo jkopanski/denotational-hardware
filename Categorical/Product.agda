@@ -243,3 +243,5 @@ module product-instances where
               ; F-xor = elimʳ (elimʳ id⊗id) ; sym identityˡ
               ; F-cond = elimʳ (elimʳ id⊗id)
               }
+
+-- TODO: Factor out some of the instance requirements as submodule arguments.
