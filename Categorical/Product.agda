@@ -14,23 +14,18 @@ module Categorical.Product
 open import Level using (_⊔_)
 open import Data.Product using (_,_; proj₁; proj₂) renaming (_×_ to _×′_)
 
-private
-  Obj = obj₁ ×′ obj₂
+Obj : Set (o₁ ⊔ o₂)
+Obj = obj₁ ×′ obj₂
 
-record _⇨_ (a b : Obj) : Set (ℓ₁ ⊔ ℓ₂) where
-  constructor mk
-  field
-    f₁ : proj₁ a ⇨₁ proj₁ b
-    f₂ : proj₂ a ⇨₂ proj₂ b
-
--- TODO: Is there a pattern-matching alternative to the proj'shere?
+_⇨_ : Obj → Obj → Set (ℓ₁ ⊔ ℓ₂)
+(a₁ , a₂) ⇨ (b₁ , b₂) = (a₁ ⇨₁ b₁) ×′ (a₂ ⇨₂ b₂)
 
 module product-instances where
 
  instance
 
   category : Category _⇨_
-  category = record { id = mk id id ; _∘_ = λ (mk g₁ g₂) (mk f₁ f₂) → mk (g₁ ∘ f₁) (g₂ ∘ f₂) }
+  category = record { id = id , id ; _∘_ = λ (g₁ , g₂) (f₁ , f₂) → (g₁ ∘ f₁) , (g₂ ∘ f₂) }
 
   products : ⦃ _ : Products obj₁ ⦄ ⦃ _ : Products obj₂ ⦄ → Products Obj
   products = record { ⊤ = ⊤ , ⊤ ; _×_ = λ (a₁ , a₂) (b₁ , b₂) → (a₁ × b₁) , (a₂ × b₂) }
@@ -39,10 +34,10 @@ module product-instances where
               ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄ →
               Cartesian _⇨_
   cartesian = record
-    {  !  = mk ! !
-    ; _▵_ = λ (mk f₁ f₂) (mk g₁ g₂) → mk (f₁ ▵ g₁) (f₂ ▵ g₂)
-    ; exl = mk exl exl
-    ; exr = mk exr exr
+    {  !  = ! , !
+    ; _▵_ = λ (f₁ , f₂) (g₁ , g₂) → (f₁ ▵ g₁) , (f₂ ▵ g₂)
+    ; exl = exl , exl
+    ; exr = exr , exr
     }
 
   boolean : ⦃ _ : Boolean obj₁ ⦄ ⦃ _ : Boolean obj₂ ⦄ → Boolean Obj
@@ -53,19 +48,19 @@ module product-instances where
           ⦃ _ : Logic _⇨₁_ ⦄ ⦃ _ : Logic _⇨₂_ ⦄
         → Logic _⇨_
   logic = record
-            { false = mk false false
-            ; true  = mk true  true
-            ; not   = mk  not   not
-            ; ∧     = mk   ∧     ∧
-            ; ∨     = mk   ∨     ∨
-            ; xor   = mk  xor   xor
-            ; cond  = mk cond  cond
+            { false = false , false
+            ; true  = true  , true
+            ; not   =  not  ,  not
+            ; ∧     =   ∧   ,   ∧
+            ; ∨     =   ∨   ,   ∨
+            ; xor   =  xor  ,  xor
+            ; cond  = cond  , cond
             }
 
   equivalent : ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄ {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄
              → Equivalent (q₁ ⊔ q₂) _⇨_
   equivalent = record
-    { _≈_ = λ (mk f₁ f₂) (mk g₁ g₂) → f₁ ≈ g₁ ×′ f₂ ≈ g₂  -- Does this construction already exist?
+    { _≈_ = λ (f₁ , f₂) (g₁ , g₂) → f₁ ≈ g₁ ×′ f₂ ≈ g₂  -- Does this construction already exist?
     ; equiv = record
        { refl  = refl , refl
        ; sym   = λ (eq₁ , eq₂) → sym eq₁ , sym eq₂
@@ -96,7 +91,7 @@ module product-instances where
              → L.Cartesian _⇨_
   l-cartesian = record
     { ∀⊤ = ∀⊤ , ∀⊤
-    ; ∀× = λ { {a = a₁ , a₂} {b = b₁ , b₂} {c = c₁ , c₂} {f = mk f₁ f₂} {g = mk g₁ g₂} {k = mk k₁ k₂} →
+    ; ∀× = λ { {a = a₁ , a₂} {b = b₁ , b₂} {c = c₁ , c₂} {f = f₁ , f₂} {g = g₁ , g₂} {k = k₁ , k₂} →
         let e₁ = ∀× {f = f₁} {g₁} {k₁}
             e₂ = ∀× {f = f₂} {g₂} {k₂}
             module Q₁ = Equivalence e₁
@@ -111,7 +106,7 @@ module product-instances where
           (λ ((eq₁ , eq₂) , (eq₁′ , eq₂′)) →
             h₁⁻¹ (eq₁ , eq₁′) , h₂⁻¹ (eq₂ , eq₂′))
       }
-    ; ▵≈ = λ { {f = mk f₁ f₂} {g = mk g₁ g₂} {h = mk h₁ h₂} {k = mk k₁ k₂}
+    ; ▵≈ = λ { {f = f₁ , f₂} {g = g₁ , g₂} {h = h₁ , h₂} {k = k₁ , k₂}
                (h₁≈k₁ , h₂≈k₂) (f₁≈g₁ , f₂≈g₂) →
                  (▵≈ h₁≈k₁ f₁≈g₁) , ▵≈ h₂≈k₂ f₂≈g₂ }
     }
@@ -131,13 +126,13 @@ module product-instances where
   Hₒ₁ = record { Fₒ = proj₁ }
 
   H₁ : Homomorphism _⇨_ _⇨₁_
-  H₁ = record { Fₘ = λ (mk f₁ f₂) → f₁ }
+  H₁ = record { Fₘ = proj₁ }
 
   Hₒ₂ : Homomorphismₒ Obj obj₂
   Hₒ₂ = record { Fₒ = proj₂ }
 
   H₂ : Homomorphism _⇨_ _⇨₂_
-  H₂ = record { Fₘ = λ (mk f₁ f₂) → f₂ }
+  H₂ = record { Fₘ = proj₂ }
 
   categoryH₁ : ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄ → CategoryH _⇨_ _⇨₁_
   categoryH₁ = record { F-id = refl ; F-∘ = refl }
