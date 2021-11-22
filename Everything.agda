@@ -13,6 +13,7 @@ import Categorical.Subcategory
 import Categorical.Comma
 import Categorical.Arrow
 import Categorical.Free
+import Categorical.Product
 
 import Functions
 import Equality
