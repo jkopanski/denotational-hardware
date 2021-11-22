@@ -35,7 +35,7 @@ module product-instances where
             → Cartesian _⇨_
   cartesian = record
     {  !  = ! , !
-    ; _▵_ = λ (f₁ , f₂) (g₁ , g₂) → (f₁ ▵ g₁) , (f₂ ▵ g₂)
+    ; _▵_ = λ (f₁ , f₂) (g₁ , g₂) → f₁ ▵ g₁ , f₂ ▵ g₂
     ; exl = exl , exl
     ; exr = exr , exr
     }
@@ -45,7 +45,7 @@ module product-instances where
 
   logic : ⦃ _ : Products obj₁ ⦄ ⦃ _ : Products obj₂ ⦄
           ⦃ _ : Boolean  obj₁ ⦄ ⦃ _ : Boolean  obj₂ ⦄
-          ⦃ _ : Logic _⇨₁_ ⦄ ⦃ _ : Logic _⇨₂_ ⦄
+          ⦃ _ : Logic    _⇨₁_ ⦄ ⦃ _ : Logic    _⇨₂_ ⦄
         → Logic _⇨_
   logic = record
             { false = false , false
@@ -91,7 +91,7 @@ module product-instances where
              → L.Cartesian _⇨_
   l-cartesian = record
     { ∀⊤ = ∀⊤ , ∀⊤
-    ; ∀× = λ { {a = a₁ , a₂} {b = b₁ , b₂} {c = c₁ , c₂} {f = f₁ , f₂} {g = g₁ , g₂} {k = k₁ , k₂} →
+    ; ∀× = λ { {a = a₁ , a₂} {b₁ , b₂} {c₁ , c₂} {f₁ , f₂} {g₁ , g₂} {k₁ , k₂} →
         let e₁ = ∀× {f = f₁} {g₁} {k₁}
             e₂ = ∀× {f = f₂} {g₂} {k₂}
             module Q₁ = Equivalence e₁
@@ -106,7 +106,7 @@ module product-instances where
           (λ ((eq₁ , eq₂) , (eq₁′ , eq₂′)) →
             h₁⁻¹ (eq₁ , eq₁′) , h₂⁻¹ (eq₂ , eq₂′))
       }
-    ; ▵≈ = λ { {f = f₁ , f₂} {g = g₁ , g₂} {h = h₁ , h₂} {k = k₁ , k₂}
+    ; ▵≈ = λ { {f = f₁ , f₂} {g₁ , g₂} {h₁ , h₂} {k₁ , k₂}
                (h₁≈k₁ , h₂≈k₂) (f₁≈g₁ , f₂≈g₂) →
                  (▵≈ h₁≈k₁ f₁≈g₁) , ▵≈ h₂≈k₂ f₂≈g₂ }
     }
