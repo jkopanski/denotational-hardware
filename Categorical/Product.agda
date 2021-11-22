@@ -89,9 +89,9 @@ module product-instances where
   open import Function.Equality as F using (Π; _⟨$⟩_)
 
   l-cartesian : ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄ {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄
-                ⦃ _ : Products obj₁ ⦄ ⦃ _ : Products obj₂ ⦄
-                ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄
-                ⦃ _ : L.Category _⇨₁_ ⦄ ⦃ _ : L.Category _⇨₂_ ⦄
+                ⦃ _ :   Products  obj₁ ⦄ ⦃ _ :   Products  obj₂ ⦄
+                ⦃ _ :   Cartesian _⇨₁_ ⦄ ⦃ _ :   Cartesian _⇨₂_ ⦄
+                ⦃ _ : L.Category  _⇨₁_ ⦄ ⦃ _ : L.Category  _⇨₂_ ⦄
                 ⦃ _ : L.Cartesian _⇨₁_ ⦄ ⦃ _ : L.Cartesian _⇨₂_ ⦄
              → L.Cartesian _⇨_
   l-cartesian = record
@@ -117,11 +117,11 @@ module product-instances where
     }
 
   l-logic : ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄ {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄
-            ⦃ _ : Products obj₁ ⦄ ⦃ _ : Products obj₂ ⦄
-            ⦃ _ : Boolean obj₁ ⦄ ⦃ _ : Boolean obj₂ ⦄
+            ⦃ _ : Products  obj₁ ⦄ ⦃ _ : Products  obj₂ ⦄
+            ⦃ _ : Boolean   obj₁ ⦄ ⦃ _ : Boolean   obj₂ ⦄
             ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄
-            ⦃ _ : Logic _⇨₁_ ⦄ ⦃ _ : Logic _⇨₂_ ⦄
-            ⦃ _ : L.Logic _⇨₁_ ⦄ ⦃ _ : L.Logic _⇨₂_ ⦄
+            ⦃ _ :    Logic  _⇨₁_ ⦄ ⦃ _ :    Logic  _⇨₂_ ⦄
+            ⦃ _ :  L.Logic  _⇨₁_ ⦄ ⦃ _ :  L.Logic  _⇨₂_ ⦄
           → L.Logic _⇨_
   l-logic = record { f∘cond = f∘cond , f∘cond }
 
