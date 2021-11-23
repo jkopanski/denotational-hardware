@@ -134,37 +134,37 @@ module product-instances where
   H₂ : Homomorphism _⇨_ _⇨₂_
   H₂ = record { Fₘ = proj₂ }
 
-  categoryH₁ : ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄ → CategoryH _⇨_ _⇨₁_
-  categoryH₁ = record { F-id = refl ; F-∘ = refl }
+  catH₁ : ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄ → CategoryH _⇨_ _⇨₁_
+  catH₁ = record { F-id = refl ; F-∘ = refl }
 
-  categoryH₂ : ∀ {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄ → CategoryH _⇨_ _⇨₂_
-  categoryH₂ = record { F-id = refl ; F-∘ = refl }
+  catH₂ : ∀ {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄ → CategoryH _⇨_ _⇨₂_
+  catH₂ = record { F-id = refl ; F-∘ = refl }
 
-  productsH₁ : ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄ ⦃ _ : Products obj₁ ⦄ ⦃ _ : Products obj₂ ⦄
-              ⦃ _ : L.Category _⇨₁_ ⦄
-             → ProductsH Obj _⇨₁_
-  productsH₁ = record { ε     = id
-                      ; μ     = id
-                      ; ε⁻¹   = id
-                      ; μ⁻¹   = id
-                      ; ε⁻¹∘ε = identityˡ
-                      ; ε∘ε⁻¹ = identityˡ
-                      ; μ⁻¹∘μ = identityˡ
-                      ; μ∘μ⁻¹ = identityˡ
-                      }
+  pH₁ : ∀ ⦃ _ : Products obj₁ ⦄ ⦃ _ : Products obj₂ ⦄ → ProductsH Obj _⇨₁_
+  pH₁ = record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id}
 
-  productsH₂ : ∀ {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄ ⦃ _ : Products obj₁ ⦄ ⦃ _ : Products obj₂ ⦄
-               ⦃ _ : L.Category _⇨₂_ ⦄
-             → ProductsH Obj _⇨₂_
-  productsH₂                = record { ε = id
-                      ; μ     = id
-                      ; ε⁻¹   = id
-                      ; μ⁻¹   = id
-                      ; ε⁻¹∘ε = identityˡ
-                      ; ε∘ε⁻¹ = identityˡ
-                      ; μ⁻¹∘μ = identityˡ
-                      ; μ∘μ⁻¹ = identityˡ
-                      }
+  spH₁ : ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄
+    ⦃ _ : Products obj₁ ⦄ ⦃ _ : Products obj₂ ⦄
+    ⦃ _ : L.Category _⇨₁_ ⦄
+    → StrongProductsH Obj _⇨₁_
+  spH₁ = record { ε⁻¹∘ε = identityˡ
+                ; ε∘ε⁻¹ = identityˡ
+                ; μ⁻¹∘μ = identityˡ
+                ; μ∘μ⁻¹ = identityˡ
+                }
+
+  pH₂ : ∀ ⦃ _ : Products obj₁ ⦄ ⦃ _ : Products obj₂ ⦄ → ProductsH Obj _⇨₂_
+  pH₂ = record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id}
+
+  spH₂ : ∀ {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄
+    ⦃ _ : Products obj₁ ⦄ ⦃ _ : Products obj₂ ⦄
+    ⦃ _ : L.Category _⇨₂_ ⦄
+    → StrongProductsH Obj _⇨₂_
+  spH₂ = record { ε⁻¹∘ε = identityˡ
+                ; ε∘ε⁻¹ = identityˡ
+                ; μ⁻¹∘μ = identityˡ
+                ; μ∘μ⁻¹ = identityˡ
+                }
 
   cartesianH₁ : ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄
       ⦃ _ : Products  obj₁ ⦄ ⦃ _ : Products  obj₂ ⦄

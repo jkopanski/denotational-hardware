@@ -75,15 +75,16 @@ module comma-products
     ⦃ _ : Products obj₁ ⦄  ⦃ _ : Products obj₂ ⦄  ⦃ _ : Products obj₀ ⦄
     ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄ ⦃ _ : Cartesian _⇨₀_ ⦄
     ⦃ _ : L.Cartesian _⇨₀_ ⦄
-    ⦃ _ : ProductsH obj₁ _⇨₀_ ⦄  ⦃ _ : ProductsH obj₂ _⇨₀_ ⦄
+    ⦃ _ : ProductsH obj₁ _⇨₀_ ⦄ ⦃ _ : ProductsH obj₂ _⇨₀_ ⦄
+    ⦃ _ : StrongProductsH obj₁ _⇨₀_ ⦄ ⦃ _ : StrongProductsH obj₂ _⇨₀_ ⦄
     ⦃ _ : CartesianH _⇨₁_ _⇨₀_ ⦄ ⦃ _ : CartesianH _⇨₂_ _⇨₀_ ⦄
   where
 
   instance
 
     products : Products Obj
-    products = record { ⊤   = mk (ε ∘ ε⁻¹)
-                      ; _×_ = λ (mk h) (mk k) → mk (μ ∘ (h ⊗ k) ∘ μ⁻¹)
+    products = record { ⊤   = mkO (ε ∘ ε⁻¹)
+                      ; _×_ = λ (mkO h) (mkO k) → mkO (μ ∘ (h ⊗ k) ∘ μ⁻¹)
                       }
 
   -- !′ : ∀ {a} → a ⇨ ⊤
@@ -178,6 +179,7 @@ module comma-booleans
     ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄ ⦃ _ : Cartesian _⇨₀_ ⦄
     ⦃ _ : L.Cartesian _⇨₀_ ⦄
     ⦃ _ : ProductsH obj₁ _⇨₀_ ⦄  ⦃ _ : ProductsH obj₂ _⇨₀_ ⦄
+    ⦃ _ : StrongProductsH obj₁ _⇨₀_ ⦄ ⦃ _ : StrongProductsH obj₂ _⇨₀_ ⦄
     ⦃ _ : CartesianH _⇨₁_ _⇨₀_ ⦄ ⦃ _ : CartesianH _⇨₂_ _⇨₀_ ⦄
     -- TODO: remove cartesian stuff as able
     ⦃ _ : Boolean obj₁ ⦄  ⦃ _ : Boolean obj₂ ⦄  ⦃ _ : Boolean obj₀ ⦄
@@ -191,7 +193,7 @@ module comma-booleans
   instance
 
     boolean : Boolean Obj
-    boolean = record { Bool = mk (β ∘ β⁻¹) }
+    boolean = record { Bool = mkO (β ∘ β⁻¹) }
 
   -- false′ : ⊤ ⇨ Bool
   -- false′ = mk false false

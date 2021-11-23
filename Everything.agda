@@ -16,6 +16,7 @@ import Categorical.Free
 import Categorical.Product
 
 import Functions
+import Functions.Instances
 import Equality
 import Equality.Homomorphism
 import Finite

@@ -40,6 +40,9 @@ module arrow-products ⦃ p : Products obj ⦄ ⦃ c : Cartesian _↠_ ⦄ ⦃ l
     productsH : ProductsH obj _↠_
     productsH = id-ProductsH
 
+    strongProductsH : StrongProductsH obj _↠_
+    strongProductsH = id-StrongProductsH
+
     cartesianH : CartesianH _↠_ _↠_
     cartesianH = id-CartesianH
 
@@ -52,7 +55,7 @@ module arrow-products ⦃ p : Products obj ⦄ ⦃ c : Cartesian _↠_ ⦄ ⦃ l
 
 -- Transposition
 _ᵀ : ∀ {a b} ((mk f₁ f₂ _) : a ⇨ b) → (f₁ ⇉ f₂)
-_ᵀ {mk h}{mk h′} (mk _ _ commute) = mk h h′ (sym commute)
+_ᵀ {mkO h}{mkO h′} (mk _ _ commute) = mk h h′ (sym commute)
 
 open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 

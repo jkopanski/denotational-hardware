@@ -21,7 +21,7 @@ module Categorical.Comma.Type
 -- TODO: Define some bundles to reduce syntactic clutter.
 
 record Obj : Set (o₁ ⊔ o₂ ⊔ ℓ₀) where
-  constructor mk
+  constructor mkO
   field
     { τ₁ } : obj₁
     { τ₂ } : obj₂
@@ -43,7 +43,7 @@ open _⇨_
 infix 0 _⇉_
 _⇉_ : ∀ {σ₁ τ₁ : obj₁}{σ₂ τ₂ : obj₂}
     → (Fₒ σ₁ ⇨₀ Fₒ σ₂) → (Fₒ τ₁ ⇨₀ Fₒ τ₂) → Set (ℓ₁ ⊔ ℓ₂ ⊔ q)
-g ⇉ h = mk g ⇨ mk h
+g ⇉ h = mkO g ⇨ mkO h
 
 module comma-type-instances where
 
@@ -53,14 +53,23 @@ module comma-type-instances where
   
     -- Forgetful functors
 
-    homomorphismₒ₁ : Homomorphismₒ Obj obj₁
-    homomorphismₒ₁ = record { Fₒ = τ₁ }
+    open import Data.Product using (_,_)
+    open import Categorical.Product _⇨₁_ _⇨₂_ renaming (Obj to Obj× ; _⇨_ to _⇨×_)
+    
+    Hₒ : Homomorphismₒ Obj Obj×
+    Hₒ = record { Fₒ = λ (mkO {τ₁} {τ₂} _) → τ₁ , τ₂}
 
-    homomorphism₁ : Homomorphism _⇨_ _⇨₁_
-    homomorphism₁ = record { Fₘ = _⇨_.f₁ }
+    H : Homomorphism _⇨_ _⇨×_
+    H = record { Fₘ = λ (mk f₁ f₂ _) → f₁ , f₂ }
+    
+    Hₒ₁ : Homomorphismₒ Obj obj₁
+    Hₒ₁ = record { Fₒ = τ₁ }
 
-    homomorphismₒ₂ : Homomorphismₒ Obj obj₂
-    homomorphismₒ₂ = record { Fₒ = τ₂ }
+    H₁ : Homomorphism _⇨_ _⇨₁_
+    H₁ = record { Fₘ = _⇨_.f₁ }
 
-    homomorphism₂ : Homomorphism _⇨_ _⇨₂_
-    homomorphism₂ = record { Fₘ = _⇨_.f₂ }
+    Hₒ₂ : Homomorphismₒ Obj obj₂
+    Hₒ₂ = record { Fₒ = τ₂ }
+
+    H₂ : Homomorphism _⇨_ _⇨₂_
+    H₂ = record { Fₘ = _⇨_.f₂ }

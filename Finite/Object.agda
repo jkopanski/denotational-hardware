@@ -25,18 +25,21 @@ module finite-object-instances where
     products : Products ℕ
     products = record { ⊤ = 1 ; _×_ = _*_ }
 
-    productsH : ProductsH ℕ ⟨→⟩
-    productsH = record
-                  { ε     = λ { tt → zero }
-                  ; μ     = uncurry combine
-                  ; ε⁻¹   = λ { zero → tt }
-                  ; μ⁻¹   = λ {m n} → remQuot n
-                  ; ε⁻¹∘ε = λ { tt → refl }
-                  ; ε∘ε⁻¹ = λ { zero → refl }
-                  ; μ⁻¹∘μ = uncurry remQuot-combine
-                  ; μ∘μ⁻¹ = λ {m n} → combine-remQuot {m} n
-                  }
-    -- TODO: Construct productsH from 1↔⊤ and *↔×
+    pH : ProductsH ℕ ⟨→⟩
+    pH = record
+           { ε   = λ { tt → zero }
+           ; μ   = uncurry combine
+           ; ε⁻¹ = λ { zero → tt }
+           ; μ⁻¹ = λ {m n} → remQuot n
+           }
+    spH : StrongProductsH ℕ ⟨→⟩
+    spH = record
+            { ε⁻¹∘ε = λ { tt → refl }
+            ; ε∘ε⁻¹ = λ { zero → refl }
+            ; μ⁻¹∘μ = uncurry remQuot-combine
+            ; μ∘μ⁻¹ = λ {m n} → combine-remQuot {m} n
+            }
+    -- TODO: Construct pH and spH from 1↔⊤ and *↔×
 
     -- TODO: Coproducts
     -- TODO: Exponentials

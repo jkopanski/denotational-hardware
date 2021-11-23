@@ -78,16 +78,15 @@ module StronglyFinite-Set-instances where
            )  -- TODO: simplify with a monoidal category of isomorphisms.
       }
 
-    productsH : ProductsH Obj ⟨→⟩
-    productsH = record { ε     = id
-                       ; μ     = id
-                       ; ε⁻¹   = id
-                       ; μ⁻¹   = id
-                       ; ε⁻¹∘ε = λ _ → refl
-                       ; ε∘ε⁻¹ = λ _ → refl
-                       ; μ⁻¹∘μ = λ _ → refl
-                       ; μ∘μ⁻¹ = λ _ → refl
-                       }
+    pH : ProductsH Obj ⟨→⟩
+    pH = record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id}
+
+    spH : StrongProductsH Obj ⟨→⟩
+    spH = record { ε⁻¹∘ε = λ _ → refl
+                 ; ε∘ε⁻¹ = λ _ → refl
+                 ; μ⁻¹∘μ = λ _ → refl
+                 ; μ∘μ⁻¹ = λ _ → refl
+                 }
 
     -- TODO: Coproducts
     -- TODO: Exponentials
@@ -111,17 +110,16 @@ module StronglyFinite-ℕ-instances where
     Hₒ : Homomorphismₒ Obj ℕ
     Hₒ = record { Fₒ = Obj.n }
 
-    productsH : ProductsH Obj _↠_
-    productsH = record
-               { ε     = id
-               ; μ     = id
-               ; ε⁻¹   = id
-               ; μ⁻¹   = id
-               ; ε⁻¹∘ε = λ _ → refl
-               ; ε∘ε⁻¹ = λ _ → refl
-               ; μ⁻¹∘μ = λ _ → refl
-               ; μ∘μ⁻¹ = λ _ → refl
-               }
+    p : ProductsH Obj _↠_
+    p = record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id}
+
+    spH : StrongProductsH Obj _↠_
+    spH = record
+         { ε⁻¹∘ε = λ _ → refl
+         ; ε∘ε⁻¹ = λ _ → refl
+         ; μ⁻¹∘μ = λ _ → refl
+         ; μ∘μ⁻¹ = λ _ → refl
+         }
 
     -- TODO: Coproducts
     -- TODO: Exponentials

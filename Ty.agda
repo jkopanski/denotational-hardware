@@ -38,14 +38,19 @@ module ty-instances where
         h (a `× b) = h a × h b
         h (a `⇛ b) = h a ⇛ h b
 
-    productsH : ∀ {ℓ o}{obj : Set o} ⦃ _ : Products obj ⦄
+    pH : ∀ {ℓ o}{obj : Set o} ⦃ _ : Products obj ⦄
+           ⦃ _ : Boolean obj ⦄ ⦃ _ : Exponentials obj ⦄
+           {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
+      → ProductsH Ty _⇨_
+    pH = record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id }
+
+    spH : ∀ {ℓ o}{obj : Set o} ⦃ _ : Products obj ⦄
                   ⦃ _ : Boolean obj ⦄ ⦃ _ : Exponentials obj ⦄
                   {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
                   {q} ⦃ _ : Equivalent q _⇨_ ⦄ ⦃ _ : L.Category _⇨_ ⦄
-             → ProductsH Ty _⇨_
-    productsH = record
-      { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id
-      ; ε⁻¹∘ε = L.identityˡ ; ε∘ε⁻¹ = L.identityˡ
+             → StrongProductsH Ty _⇨_
+    spH = record
+      { ε⁻¹∘ε = L.identityˡ ; ε∘ε⁻¹ = L.identityˡ
       ; μ⁻¹∘μ = L.identityˡ ; μ∘μ⁻¹ = L.identityˡ
       }
 

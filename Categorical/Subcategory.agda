@@ -68,8 +68,8 @@ module subcategory-instances where
 
     cartesianH :
       ⦃ _ : Products obj ⦄ ⦃ _ : Cartesian _↠_ ⦄ ⦃ _ : L.Category _↠_ ⦄
-      ⦃ _ : Products I ⦄ ⦃ _ : ProductsH I _↠_ ⦄ →
-      CartesianH _⇨_ _↠_
+      ⦃ _ : Products I ⦄ ⦃ _ : ProductsH I _↠_ ⦄ ⦃ _ : StrongProductsH I _↠_ ⦄
+      → CartesianH _⇨_ _↠_
     cartesianH = record { F-! = refl↠
                         ; F-▵ = refl↠
                         ; F-exl = ∘-assoc-elimʳ μ⁻¹∘μ   -- (exl ∘ μ⁻¹) ∘ μ ≈ exl
@@ -81,7 +81,7 @@ module subcategory-instances where
              ⦃ _ : Cartesian _↠_ ⦄ ⦃ _ : Logic _↠_ ⦄
              ⦃ _ : L.Category _↠_ ⦄ ⦃ _ : L.Cartesian _↠_ ⦄
              ⦃ _ : Boolean I ⦄ ⦃ _ : Products I ⦄
-             ⦃ _ : ProductsH I _↠_ ⦄
+             ⦃ _ : ProductsH I _↠_ ⦄ ⦃ _ : StrongProductsH I _↠_ ⦄
              ⦃ _ : BooleanH I _↠_ ⦄ ⦃ _ : StrongBooleanH I _↠_ ⦄ →
              LogicH _⇨_ _↠_
     logicH = record

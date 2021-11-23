@@ -69,40 +69,53 @@ id-CategoryH = record { F-id = refl ; F-∘ = refl }
 record ProductsH
     (obj₁ : Set o₁) ⦃ _ : Products obj₁ ⦄
     {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄
-    (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂) ⦃ _ : Category _⇨₂′_ ⦄
+    (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
     ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
-    {q} ⦃ _ : Equivalent q _⇨₂′_ ⦄
-    : Set (o₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
+    : Set (o₁ ⊔ o₂ ⊔ ℓ₂ {- ⊔ q -}) where
   private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
   field
     -- https://ncatlab.org/nlab/show/monoidal+functor
     ε : ⊤ ⇨₂ Fₒ ⊤
     μ : {a b : obj₁} → Fₒ a × Fₒ b ⇨₂ Fₒ (a × b)
 
-    -- *Strong*
     ε⁻¹ : Fₒ ⊤ ⇨₂ ⊤
     μ⁻¹ : {a b : obj₁} → Fₒ (a × b) ⇨₂ Fₒ a × Fₒ b
-
-    ε⁻¹∘ε : ε⁻¹ ∘ ε ≈ id
-    ε∘ε⁻¹ : ε ∘ ε⁻¹ ≈ id
-
-    μ⁻¹∘μ : μ⁻¹ ∘ μ {a}{b} ≈ id
-    μ∘μ⁻¹ : μ ∘ μ⁻¹ {a}{b} ≈ id
-
-  -- -- Maybe useful along with second′ and _⊗′_
-  -- first′ : {a b c : obj₁} ⦃ _ : Cartesian _⇨₂_ ⦄
-  --        → (Fₒ a ⇨₂ Fₒ c) → (Fₒ (a × b) ⇨₂ Fₒ (c × b))
-  -- first′ f = μ ∘ first f ∘ μ⁻¹
 
 open ProductsH ⦃ … ⦄ public
 
 id-ProductsH : ∀ {obj : Set o} ⦃ _ : Products obj ⦄
                  {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
-                 {q} ⦃ _ : Equivalent q _⇨_ ⦄ ⦃ _ : L.Category _⇨_ ⦄
+                 -- {q} ⦃ _ : Equivalent q _⇨_ ⦄
              → ProductsH obj _⇨_ ⦃ Hₒ = id-Hₒ ⦄
 id-ProductsH =
-  record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id
-         ; ε⁻¹∘ε = L.identityˡ ; ε∘ε⁻¹ = L.identityˡ
+  record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id }
+
+record StrongProductsH
+    (obj₁ : Set o₁) ⦃ _ : Products obj₁ ⦄
+    {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄
+    (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂) ⦃ _ : Category _⇨₂′_ ⦄
+    ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
+    {q} ⦃ _ : Equivalent q _⇨₂′_ ⦄
+    ⦃ pH : ProductsH obj₁ _⇨₂′_ ⦄
+    : Set (o₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
+  private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
+  field
+
+    ε⁻¹∘ε : ε⁻¹ ∘ ε ≈ id
+    ε∘ε⁻¹ : ε ∘ ε⁻¹ ≈ id
+
+    μ⁻¹∘μ : {a b : obj₁} → μ⁻¹ ∘ μ {a = a}{b} ≈ id
+    μ∘μ⁻¹ : {a b : obj₁} → μ ∘ μ⁻¹ {a = a}{b} ≈ id
+
+open StrongProductsH ⦃ … ⦄ public
+
+id-StrongProductsH :
+  ∀ {obj : Set o} ⦃ _ : Products obj ⦄
+  {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
+  {q} ⦃ _ : Equivalent q _⇨_ ⦄ ⦃ _ : L.Category _⇨_ ⦄
+  → StrongProductsH obj _⇨_ ⦃ Hₒ = id-Hₒ ⦄ ⦃ pH = id-ProductsH ⦄
+id-StrongProductsH =
+  record { ε⁻¹∘ε = L.identityˡ ; ε∘ε⁻¹ = L.identityˡ
          ; μ⁻¹∘μ = L.identityˡ ; μ∘μ⁻¹ = L.identityˡ
          }
 
@@ -123,7 +136,7 @@ record CartesianH
     F-exl : ∀ {a b : obj₁} → Fₘ exl ∘ μ {a = a}{b} ≈ exl
     F-exr : ∀ {a b : obj₁} → Fₘ exr ∘ μ {a = a}{b} ≈ exr
 
-  module _ ⦃ _ : L.Category _⇨₂_ ⦄ where
+  module _ ⦃ _ : L.Category _⇨₂_ ⦄ ⦃ spH : StrongProductsH obj₁ _⇨₂_ ⦄ where
 
     F-!′ : {a : obj₁} → ε⁻¹ ∘ Fₘ {a = a} ! ≈ !
     F-!′ = ∘≈ʳ F-! ; ∘-assoc-elimˡ ε⁻¹∘ε
@@ -263,11 +276,12 @@ record CartesianH
 
 open CartesianH ⦃ … ⦄ public
 
-id-CartesianH : {obj : Set o} {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Products obj ⦄
-                {q : Level} ⦃ _ : Equivalent q _⇨_ ⦄
-                ⦃ _ :   Category _⇨_ ⦄ ⦃ _ :   Cartesian _⇨_ ⦄
-                ⦃ _ : L.Category _⇨_ ⦄ ⦃ _ : L.Cartesian _⇨_ ⦄
-              → CartesianH _⇨_ _⇨_ ⦃ Hₒ = id-Hₒ ⦄ ⦃ H = id-H ⦄ ⦃ pH = id-ProductsH ⦄
+id-CartesianH :
+    {obj : Set o} {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Products obj ⦄
+    {q : Level} ⦃ _ : Equivalent q _⇨_ ⦄
+    ⦃ _ :   Category _⇨_ ⦄ ⦃ _ :   Cartesian _⇨_ ⦄
+    ⦃ _ : L.Category _⇨_ ⦄ ⦃ _ : L.Cartesian _⇨_ ⦄
+  → CartesianH _⇨_ _⇨_ ⦃ Hₒ = id-Hₒ ⦄ ⦃ H = id-H ⦄ ⦃ pH = id-ProductsH ⦄
 id-CartesianH = record
   { F-!   = sym identityˡ
   ; F-▵   = sym identityˡ
@@ -361,7 +375,8 @@ record LogicH
     ⦃ _ : Category _⇨₂′_ ⦄ ⦃ _ : Cartesian _⇨₂′_ ⦄
     ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
     ⦃ H : Homomorphism _⇨₁′_ _⇨₂′_ ⦄
-    ⦃ productsH : ProductsH obj₁ _⇨₂′_ ⦄
+    ⦃ pH : ProductsH obj₁ _⇨₂′_ ⦄
+    ⦃ spH : StrongProductsH obj₁ _⇨₂′_ ⦄
     ⦃ booleanH  : BooleanH obj₁ _⇨₂′_ ⦄
   : Set (o₁ ⊔ ℓ₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
   private infix 0 _⇨₁_; _⇨₁_ = _⇨₁′_
@@ -456,7 +471,8 @@ id-LogicH : {obj : Set o} ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄
             ⦃ _ :   Category _⇨_ ⦄ ⦃ _ :   Cartesian _⇨_ ⦄ ⦃ _ :   Logic _⇨_ ⦄
             ⦃ _ : L.Category _⇨_ ⦄ ⦃ _ : L.Cartesian _⇨_ ⦄ ⦃ _ : L.Logic _⇨_ ⦄
           → LogicH _⇨_ _⇨_ ⦃ Hₒ = id-Hₒ ⦄ ⦃ H = id-H ⦄
-               ⦃ productsH = id-ProductsH ⦄ ⦃ booleanH = id-BooleanH ⦄
+               ⦃ pH = id-ProductsH ⦄ ⦃ spH = id-StrongProductsH ⦄
+               ⦃ booleanH = id-BooleanH ⦄
 id-LogicH = record
               { F-false = identityʳ ; sym identityˡ
               ; F-true  = identityʳ ; sym identityˡ
