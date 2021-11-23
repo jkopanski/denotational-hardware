@@ -14,9 +14,9 @@ import Categorical.Comma
 import Categorical.Arrow
 import Categorical.Free
 import Categorical.Product
+import Categorical.IdInstances
 
 import Functions
-import Functions.Instances
 import Equality
 import Equality.Homomorphism
 import Finite
