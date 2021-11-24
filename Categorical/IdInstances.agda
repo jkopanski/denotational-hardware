@@ -1,5 +1,5 @@
 {-# OPTIONS --safe --without-K #-}
--- Some convenient identity instances. Use with "import", not "open import".
+-- Some convenient identity instances.
 
 module Categorical.IdInstances
    {o ℓ} {obj : Set o} (_⇨_ : obj → obj → Set ℓ)
@@ -9,42 +9,44 @@ open import Categorical.Homomorphism
 
 import Categorical.Laws as L
 
-instance
+module id-instances where
 
-  Hₒ : Homomorphismₒ obj obj
-  Hₒ = id-Hₒ
+  instance
 
-  H : Homomorphism _⇨_ _⇨_
-  H = id-H
+    Hₒ : Homomorphismₒ obj obj
+    Hₒ = id-Hₒ
 
-  pH : ⦃ _ : Products obj ⦄ ⦃ _ : Category _⇨_ ⦄
-     → ProductsH obj _⇨_
-  pH = id-ProductsH
+    H : Homomorphism _⇨_ _⇨_
+    H = id-H
 
-  bH : ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄ ⦃ _ : Category _⇨_ ⦄
-     → BooleanH obj _⇨_
-  bH = id-BooleanH
+    pH : ⦃ _ : Products obj ⦄ ⦃ _ : Category _⇨_ ⦄
+       → ProductsH obj _⇨_
+    pH = id-ProductsH
 
-module _ {q} ⦃ _ : Equivalent q _⇨_ ⦄ ⦃ _ : Category _⇨_ ⦄ where
+    bH : ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄ ⦃ _ : Category _⇨_ ⦄
+       → BooleanH obj _⇨_
+    bH = id-BooleanH
 
- instance
+  module _ {q} ⦃ _ : Equivalent q _⇨_ ⦄ ⦃ _ : Category _⇨_ ⦄ where
 
-  catH : CategoryH _⇨_ _⇨_
-  catH = id-CategoryH
+   instance
 
-  spH : ⦃ _ : Products obj ⦄ ⦃ _ : L.Category _⇨_ ⦄ → StrongProductsH obj _⇨_
-  spH = id-StrongProductsH
+    catH : CategoryH _⇨_ _⇨_
+    catH = id-CategoryH
 
-  cartH : ⦃ _ : Products obj ⦄ ⦃ _ : Cartesian _⇨_ ⦄
-          ⦃ _ : L.Category _⇨_ ⦄ ⦃ _ : L.Cartesian _⇨_ ⦄ → CartesianH _⇨_ _⇨_
-  cartH = id-CartesianH
+    spH : ⦃ _ : Products obj ⦄ ⦃ _ : L.Category _⇨_ ⦄ → StrongProductsH obj _⇨_
+    spH = id-StrongProductsH
 
-  sbH : ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄ ⦃ _ : L.Category _⇨_ ⦄
-      → StrongBooleanH obj _⇨_
-  sbH = id-StrongBooleanH
+    cartH : ⦃ _ : Products obj ⦄ ⦃ _ : Cartesian _⇨_ ⦄
+            ⦃ _ : L.Category _⇨_ ⦄ ⦃ _ : L.Cartesian _⇨_ ⦄ → CartesianH _⇨_ _⇨_
+    cartH = id-CartesianH
 
-  lH : ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄
-       ⦃ _ : Logic _⇨_ ⦄ ⦃ _ : Cartesian _⇨_ ⦄
-       ⦃ _ : L.Category _⇨_ ⦄ ⦃ _ : L.Cartesian _⇨_ ⦄ ⦃ _ : L.Logic _⇨_ ⦄
-     → LogicH _⇨_ _⇨_
-  lH = id-LogicH
+    sbH : ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄ ⦃ _ : L.Category _⇨_ ⦄
+        → StrongBooleanH obj _⇨_
+    sbH = id-StrongBooleanH
+
+    lH : ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄
+         ⦃ _ : Logic _⇨_ ⦄ ⦃ _ : Cartesian _⇨_ ⦄
+         ⦃ _ : L.Category _⇨_ ⦄ ⦃ _ : L.Cartesian _⇨_ ⦄ ⦃ _ : L.Logic _⇨_ ⦄
+       → LogicH _⇨_ _⇨_
+    lH = id-LogicH
