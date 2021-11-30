@@ -56,18 +56,20 @@ module comma-type-instances where
     open import Data.Product using (_,_)
     open import Categorical.Product _⇨₁_ _⇨₂_ renaming (Obj to Obj× ; _⇨_ to _⇨×_)
     
-    Hₒ : Homomorphismₒ Obj Obj×
-    Hₒ = record { Fₒ = λ (mkO {τ₁} {τ₂} _) → τ₁ , τ₂}
+    Hₒ× : Homomorphismₒ Obj Obj×
+    Hₒ× = record { Fₒ = λ (mkO {τ₁} {τ₂} _) → τ₁ , τ₂}
 
-    H : Homomorphism _⇨_ _⇨×_
-    H = record { Fₘ = λ (mk f₁ f₂ _) → f₁ , f₂ }
+    H× : Homomorphism _⇨_ _⇨×_
+    H× = record { Fₘ = λ (mk f₁ f₂ _) → f₁ , f₂ }
     
+    -- "Domain functor"
     Hₒ₁ : Homomorphismₒ Obj obj₁
     Hₒ₁ = record { Fₒ = τ₁ }
 
     H₁ : Homomorphism _⇨_ _⇨₁_
     H₁ = record { Fₘ = _⇨_.f₁ }
 
+    -- "Codomain functor"
     Hₒ₂ : Homomorphismₒ Obj obj₂
     Hₒ₂ = record { Fₒ = τ₂ }
 
