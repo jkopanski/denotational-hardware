@@ -23,6 +23,12 @@ module →-raw-instances where
     cartesian : Cartesian Function
     cartesian = record { _▵_ = <_,_> ; exl = proj₁ ; exr = proj₂ }
 
+    indexedCartesian : ∀ {I : Set ℓ} → IndexedCartesian I Function
+    indexedCartesian = record
+      { △  = λ fs x i → fs i x
+      ; ex = λ i xs → xs i
+      }
+
     cartesianClosed : CartesianClosed Function
     cartesianClosed = record { curry = ×.curry ; apply = ×.uncurry id }
 

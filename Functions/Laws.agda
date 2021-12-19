@@ -7,7 +7,8 @@ module Functions.Laws (ℓ : Level) where
 open import Function.Equivalence hiding (id; _∘_)
 open import Data.Product using (_,_)
 
-open import Categorical.Raw hiding (Category; Cartesian; CartesianClosed; Logic)
+open import Categorical.Raw
+      hiding (Category; Cartesian; IndexedCartesian; CartesianClosed; Logic)
 open import Categorical.Laws
 open import Categorical.Equiv
 open import Functions.Raw ℓ public
@@ -40,6 +41,15 @@ module →-laws-instances where
           (λ (exl∘k≈f , exr∘k≈g) x → cong₂ _,_ (exl∘k≈f x) (exr∘k≈g x))
       ; ▵≈ = λ h≈k f≈g x → cong₂ _,_ (h≈k x) (f≈g x)
       }
+
+    -- -- I don't think this one can be proved without extensionality.
+    -- indexedCartesian : ∀ {I : Set ℓ} → IndexedCartesian I Function
+    -- indexedCartesian = record
+    --   { ∀Π = equivalence
+    --       (λ k≈△fs i x → cong (λ f → f i) (k≈△fs x))
+    --       (λ eqs x → {!!})
+    --   ; △≈ = λ eqs x → {!!}
+    --   }
 
     module ccc (extensionality : Extensionality _ _) where
 

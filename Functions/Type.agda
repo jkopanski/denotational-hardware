@@ -71,6 +71,9 @@ module →-instances where
     products : Products (Set ℓ)
     products = record { ⊤ = ⊤′ ; _×_ = _×′_ }
 
+    indexedProducts : ∀ {I : Set ℓ} → IndexedProducts (Set ℓ) I
+    indexedProducts {I = I} = record { Π = λ f → ∀ i → f i }
+
     exponentials : Exponentials (Set ℓ)
     exponentials = record { _⇛_ = Function }
 

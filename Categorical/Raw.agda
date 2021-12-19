@@ -3,7 +3,7 @@
 module Categorical.Raw where
 
 open import Level
-open import Function using () renaming (_∘′_ to _∙_)
+open import Function using (const) renaming (_∘_ to _∙_)
 
 open import Categorical.Object public
 
@@ -131,6 +131,28 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   replicateᵀ (suc n) = replicateᵀ n ▵ replicateᵀ n
 
 open Cartesian ⦃ … ⦄ public
+
+
+record IndexedCartesian
+    {obj : Set o} {ℓᵢ} (I : Set ℓᵢ) ⦃ _ : IndexedProducts obj I ⦄
+    (_⇨′_ : obj → obj → Set ℓ) ⦃ _ : Category _⇨′_ ⦄
+   : Set (o ⊔ ℓ ⊔ ℓᵢ) where
+  private infix 0 _⇨_; _⇨_ = _⇨′_
+  field
+    △  : {B : I → obj} → (∀ i → a ⇨ B i) → (a ⇨ Π B)
+    ex : {A : I → obj} → (i : I) → (Π A ⇨ A i)
+
+  -- Replicate
+  rep : a ⇨ Π (const a)
+  rep = △ (const id)
+
+  ⨂ : {A B : I → obj} → (∀ i → A i ⇨ B i) → Π A ⇨ Π B
+  ⨂ fs = △ λ i → fs i ∘ ex i
+
+  map : (a ⇨ b) → Π (const a) ⇨ Π (const b)
+  map f = ⨂ (const f)
+
+open IndexedCartesian ⦃ … ⦄ public
 
 
 record CartesianClosed {obj : Set o}

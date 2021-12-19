@@ -2,7 +2,7 @@
 
 module Categorical.Object where
 
-open import Level using (Level; lift; _⊔_) renaming (suc to lsuc)
+open import Level using (Level; lift; _⊔_)
 open import Function
 
 open import Data.Nat hiding (_⊔_)
@@ -18,7 +18,7 @@ private
   f ↑ zero  = id
   f ↑ suc n = f ∘ (f ↑ n)
 
-record Products (obj : Set o) : Set (lsuc o) where
+record Products (obj : Set o) : Set o where
   infixr 2 _×_
   field
     ⊤ : obj
@@ -31,7 +31,13 @@ record Products (obj : Set o) : Set (lsuc o) where
 
 open Products ⦃ … ⦄ public
 
-record Exponentials (obj : Set o) : Set (lsuc o) where
+record IndexedProducts (obj : Set o) {ℓᵢ} (I : Set ℓᵢ) : Set (o ⊔ ℓᵢ) where
+  field
+    Π : (I → obj) → obj
+
+open IndexedProducts ⦃ … ⦄ public
+
+record Exponentials (obj : Set o) : Set o where
   infixr 1 _⇛_
   field
     _⇛_ : obj → obj → obj
@@ -39,7 +45,7 @@ record Exponentials (obj : Set o) : Set (lsuc o) where
 open Exponentials ⦃ … ⦄ public
 
 
-record Boolean (obj : Set o) : Set (lsuc o) where
+record Boolean (obj : Set o) : Set o where
   field
     Bool : obj
 

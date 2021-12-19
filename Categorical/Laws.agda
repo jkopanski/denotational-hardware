@@ -8,7 +8,7 @@ open import Function.Equivalence using (_⇔_; module Equivalence)
 open import Function.Equality using (_⟨$⟩_)
 
 open import Categorical.Raw as R
-       hiding (Category; Cartesian; CartesianClosed; Logic)
+       hiding (Category; Cartesian; IndexedCartesian; CartesianClosed; Logic)
 open import Categorical.Equiv
 
 open Equivalence
@@ -24,7 +24,7 @@ private
 record Category {obj : Set o} (_⇨′_ : obj → obj → Set ℓ)
                 {q} ⦃ equiv : Equivalent q _⇨′_ ⦄
                 ⦃ rcat : R.Category _⇨′_ ⦄
-       : Set (suc o ⊔ ℓ ⊔ suc q) where
+       : Set (o ⊔ ℓ ⊔ q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
     identityˡ : {f : a ⇨ b} → id ∘ f ≈ f
@@ -49,6 +49,7 @@ record Category {obj : Set o} (_⇨′_ : obj → obj → Set ℓ)
 
 open Category ⦃ … ⦄ public
 
+
 open import Data.Product using (_,_) renaming (_×_ to _×ₚ_)
 
 record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
@@ -56,63 +57,63 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
                  {q} ⦃ equiv : Equivalent q _⇨′_ ⦄
                  ⦃ _ : R.Category _⇨′_ ⦄ ⦃ _ : R.Cartesian _⇨′_ ⦄
                  ⦃ lCat : Category _⇨′_ ⦄
-       : Set (suc o ⊔ ℓ ⊔ suc q) where
+       : Set (o ⊔ ℓ ⊔ q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
-    ∀⊤ : ∀ {f : a ⇨ ⊤} → f ≈ !
+    ∀⊤ : {f : a ⇨ ⊤} → f ≈ !
 
-    ∀× : ∀ {f : a ⇨ b} {g : a ⇨ c} {k : a ⇨ b × c}
+    ∀× : {f : a ⇨ b} {g : a ⇨ c} {k : a ⇨ b × c}
        → k ≈ f ▵ g ⇔ (exl ∘ k ≈ f  ×ₚ  exr ∘ k ≈ g)
 
     -- TODO: infix?
-    ▵≈ : ∀ {f g : a ⇨ c} {h k : a ⇨ d} → h ≈ k → f ≈ g → h ▵ f ≈ k ▵ g
+    ▵≈ : {f g : a ⇨ c} {h k : a ⇨ d} → h ≈ k → f ≈ g → h ▵ f ≈ k ▵ g
 
-  ∀×→ : ∀ {f : a ⇨ b} {g : a ⇨ c} {k : a ⇨ b × c}
+  ∀×→ : {f : a ⇨ b} {g : a ⇨ c} {k : a ⇨ b × c}
      → k ≈ f ▵ g → (exl ∘ k ≈ f  ×ₚ  exr ∘ k ≈ g)
   ∀×→ = to ∀× ⟨$⟩_
 
-  ∀×← : ∀ {f : a ⇨ b} {g : a ⇨ c} {k : a ⇨ b × c}
+  ∀×← : {f : a ⇨ b} {g : a ⇨ c} {k : a ⇨ b × c}
      → (exl ∘ k ≈ f  ×ₚ  exr ∘ k ≈ g) → k ≈ f ▵ g
   ∀×← = from ∀× ⟨$⟩_
 
-  ▵≈ˡ : ∀ {f : a ⇨ c} {h k : a ⇨ d} → h ≈ k → h ▵ f ≈ k ▵ f
+  ▵≈ˡ : {f : a ⇨ c} {h k : a ⇨ d} → h ≈ k → h ▵ f ≈ k ▵ f
   ▵≈ˡ h≈k = ▵≈ h≈k refl
 
-  ▵≈ʳ : ∀ {f g : a ⇨ c} {h : a ⇨ d} → f ≈ g → h ▵ f ≈ h ▵ g
+  ▵≈ʳ : {f g : a ⇨ c} {h : a ⇨ d} → f ≈ g → h ▵ f ≈ h ▵ g
   ▵≈ʳ f≈g = ▵≈ refl f≈g
 
   open import Data.Product using (proj₁; proj₂)
   -- TODO: Generalize Function category from level 0, and use exl & exr in place
   -- of proj₁ & proj₂
 
-  exl∘▵ : ∀ {f : a ⇨ b}{g : a ⇨ c} → exl ∘ (f ▵ g) ≈ f
+  exl∘▵ : {f : a ⇨ b} {g : a ⇨ c} → exl ∘ (f ▵ g) ≈ f
   exl∘▵ = proj₁ (∀×→ refl)
 
-  exr∘▵ : ∀ {f : a ⇨ b}{g : a ⇨ c} → exr ∘ (f ▵ g) ≈ g
+  exr∘▵ : {f : a ⇨ b} {g : a ⇨ c} → exr ∘ (f ▵ g) ≈ g
   exr∘▵ = proj₂ (∀×→ refl)
 
   -- Specializing:
-  exl∘⊗ : ∀ {f : a ⇨ c}{g : b ⇨ d} → exl ∘ (f ⊗ g) ≈ f ∘ exl
+  exl∘⊗ : {f : a ⇨ c} {g : b ⇨ d} → exl ∘ (f ⊗ g) ≈ f ∘ exl
   exl∘⊗ = exl∘▵
-  exr∘⊗ : ∀ {f : a ⇨ c}{g : b ⇨ d} → exr ∘ (f ⊗ g) ≈ g ∘ exr
+  exr∘⊗ : {f : a ⇨ c} {g : b ⇨ d} → exr ∘ (f ⊗ g) ≈ g ∘ exr
   exr∘⊗ = exr∘▵
 
-  exl∘first : ∀ {b : obj} {f : a ⇨ c} → exl ∘ first {b = b} f ≈ f ∘ exl
+  exl∘first : {b : obj} {f : a ⇨ c} → exl ∘ first {b = b} f ≈ f ∘ exl
   exl∘first = exl∘⊗
 
-  exr∘first : ∀ {b : obj} {f : a ⇨ c} → exr ∘ first {b = b} f ≈ exr
+  exr∘first : {b : obj} {f : a ⇨ c} → exr ∘ first {b = b} f ≈ exr
   exr∘first = exr∘⊗ ; identityˡ
 
-  exl∘second : ∀ {a : obj} {g : b ⇨ d} → exl ∘ second {a = a} g ≈ exl
+  exl∘second : {a : obj} {g : b ⇨ d} → exl ∘ second {a = a} g ≈ exl
   exl∘second = exl∘⊗ ; identityˡ
 
-  exr∘second : ∀ {a : obj} {g : b ⇨ d} → exr ∘ second {a = a} g ≈ g ∘ exr
+  exr∘second : {a : obj} {g : b ⇨ d} → exr ∘ second {a = a} g ≈ g ∘ exr
   exr∘second = exr∘⊗
 
-  exl▵exr : ∀ {a b : obj} → exl ▵ exr ≈ id {a = a × b}
+  exl▵exr : {a b : obj} → exl ▵ exr ≈ id {a = a × b}
   exl▵exr = sym (∀×← (identityʳ , identityʳ))
 
-  ⊗≈ : ∀ {a b c d : obj}{f g : a ⇨ c}{h k : b ⇨ d}
+  ⊗≈ : {a b c d : obj} {f g : a ⇨ c} {h k : b ⇨ d}
      → f ≈ g → h ≈ k → f ⊗ h ≈ g ⊗ k
   ⊗≈ f≈g h≈k = ▵≈ (∘≈ˡ f≈g) (∘≈ˡ h≈k)
 
@@ -127,21 +128,21 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   --     g ⊗ k
   --   ∎
 
-  ⊗≈ˡ : ∀ {a b c d : obj}{f g : a ⇨ c}{h : b ⇨ d}
+  ⊗≈ˡ : {a b c d : obj}{f g : a ⇨ c}{h : b ⇨ d}
      → f ≈ g → f ⊗ h ≈ g ⊗ h
   ⊗≈ˡ f≈g = ⊗≈ f≈g refl
 
-  ⊗≈ʳ : ∀ {a b c d : obj}{f : a ⇨ c}{h k : b ⇨ d}
+  ⊗≈ʳ : {a b c d : obj}{f : a ⇨ c}{h k : b ⇨ d}
      → h ≈ k → f ⊗ h ≈ f ⊗ k
   ⊗≈ʳ h≈k = ⊗≈ refl h≈k
 
-  id⊗id : ∀ {a b : obj} → id ⊗ id ≈ id {a = a × b}
+  id⊗id : {a b : obj} → id ⊗ id ≈ id {a = a × b}
   id⊗id = exl▵exr • ▵≈ identityˡ identityˡ
 
-  ▵∘ : ∀ {f : a ⇨ b}{g : b ⇨ c}{h : b ⇨ d} → (g ▵ h) ∘ f ≈ g ∘ f ▵ h ∘ f
+  ▵∘ : {f : a ⇨ b} {g : b ⇨ c} {h : b ⇨ d} → (g ▵ h) ∘ f ≈ g ∘ f ▵ h ∘ f
   ▵∘ {f = f}{g}{h}= ∀×← (∘≈ˡ exl∘▵ • sym assoc , ∘≈ˡ exr∘▵ • sym assoc)
 
-  ⊗∘▵ : ∀ {f : a ⇨ b}{g : a ⇨ c}{h : b ⇨ d}{k : c ⇨ e}
+  ⊗∘▵ : {f : a ⇨ b} {g : a ⇨ c} {h : b ⇨ d} {k : c ⇨ e}
       → (h ⊗ k) ∘ (f ▵ g) ≈ h ∘ f ▵ k ∘ g
   ⊗∘▵ {f = f}{g}{h}{k} =
     begin
@@ -156,48 +157,48 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
       h ∘ f ▵ k ∘ g
     ∎
 
-  first∘▵ : ∀ {f : a ⇨ b}{g : a ⇨ c}{h : b ⇨ d}
+  first∘▵ : {f : a ⇨ b} {g : a ⇨ c} {h : b ⇨ d}
       → first h ∘ (f ▵ g) ≈ h ∘ f ▵ g
   first∘▵ = ⊗∘▵ ; ▵≈ʳ identityˡ
 
-  second∘▵ : ∀ {f : a ⇨ b}{g : a ⇨ c}{k : c ⇨ e}
+  second∘▵ : {f : a ⇨ b} {g : a ⇨ c} {k : c ⇨ e}
       → second k ∘ (f ▵ g) ≈ f ▵ k ∘ g
   second∘▵ = ⊗∘▵ ; ▵≈ˡ identityˡ
 
-  ⊗∘⊗ : ∀ {f : a ⇨ c}{g : b ⇨ d}{h : c ⇨ c′}{k : d ⇨ d′}
+  ⊗∘⊗ : {f : a ⇨ c} {g : b ⇨ d} {h : c ⇨ c′} {k : d ⇨ d′}
       → (h ⊗ k) ∘ (f ⊗ g) ≈ h ∘ f ⊗ k ∘ g
   ⊗∘⊗ = ⊗∘▵ ; ▵≈ ∘-assocˡ ∘-assocˡ
 
-  first∘⊗ : ∀ {f : a ⇨ c}{g : b ⇨ d}{h : c ⇨ c′}
+  first∘⊗ : {f : a ⇨ c} {g : b ⇨ d} {h : c ⇨ c′}
       → first h ∘ (f ⊗ g) ≈ h ∘ f ⊗ g
   first∘⊗ = ⊗∘⊗ ; ⊗≈ʳ identityˡ
        -- = first∘▵ ; ▵≈ˡ ∘-assocˡ
 
-  ⊗∘first : ∀ {f : a ⇨ c}{h : c ⇨ c′}{k : d ⇨ d′}
+  ⊗∘first : {f : a ⇨ c} {h : c ⇨ c′} {k : d ⇨ d′}
       → (h ⊗ k) ∘ first f ≈ h ∘ f ⊗ k
   ⊗∘first = ⊗∘⊗ ; ⊗≈ʳ identityʳ
 
-  ⊗∘second : ∀ {g : b ⇨ d}{h : c ⇨ c′}{k : d ⇨ d′}
+  ⊗∘second : {g : b ⇨ d} {h : c ⇨ c′} {k : d ⇨ d′}
       → (h ⊗ k) ∘ second g ≈ h ⊗ k ∘ g
   ⊗∘second = ⊗∘⊗ ; ⊗≈ˡ identityʳ
 
-  second∘⊗ : ∀ {f : a ⇨ c}{g : b ⇨ d}{k : d ⇨ d′}
+  second∘⊗ : {f : a ⇨ c} {g : b ⇨ d} {k : d ⇨ d′}
       → second k ∘ (f ⊗ g) ≈ f ⊗ k ∘ g
   second∘⊗ = ⊗∘⊗ ; ⊗≈ˡ identityˡ
 
-  first∘first : ∀ {b : obj}{f : a ⇨ c}{h : c ⇨ c′}
+  first∘first : {b : obj} {f : a ⇨ c} {h : c ⇨ c′}
       → first h ∘ first f ≈ first (h ∘ f)
   first∘first {b = b} = first∘⊗ {b = b}   -- = ⊗∘first
 
-  second∘second : ∀ {c : obj}{g : b ⇨ d}{k : d ⇨ d′}
+  second∘second : {c : obj} {g : b ⇨ d} {k : d ⇨ d′}
       → second k ∘ second g ≈ second (k ∘ g)
   second∘second {c = c} = second∘⊗ {c = c}   -- = ⊗∘second
 
-  first∘second : ∀ {f : a ⇨ c}{g : b ⇨ d}
+  first∘second : {f : a ⇨ c} {g : b ⇨ d}
       → first f ∘ second g ≈ f ⊗ g
   first∘second = first∘⊗ ; ⊗≈ˡ identityʳ
 
-  second∘first : ∀ {f : a ⇨ c}{g : b ⇨ d}
+  second∘first : {f : a ⇨ c} {g : b ⇨ d}
       → second g ∘ first f ≈ f ⊗ g
   second∘first = second∘⊗ ; ⊗≈ʳ identityʳ
 
@@ -205,6 +206,24 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   -- There many be broad consequences.
 
 open Cartesian ⦃ … ⦄ public
+
+
+record IndexedCartesian
+   {obj : Set o} {ℓᵢ} (I : Set ℓᵢ) ⦃ _ : IndexedProducts obj I ⦄
+   (_⇨′_ : obj → obj → Set ℓ)
+   {q} ⦃ _ : Equivalent q _⇨′_ ⦄
+   ⦃ _ : R.Category _⇨′_ ⦄ ⦃ _ : R.IndexedCartesian I _⇨′_ ⦄
+   ⦃ _ : Category _⇨′_ ⦄
+  : Set (o ⊔ ℓ ⊔ ℓᵢ ⊔ q) where
+  private infix 0 _⇨_; _⇨_ = _⇨′_
+  field
+    ∀Π : {B : I → obj} {fs : ∀ i → a ⇨ B i} {k : a ⇨ Π B} →
+         k ≈ △ fs ⇔ (∀ i → ex i ∘ k ≈ fs i)
+    △≈ : {B : I → obj} {fs gs : ∀ i → a ⇨ B i} →
+         (∀ i → fs i ≈ gs i) → △ fs ≈ △ gs
+
+open IndexedCartesian ⦃ … ⦄ public
+
 
 record CartesianClosed {obj : Set o} ⦃ _ : Products obj ⦄
                        ⦃ _ : Exponentials obj ⦄ (_⇨′_ : obj → obj → Set ℓ)
@@ -214,24 +233,24 @@ record CartesianClosed {obj : Set o} ⦃ _ : Products obj ⦄
                        ⦃ _ : R.Cartesian _⇨′_ ⦄
                        ⦃ _ : R.CartesianClosed _⇨′_ ⦄
                        ⦃ lCat : Category _⇨′_ ⦄ ⦃ lCart : Cartesian _⇨′_ ⦄
-       : Set (suc o ⊔ ℓ ⊔ suc q) where
+       : Set (o ⊔ ℓ ⊔ q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
-    ∀⇛ : ∀ {f : a × b ⇨ c} {g : a ⇨ (b ⇛ c)} → (g ≈ curry f) ⇔ (f ≈ uncurry g)
+    ∀⇛ : {f : a × b ⇨ c} {g : a ⇨ (b ⇛ c)} → (g ≈ curry f) ⇔ (f ≈ uncurry g)
     -- Note: uncurry g ≡ apply ∘ first g ≡ apply ∘ (g ⊗ id)
     -- RHS is often written "apply ∘ (g ⊗ id)"
 
     curry≈ : ∀ {f g : a × b ⇨ c} → f ≈ g → curry f ≈ curry g
 
-  ∀⇛→ : ∀ {f : a × b ⇨ c} {g : a ⇨ (b ⇛ c)}
+  ∀⇛→ : {f : a × b ⇨ c} {g : a ⇨ (b ⇛ c)}
       → g ≈ curry f → f ≈ uncurry g
   ∀⇛→ = to ∀⇛ ⟨$⟩_
 
-  ∀⇛← : ∀ {f : a × b ⇨ c} {g : a ⇨ (b ⇛ c)}
+  ∀⇛← : {f : a × b ⇨ c} {g : a ⇨ (b ⇛ c)}
       → f ≈ uncurry g → g ≈ curry f
   ∀⇛← = from ∀⇛ ⟨$⟩_
 
-  curry-apply : ∀ {a b : obj} → id { a = a ⇛ b } ≈ curry apply
+  curry-apply : {a b : obj} → id { a = a ⇛ b } ≈ curry apply
   curry-apply = ∀⇛← (begin
                        apply
                      ≈˘⟨ identityʳ ⟩
@@ -249,7 +268,7 @@ record Logic {obj : Set o}
              (_⇨′_ : obj → obj → Set ℓ) {q} ⦃ equiv : Equivalent q _⇨′_ ⦄
              ⦃ _ : R.Category _⇨′_ ⦄ ⦃ _ : R.Cartesian _⇨′_ ⦄ ⦃ _ : R.Logic _⇨′_ ⦄
              -- ⦃ _ : Category _⇨′_ ⦄
-       : Set (suc o ⊔ ℓ ⊔ suc q) where
+       : Set (o ⊔ ℓ ⊔ q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
     f∘cond : {f : a ⇨ b} → f ∘ cond ≈ cond ∘ second (f ⊗ f)
