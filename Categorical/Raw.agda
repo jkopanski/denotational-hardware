@@ -133,6 +133,27 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
 open Cartesian ⦃ … ⦄ public
 
 
+record Semigroup {obj : Set o} ⦃ _ : Products obj ⦄ (M : obj)
+    (_⇨′_ : obj → obj → Set ℓ) ⦃ _ : Category _⇨′_ ⦄
+   : Set (o ⊔ ℓ) where
+  private infix 0 _⇨_; _⇨_ = _⇨′_
+  field
+    ⟨∙⟩ : M × M ⇨ M
+
+open Semigroup ⦃ … ⦄ public
+
+record Monoid {obj : Set o} ⦃ _ : Products obj ⦄ (M : obj)
+    (_⇨′_ : obj → obj → Set ℓ) ⦃ _ : Category _⇨′_ ⦄
+    -- ⦃ _ : Semigroup M _⇨′_ ⦄
+   : Set (o ⊔ ℓ) where
+  private infix 0 _⇨_; _⇨_ = _⇨′_
+  field
+    ⟨ε⟩ : ⊤ ⇨ M
+
+open Monoid ⦃ … ⦄ public
+
+
+{-
 record IndexedCartesian
     {obj : Set o} {ℓᵢ} (I : Set ℓᵢ) ⦃ _ : IndexedProducts obj I ⦄
     (_⇨′_ : obj → obj → Set ℓ) ⦃ _ : Category _⇨′_ ⦄
@@ -153,6 +174,7 @@ record IndexedCartesian
   map f = ⨂ (const f)
 
 open IndexedCartesian ⦃ … ⦄ public
+-}
 
 
 record CartesianClosed {obj : Set o}

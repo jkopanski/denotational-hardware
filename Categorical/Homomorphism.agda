@@ -6,7 +6,7 @@ open import Level
 
 open import Categorical.Raw public
 open import Categorical.Laws as L
-       hiding (Category; Cartesian; CartesianClosed; Logic)
+       hiding (Category; Cartesian; Semigroup; Monoid; CartesianClosed; Logic)
 open import Categorical.Reasoning
 
 private
@@ -71,7 +71,7 @@ record ProductsH
     {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄
     (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
     ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
-    : Set (o₁ ⊔ o₂ ⊔ ℓ₂ {- ⊔ q -}) where
+    : Set (o₁ ⊔ o₂ ⊔ ℓ₂) where
   private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
   field
     -- https://ncatlab.org/nlab/show/monoidal+functor
@@ -289,6 +289,92 @@ id-CartesianH = record
   ; F-exr = identityʳ
   }
 
+
+record SemigroupHₒ
+    {obj₁ : Set o₁} ⦃ _ : Products obj₁ ⦄ (M₁ : obj₁)
+    {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ (M₂ : obj₂)
+    (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
+    ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄ : Set (o₁ ⊔ o₂ ⊔ ℓ₂) where
+  private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
+  field
+    δ   : M₂ ⇨₂ Fₒ M₁
+    δ⁻¹ : Fₒ M₁ ⇨₂ M₂
+
+open SemigroupHₒ ⦃ … ⦄ public
+
+id-SemigroupHₒ : ∀ {obj : Set o} (M : obj) ⦃ _ : Products obj ⦄
+                   {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
+               → SemigroupHₒ M M _⇨_ ⦃ Hₒ = id-Hₒ ⦄
+id-SemigroupHₒ M = record { δ = id ; δ⁻¹ = id }
+
+record StrongSemigroupHₒ
+   {obj₁ : Set o₁} ⦃ _ : Products obj₁ ⦄ (M₁ : obj₁)
+   {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ (M₂ : obj₂)
+   (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂) ⦃ _ : Category _⇨₂′_ ⦄
+   {q} ⦃ _ : Equivalent q _⇨₂′_ ⦄
+   ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄ ⦃ pH : SemigroupHₒ M₁ M₂ _⇨₂′_ ⦄
+   : Set (o₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
+  private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
+  field
+    δ⁻¹∘δ : δ⁻¹ ∘ δ ≈ id
+    δ∘δ⁻¹ : δ ∘ δ⁻¹ ≈ id
+
+open StrongSemigroupHₒ ⦃ … ⦄ public
+
+id-StrongSemigroupHₒ :
+    ∀ {obj : Set o} ⦃ _ : Products obj ⦄ (M : obj)
+    {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
+    {q} ⦃ _ : Equivalent q _⇨_ ⦄ ⦃ _ : L.Category _⇨_ ⦄ →
+  StrongSemigroupHₒ M M _⇨_ ⦃ Hₒ = id-Hₒ ⦄ ⦃ pH = id-SemigroupHₒ M ⦄
+id-StrongSemigroupHₒ M = record { δ⁻¹∘δ = L.identityˡ ; δ∘δ⁻¹ = L.identityˡ }
+
+-- TODO: explicit vs implicit M in id-StrongSemigroupHₒ & id-StrongSemigroupHₒ?
+
+
+-- Semigroup homomorphism
+record SemigroupH
+         {obj₁ : Set o₁} ⦃ _ : Products obj₁ ⦄ (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁)
+         {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂)
+         {q} ⦃ _ : Equivalent q _⇨₂_ ⦄
+         ⦃ _ : Category _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₁_ ⦄
+         ⦃ _ : Category _⇨₂_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄
+         (M₁ : obj₁) ⦃ _ : Semigroup M₁ _⇨₁_ ⦄
+         (M₂ : obj₂) ⦃ _ : Semigroup M₂ _⇨₂_ ⦄
+         ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
+         ⦃ H : Homomorphism _⇨₁_ _⇨₂_ ⦄
+         ⦃ pH : ProductsH obj₁ _⇨₂_ ⦄
+         ⦃ _ : SemigroupHₒ M₁ M₂ _⇨₂_ ⦄
+       : Set (o₁ ⊔ ℓ₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
+  field
+    F-⟨∙⟩ : Fₘ ⟨∙⟩ ∘ μ ∘ (δ ⊗ δ) ≈ δ ∘ ⟨∙⟩
+
+-- Monoid homomorphism
+record MonoidH
+         {obj₁ : Set o₁} ⦃ _ : Products obj₁ ⦄ (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁)
+         {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂)
+         {q} ⦃ _ : Equivalent q _⇨₂_ ⦄
+         ⦃ _ : Category _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₁_ ⦄
+         ⦃ _ : Category _⇨₂_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄
+         (M₁ : obj₁) ⦃ _ : Semigroup M₁ _⇨₁_ ⦄ ⦃ _ : Monoid M₁ _⇨₁_ ⦄
+         (M₂ : obj₂) ⦃ _ : Semigroup M₂ _⇨₂_ ⦄ ⦃ _ : Monoid M₂ _⇨₂_ ⦄
+         ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
+         ⦃ H : Homomorphism _⇨₁_ _⇨₂_ ⦄
+         ⦃ pH : ProductsH obj₁ _⇨₂_ ⦄
+         ⦃ _ : SemigroupHₒ M₁ M₂ _⇨₂_ ⦄
+         ⦃ _ : SemigroupH _⇨₁_ _⇨₂_ M₁ M₂ ⦄  -- Not strictly necessary
+       : Set (o₁ ⊔ ℓ₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
+  field
+    F-⟨ε⟩ : δ ∘ ⟨ε⟩ ≈ Fₘ ⟨ε⟩ ∘ ε
+
+{-
+⟨ε⟩ : ⊤ ⇨₁ M₁
+⟨ε⟩ : ⊤ ⇨₂ M₂
+
+δ ∘ ⟨ε⟩ : ⊤ ⇨₂ Fₒ M₁
+Fₘ ⟨ε⟩ ∘ ε : ⊤ ⇨₂ Fₒ M₁
+-}
+
+
 record ExponentialsH
     (obj₁ : Set o₁) ⦃ _ : Exponentials obj₁ ⦄
     {obj₂ : Set o₂} ⦃ _ : Exponentials obj₂ ⦄ (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
@@ -297,7 +383,6 @@ record ExponentialsH
   private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
   field
     ν : {a b : obj₁} → (Fₒ a ⇛ Fₒ b) ⇨₂ Fₒ (a ⇛ b)
-
     -- *Strong*?
     ν⁻¹ : {a b : obj₁} → Fₒ (a ⇛ b) ⇨₂ (Fₒ a ⇛ Fₒ b)
 
@@ -310,18 +395,11 @@ record BooleanH
     {obj₂ : Set o₂} ⦃ _ : Boolean obj₂ ⦄ (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
     ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
     -- {q : Level} ⦃ _ : Equivalent q _⇨₂′_ ⦄
-    : Set (o₁ ⊔ o₂ ⊔ ℓ₂ {- ⊔ q -}) where
+    : Set (o₁ ⊔ o₂ ⊔ ℓ₂) where
   private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
   field
     β   : Bool ⇨₂ Fₒ Bool
     β⁻¹ : Fₒ Bool ⇨₂ Bool
-  
-    -- -- Oops. These two need Category _⇨₂_, which we won't always have,
-    -- -- e.g., for primitives.
-    -- -- TODO: Maybe split off StrongBooleanH with β⁻¹ and the inverse
-    -- -- properties, and similarly for ProductsH.
-    -- β⁻¹∘β : β⁻¹ ∘ β ≈ id
-    -- β∘β⁻¹ : β ∘ β⁻¹ ≈ id
 
 open BooleanH ⦃ … ⦄ public
 
@@ -331,12 +409,7 @@ id-BooleanH : {obj₂ : Set o} ⦃ _ : Boolean obj₂ ⦄
               -- {q : Level} ⦃ _ : Equivalent q _⇨₂_ ⦄
               -- ⦃ _ : L.Category _⇨₂_ ⦃ rcat = cat₂ ⦄ ⦄
             → BooleanH obj₂ _⇨₂_ ⦃ Hₒ = id-Hₒ ⦄
-id-BooleanH = record
-  { β   = id
-  ; β⁻¹ = id
-  -- ; β⁻¹∘β = {!identityˡ!}
-  -- ; β∘β⁻¹ = {!identityˡ!}
-  }
+id-BooleanH = record { β = id ; β⁻¹ = id }
 
 record StrongBooleanH
     (obj₁ : Set o₁) ⦃ _ : Boolean obj₁ ⦄

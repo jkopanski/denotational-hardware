@@ -3,6 +3,8 @@
 module Everything where
 
 import Show
+import HasAlgebra
+
 import Categorical.Object
 import Categorical.Equiv
 import Categorical.Raw

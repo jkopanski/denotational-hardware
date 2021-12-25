@@ -31,11 +31,13 @@ record Products (obj : Set o) : Set o where
 
 open Products ⦃ … ⦄ public
 
+{-
 record IndexedProducts (obj : Set o) {ℓᵢ} (I : Set ℓᵢ) : Set (o ⊔ ℓᵢ) where
   field
     Π : (I → obj) → obj
 
 open IndexedProducts ⦃ … ⦄ public
+-}
 
 record Exponentials (obj : Set o) : Set o where
   infixr 1 _⇛_

@@ -23,14 +23,23 @@ module →-raw-instances where
     cartesian : Cartesian Function
     cartesian = record { _▵_ = <_,_> ; exl = proj₁ ; exr = proj₂ }
 
-    indexedCartesian : ∀ {I : Set ℓ} → IndexedCartesian I Function
-    indexedCartesian = record
-      { △  = λ fs x i → fs i x
-      ; ex = λ i xs → xs i
-      }
+    -- indexedCartesian : ∀ {I : Set ℓ} → IndexedCartesian I Function
+    -- indexedCartesian = record
+    --   { △  = λ fs x i → fs i x
+    --   ; ex = λ i xs → xs i
+    --   }
 
     cartesianClosed : CartesianClosed Function
     cartesianClosed = record { curry = ×.curry ; apply = ×.uncurry id }
+
+    open import HasAlgebra
+
+    semigroup : ∀ {A : Set ℓ} ⦃ _ : HasRawSemigroup A ⦄ → Semigroup A Function
+    semigroup = record { ⟨∙⟩ = uncurry _∙_ }
+
+    monoid : ∀ {A : Set ℓ} ⦃ _ : HasRawSemigroup A ⦄ ⦃ _ : HasRawMonoid A ⦄ →
+      Monoid A Function
+    monoid = record { ⟨ε⟩ = λ { tt → ε } }
 
     logic : Logic Function
     logic = record
