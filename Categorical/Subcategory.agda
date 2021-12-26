@@ -6,7 +6,7 @@ open import Level
 
 open import Categorical.Homomorphism
 open import Categorical.Laws as L
-       hiding (Category; Cartesian; CartesianClosed; Logic)
+       hiding (Category; Cartesian; Semigroup; Monoid; CartesianClosed; Logic)
 open import Categorical.Reasoning
 
 module Categorical.Subcategory
@@ -41,6 +41,20 @@ module subcategory-instances where
                        ; exl = mk (exl ∘ μ⁻¹)
                        ; exr = mk (exr ∘ μ⁻¹)
                        }
+
+    semigroup : ⦃ _ : Products obj ⦄ ⦃ _ : MonoidObj obj ⦄
+                ⦃ _ : Products I   ⦄ ⦃ _ : MonoidObj I ⦄
+                ⦃ _ : ProductsH I _↠_ ⦄ ⦃ _ : MonoidObjH I _↠_ ⦄
+                ⦃ _ : Cartesian _↠_ ⦄ ⦃ _ : Semigroup _↠_ ⦄ →
+                Semigroup _⇨_
+    semigroup = record { ⟨∙⟩ = mk (δ ∘ ⟨∙⟩ ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹) }
+
+    monoid : ⦃ _ : Products obj ⦄ ⦃ _ : MonoidObj obj ⦄
+             ⦃ _ : Products I   ⦄ ⦃ _ : MonoidObj I ⦄
+             ⦃ _ : ProductsH I _↠_ ⦄ ⦃ _ : MonoidObjH I _↠_ ⦄
+             ⦃ _ : Cartesian _↠_ ⦄ ⦃ _ : Semigroup _↠_ ⦄ ⦃ _ : Monoid _↠_ ⦄ →
+             Monoid _⇨_
+    monoid = record { ⟨ι⟩ = mk (δ ∘ ⟨ι⟩ ∘ ε⁻¹) }
 
     logic : ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄
             ⦃ _ : Cartesian _↠_ ⦄ ⦃ _ : Logic _↠_ ⦄

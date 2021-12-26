@@ -79,3 +79,8 @@ module →-instances where
 
     boolean : Boolean (Set ℓ)
     boolean = record { Bool = Lift ℓ B.Bool }
+
+    open import HasAlgebra
+
+    monoidObj : ∀ {A : Set ℓ} ⦃ _ : HasRawSemigroup A ⦄ → MonoidObj (Set ℓ)
+    monoidObj {A = A} = record { M = A }

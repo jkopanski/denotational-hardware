@@ -34,13 +34,13 @@ module _ where
 
 record HasRawMonoid (A : Set a) ⦃ _ : HasRawSemigroup A ⦄ : Set a where
   field
-    ε : A
+    ι : A
 
 open HasRawMonoid ⦃ … ⦄ public
 
 record HasMonoid (A : Set a) ⦃ _ : HasRawSemigroup A ⦄ ⦃ _ : HasRawMonoid A ⦄ : Set a where
   field
-    ∙-identityˡ : LeftIdentity  ε _∙_
-    ∙-identityʳ : RightIdentity ε _∙_
+    ∙-identityˡ : LeftIdentity  ι _∙_
+    ∙-identityʳ : RightIdentity ι _∙_
 
 open HasMonoid ⦃ … ⦄ public

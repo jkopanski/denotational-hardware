@@ -133,7 +133,7 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
 open Cartesian ⦃ … ⦄ public
 
 
-record Semigroup {obj : Set o} ⦃ _ : Products obj ⦄ (M : obj)
+record Semigroup {obj : Set o} ⦃ _ : Products obj ⦄ ⦃ _ : MonoidObj obj ⦄
     (_⇨′_ : obj → obj → Set ℓ) ⦃ _ : Category _⇨′_ ⦄
    : Set (o ⊔ ℓ) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
@@ -142,13 +142,13 @@ record Semigroup {obj : Set o} ⦃ _ : Products obj ⦄ (M : obj)
 
 open Semigroup ⦃ … ⦄ public
 
-record Monoid {obj : Set o} ⦃ _ : Products obj ⦄ (M : obj)
+record Monoid {obj : Set o} ⦃ _ : Products obj ⦄ ⦃ _ : MonoidObj obj ⦄
     (_⇨′_ : obj → obj → Set ℓ) ⦃ _ : Category _⇨′_ ⦄
-    -- ⦃ _ : Semigroup M _⇨′_ ⦄
+    ⦃ _ : Semigroup _⇨′_ ⦄  -- not strictly necessary
    : Set (o ⊔ ℓ) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
-    ⟨ε⟩ : ⊤ ⇨ M
+    ⟨ι⟩ : ⊤ ⇨ M
 
 open Monoid ⦃ … ⦄ public
 

@@ -208,9 +208,9 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
 open Cartesian ⦃ … ⦄ public
 
 
-record Semigroup {obj : Set o} ⦃ _ : Products obj ⦄ (M : obj)
+record Semigroup {obj : Set o} ⦃ _ : Products obj ⦄ ⦃ _ : MonoidObj obj ⦄
    (_⇨′_ : obj → obj → Set ℓ) {q} ⦃ equiv : Equivalent q _⇨′_ ⦄
-   ⦃ _ : R.Category _⇨′_ ⦄ ⦃ _ : R.Cartesian _⇨′_ ⦄ ⦃ _ : R.Semigroup M _⇨′_ ⦄
+   ⦃ _ : R.Category _⇨′_ ⦄ ⦃ _ : R.Cartesian _⇨′_ ⦄ ⦃ _ : R.Semigroup _⇨′_ ⦄
    ⦃ lCat : Category _⇨′_ ⦄ : Set (o ⊔ ℓ ⊔ q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
@@ -220,18 +220,17 @@ record Semigroup {obj : Set o} ⦃ _ : Products obj ⦄ (M : obj)
 open Semigroup ⦃ … ⦄ public
 
 
-record Monoid {obj : Set o} ⦃ _ : Products obj ⦄ (M : obj)
+record Monoid {obj : Set o} ⦃ _ : Products obj ⦄ ⦃ _ : MonoidObj obj ⦄
    (_⇨′_ : obj → obj → Set ℓ) {q} ⦃ equiv : Equivalent q _⇨′_ ⦄
    ⦃ _ : R.Category _⇨′_ ⦄ ⦃ _ : R.Cartesian _⇨′_ ⦄
-   ⦃ _ : R.Semigroup M _⇨′_ ⦄
-   ⦃ _ : R.Monoid M _⇨′_ ⦄
+   ⦃ _ : R.Semigroup _⇨′_ ⦄ ⦃ _ : R.Monoid _⇨′_ ⦄
    ⦃ lCat : Category _⇨′_ ⦄
-   ⦃ _ : Semigroup M _⇨′_ ⦄
+   ⦃ _ : Semigroup _⇨′_ ⦄
    : Set (o ⊔ ℓ ⊔ q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
-    ⟨∙⟩-identityˡ : ⟨∙⟩ ∘ first  ⟨ε⟩ ≈ unitorᵉˡ  -- ε ∙ y ≡ y
-    ⟨∙⟩-identityʳ : ⟨∙⟩ ∘ second ⟨ε⟩ ≈ unitorᵉʳ  -- x ∙ ε ≡ x
+    ⟨∙⟩-identityˡ : ⟨∙⟩ ∘ first  ⟨ι⟩ ≈ unitorᵉˡ  -- ι ∙ y ≡ y
+    ⟨∙⟩-identityʳ : ⟨∙⟩ ∘ second ⟨ι⟩ ≈ unitorᵉʳ  -- x ∙ ι ≡ x
 
 open Monoid ⦃ … ⦄ public
 
