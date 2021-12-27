@@ -348,6 +348,37 @@ record SemigroupH
   field
     F-⟨∙⟩ : Fₘ ⟨∙⟩ ∘ μ ∘ (δ ⊗ δ) ≈ δ ∘ ⟨∙⟩
 
+  module _
+    ⦃ _ : StrongProductsH obj₁ _⇨₂_ ⦄ ⦃ _ : StrongMonoidObjH obj₁ _⇨₂_ ⦄
+    ⦃ _ : L.Category _⇨₂_ ⦄ ⦃ _ : L.Cartesian _⇨₂_ ⦄
+    where
+
+    F-⟨∙⟩′ : Fₘ ⟨∙⟩ ≈ δ ∘ ⟨∙⟩ ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
+    F-⟨∙⟩′ =
+      ( sym (cancelInner (⊗-inverse δ∘δ⁻¹ δ∘δ⁻¹) ; ∘-assoc-elimʳ μ∘μ⁻¹)
+      ; ∘≈ˡ (∘-assocʳ ; F-⟨∙⟩)
+      ; ∘-assocʳ )
+
+    -- F-⟨∙⟩′ =
+    --   begin
+    --     Fₘ ⟨∙⟩
+    --   ≈˘⟨ elimʳ μ∘μ⁻¹ ⟩
+    --     Fₘ ⟨∙⟩ ∘ μ ∘ μ⁻¹
+    --   ≈˘⟨ ∘-assocʳ ⟩
+    --     (Fₘ ⟨∙⟩ ∘ μ) ∘ μ⁻¹
+    --   ≈˘⟨ cancelInner (⊗-inverse δ∘δ⁻¹ δ∘δ⁻¹) ⟩
+    --     ((Fₘ ⟨∙⟩ ∘ μ) ∘ (δ ⊗ δ)) ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
+    --   ≈˘⟨ ∘≈ˡ ∘-assocˡ ⟩
+    --     (Fₘ ⟨∙⟩ ∘ μ ∘ (δ ⊗ δ)) ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
+    --   ≈⟨ ∘≈ˡ F-⟨∙⟩ ⟩
+    --     (δ ∘ ⟨∙⟩) ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
+    --   ≈⟨ ∘-assocʳ ⟩
+    --     δ ∘ ⟨∙⟩ ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
+    --   ∎
+
+open SemigroupH ⦃ … ⦄ public
+
+
 -- Monoid homomorphism
 record MonoidH
          {obj₁ : Set o₁} ⦃ _ : Products obj₁ ⦄ ⦃ _ : MonoidObj obj₁ ⦄
@@ -363,7 +394,27 @@ record MonoidH
          ⦃ _ : SemigroupH _⇨₁_ _⇨₂_ ⦄  -- Not strictly necessary
        : Set (o₁ ⊔ ℓ₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
   field
-    F-⟨ι⟩ : δ ∘ ⟨ι⟩ ≈ Fₘ ⟨ι⟩ ∘ ε
+    F-⟨ι⟩ : Fₘ ⟨ι⟩ ∘ ε ≈ δ ∘ ⟨ι⟩
+
+  module _ 
+    ⦃ _ : StrongProductsH obj₁ _⇨₂_ ⦄ ⦃ _ : StrongMonoidObjH obj₁ _⇨₂_ ⦄
+    ⦃ _ : L.Category _⇨₂_ ⦄ ⦃ _ : L.Cartesian _⇨₂_ ⦄
+    where
+
+    F-⟨ι⟩′ : Fₘ ⟨ι⟩ ≈ δ ∘ ⟨ι⟩ ∘ ε⁻¹
+    F-⟨ι⟩′ = sym (elimʳ ε∘ε⁻¹) ; ∘-assocˡʳ′ F-⟨ι⟩
+
+    -- F-⟨ι⟩′ : Fₘ ⟨ι⟩ ≈ δ ∘ ⟨ι⟩ ∘ ε⁻¹
+    -- F-⟨ι⟩′ =
+    --   begin
+    --     Fₘ ⟨ι⟩
+    --   ≈⟨ sym (elimʳ ε∘ε⁻¹) ⟩
+    --     Fₘ ⟨ι⟩ ∘ ε ∘ ε⁻¹
+    --   ≈⟨ ∘-assocˡʳ′ F-⟨ι⟩ ⟩
+    --     δ ∘ ⟨ι⟩ ∘ ε⁻¹
+    --   ∎
+
+open MonoidH ⦃ … ⦄ public
 
 {-
 ⟨ι⟩ : ⊤ ⇨₁ M₁
