@@ -85,7 +85,6 @@ open ProductsH ⦃ … ⦄ public
 
 id-ProductsH : ∀ {obj : Set o} ⦃ _ : Products obj ⦄
                  {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
-                 -- {q} ⦃ _ : Equivalent q _⇨_ ⦄
              → ProductsH obj _⇨_ ⦃ Hₒ = id-Hₒ ⦄
 id-ProductsH =
   record { ε = id ; μ = id ; ε⁻¹ = id ; μ⁻¹ = id }
@@ -118,6 +117,11 @@ id-StrongProductsH =
   record { ε⁻¹∘ε = L.identityˡ ; ε∘ε⁻¹ = L.identityˡ
          ; μ⁻¹∘μ = L.identityˡ ; μ∘μ⁻¹ = L.identityˡ
          }
+
+-- TODO: Try defining id-ProductsH via id-ProductsH′.
+
+-- TODO: Try defining an instance module in place of id-ProductsH′ and
+-- id-StrongProductsH′. Ditto for id-ProductsH and id-StrongProductsH.
 
 -- Cartesian homomorphism (cartesian functor)
 record CartesianH
