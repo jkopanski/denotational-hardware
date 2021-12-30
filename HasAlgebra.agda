@@ -30,7 +30,7 @@ open HasSemigroup ⦃ … ⦄ public
 module _ where
   hasSemigroup : ⦃ hrs : HasRawSemigroup A ⦄
     (is-assoc : Associative _∙_) → HasSemigroup A
-  hasSemigroup ⦃ hrs ⦄ is-assoc = record { ∙-assoc = is-assoc }
+  hasSemigroup is-assoc = record { ∙-assoc = is-assoc }
 
 record HasRawMonoid (A : Set a) ⦃ _ : HasRawSemigroup A ⦄ : Set a where
   field
@@ -38,7 +38,8 @@ record HasRawMonoid (A : Set a) ⦃ _ : HasRawSemigroup A ⦄ : Set a where
 
 open HasRawMonoid ⦃ … ⦄ public
 
-record HasMonoid (A : Set a) ⦃ _ : HasRawSemigroup A ⦄ ⦃ _ : HasRawMonoid A ⦄ : Set a where
+record HasMonoid (A : Set a)
+    ⦃ _ : HasRawSemigroup A ⦄ ⦃ _ : HasRawMonoid A ⦄ : Set a where
   field
     ∙-identityˡ : LeftIdentity  ι _∙_
     ∙-identityʳ : RightIdentity ι _∙_
