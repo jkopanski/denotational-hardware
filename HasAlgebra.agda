@@ -68,8 +68,8 @@ record HasSemiring (A : Set a) ⦃ _ : HasRawSemiring A ⦄ : Set a where
     *-identityˡ : {y : A} → 1# * y ≡ y
     *-identityʳ : {x : A} → x * 1# ≡ x
     -- Connection (distributivity) 
-    *-distribˡ : {x y z : A} → (x + y) * z ≡ x * z + y * z
-    *-distribʳ : {x y z : A} → x * (y + z) ≡ x * y + x * z
+    *-distribˡ : {x y z : A} → x * (y + z) ≡ x * y + x * z
+    *-distribʳ : {x y z : A} → (x + y) * z ≡ x * z + y * z
     *-zeroˡ : {y : A} → 0# * y ≡ 0#
     *-zeroʳ : {x : A} → x * 0# ≡ 0#
 
