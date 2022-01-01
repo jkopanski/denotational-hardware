@@ -64,13 +64,13 @@ module →-laws-instances where
     open import HasAlgebra
 
     semigroup : ∀ {A : Set ℓ} ⦃ _ : HasRawSemigroup A ⦄ ⦃ _ : HasSemigroup A ⦄ → Semigroup Function
-    semigroup = record { ⟨∙⟩-assoc = λ ((x , y) , z) → ∙-assoc x y z }
+    semigroup = record { ⟨∙⟩-assoc = λ _ → ∙-assoc }
 
     monoid : ∀ {A : Set ℓ} ⦃ _ : HasRawSemigroup A ⦄ ⦃ _ : HasSemigroup A ⦄
       ⦃ _ : HasRawMonoid A ⦄ ⦃ _ : HasMonoid A ⦄ → Monoid Function
     monoid = record
-      { ⟨∙⟩-identityˡ = λ (tt , y) → ∙-identityˡ y
-      ; ⟨∙⟩-identityʳ = λ (x , tt) → ∙-identityʳ x
+      { ⟨∙⟩-identityˡ = λ _ → ∙-identityˡ
+      ; ⟨∙⟩-identityʳ = λ _ → ∙-identityʳ
       }
 
     logic : Logic Function
