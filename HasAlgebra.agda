@@ -32,6 +32,7 @@ module _ where
     (is-assoc : Associative _∙_) → HasSemigroup A
   hasSemigroup is-assoc = record { ∙-assoc = is-assoc }
 
+
 record HasRawMonoid (A : Set a) ⦃ _ : HasRawSemigroup A ⦄ : Set a where
   field
     ι : A
@@ -45,3 +46,31 @@ record HasMonoid (A : Set a)
     ∙-identityʳ : RightIdentity ι _∙_
 
 open HasMonoid ⦃ … ⦄ public
+
+
+record HasRawSemiring (A : Set a) : Set a where
+  infixl 6 _+_
+  infixl 7 _*_
+  field
+    0# 1# : A
+    _+_ _*_ : A → A → A
+
+open HasRawSemiring ⦃ … ⦄ public
+
+record HasSemiring (A : Set a) ⦃ _ : HasRawSemiring A ⦄ : Set a where
+  field
+    -- Additive monoid
+    +-assoc : {x y z : A} → (x + y) + z ≡ x + (y + z)
+    +-identityˡ : {y : A} → 0# + y ≡ y
+    +-identityʳ : {x : A} → x + 0# ≡ x
+    -- Multiplicative monoid
+    *-assoc : {x y z : A} → (x * y) * z ≡ x * (y * z)
+    *-identityˡ : {y : A} → 1# * y ≡ y
+    *-identityʳ : {x : A} → x * 1# ≡ x
+    -- Connection (distributivity) 
+    *-distribˡ : {x y z : A} → (x + y) * z ≡ x * z + y * z
+    *-distribʳ : {x y z : A} → x * (y + z) ≡ x * y + x * z
+    *-zeroˡ : {y : A} → 0# * y ≡ 0#
+    *-zeroʳ : {x : A} → x * 0# ≡ 0#
+
+open HasSemiring ⦃ … ⦄ public
