@@ -69,8 +69,8 @@ module →-laws-instances where
     monoid : ∀ {A : Set ℓ} ⦃ _ : HasRawSemigroup A ⦄ ⦃ _ : HasSemigroup A ⦄
       ⦃ _ : HasRawMonoid A ⦄ ⦃ _ : HasMonoid A ⦄ → Monoid Function
     monoid = record
-      { ⟨∙⟩-identityˡ = λ _ → ∙-identityˡ
-      ; ⟨∙⟩-identityʳ = λ _ → ∙-identityʳ
+      { ⟨∙⟩-identityˡ = λ (tt , _) → ∙-identityˡ
+      ; ⟨∙⟩-identityʳ = λ (_ , tt) → ∙-identityʳ
       }
 
     logic : Logic Function
