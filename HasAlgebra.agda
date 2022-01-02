@@ -46,12 +46,6 @@ module _ {a} (A : Set a) where
 
   open HasSemigroup ⦃ … ⦄ public
 
-  module _ where
-    hasSemigroup : ⦃ _ : HasRawSemigroup ⦄ →
-      ∀ (is-assoc : Assoc _∙_) → HasSemigroup
-    hasSemigroup is-assoc = record { ∙-assoc = is-assoc }
-
-
   record HasRawMonoid ⦃ _ : HasRawSemigroup ⦄ : Set a where
     field
       ι : A
@@ -115,6 +109,7 @@ module _ {a} (A : Set a) where
             ; *-zeroˡ     = is.zeroˡ _
             ; *-zeroʳ     = is.zeroʳ _
             } where module is = IsSemiring is
+
 
 module nat-algebra where
   open import Data.Nat.Properties
