@@ -17,4 +17,4 @@ jobs:
 
       - name: Check agda code
         run: |
-          nix-shell shell.nix --command 'agda -i "." Everything.agda'
+          nix-shell --command 'agda -i "." Everything.agda'
