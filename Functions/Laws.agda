@@ -63,7 +63,7 @@ module →-laws-instances where
 
     open import HasAlgebra
 
-    monoid : ∀ {A : Set ℓ} ⦃ _ : HasRawMonoid A ⦄ ⦃ _ : HasMonoid A ⦄ → Monoid Function
+    monoid : ∀ {A : Set ℓ} ⦃ _ : HasMonoid A ⦄ → Monoid Function
     monoid = record
       { ⟨∙⟩-identityˡ = λ (tt , _) → ∙-identityˡ
       ; ⟨∙⟩-identityʳ = λ (_ , tt) → ∙-identityʳ

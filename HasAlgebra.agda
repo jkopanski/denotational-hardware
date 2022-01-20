@@ -36,16 +36,17 @@ module _ {a} (A : Set a) where
   record HasRawMonoid : Set a where
     infixl 7 _∙_
     field
-      _∙_ : Bop
       ι : A
+      _∙_ : Bop
 
   open HasRawMonoid ⦃ … ⦄ public
 
-  record HasMonoid ⦃ _ : HasRawMonoid ⦄ : Set a where
+  record HasMonoid : Set a where
     field
-      ∙-assoc : Assoc _∙_
+      ⦃ raw ⦄ : HasRawMonoid
       ∙-identityˡ : Identityˡ _∙_ ι
       ∙-identityʳ : Identityʳ _∙_ ι
+      ∙-assoc : Assoc _∙_
 
   open HasMonoid ⦃ … ⦄ public
 
