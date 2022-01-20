@@ -82,5 +82,5 @@ module →-instances where
 
     open import HasAlgebra
 
-    monoidObj : ∀ {A : Set ℓ} ⦃ _ : HasRawSemigroup A ⦄ → MonoidObj (Set ℓ)
+    monoidObj : ∀ {A : Set ℓ} ⦃ _ : HasRawMonoid A ⦄ → MonoidObj (Set ℓ)
     monoidObj {A = A} = record { M = A }

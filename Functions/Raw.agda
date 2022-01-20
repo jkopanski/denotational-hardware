@@ -34,12 +34,8 @@ module →-raw-instances where
 
     open import HasAlgebra
 
-    semigroup : ∀ {A : Set ℓ} ⦃ _ : HasRawSemigroup A ⦄ → Semigroup Function
-    semigroup = record { ⟨∙⟩ = uncurry _∙_ }
-
-    monoid : ∀ {A : Set ℓ} ⦃ _ : HasRawSemigroup A ⦄ ⦃ _ : HasRawMonoid A ⦄ →
-      Monoid Function
-    monoid = record { ⟨ι⟩ = λ { tt → ι } }
+    monoid : ∀ {A : Set ℓ} ⦃ _ : HasRawMonoid A ⦄ → Monoid Function
+    monoid = record { ⟨ι⟩ = λ { tt → ι } ; ⟨∙⟩ = uncurry _∙_ }
 
     logic : Logic Function
     logic = record

@@ -6,7 +6,7 @@ open import Level
 
 open import Categorical.Raw public
 open import Categorical.Laws as L
-       hiding (Category; Cartesian; Semigroup; Monoid; CartesianClosed; Logic)
+       hiding (Category; Cartesian; Monoid; CartesianClosed; Logic)
 open import Categorical.Reasoning
 
 private
@@ -335,27 +335,39 @@ id-StrongMonoidObjH = record { δ⁻¹∘δ = L.identityˡ ; δ∘δ⁻¹ = L.id
 -- TODO: explicit vs implicit M in id-StrongMonoidObjH & id-StrongMonoidObjH?
 
 
--- Semigroup homomorphism
-record SemigroupH
+-- Monoid homomorphism
+record MonoidH
          {obj₁ : Set o₁} ⦃ _ : Products obj₁ ⦄ ⦃ _ : MonoidObj obj₁ ⦄
          {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ ⦃ _ : MonoidObj obj₂ ⦄
          (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁) ⦃ _ : Category _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₁_ ⦄
          (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂) ⦃ _ : Category _⇨₂_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄
          {q} ⦃ _ : Equivalent q _⇨₂_ ⦄
-         ⦃ _ : Semigroup _⇨₁_ ⦄
-         ⦃ _ : Semigroup _⇨₂_ ⦄
+         ⦃ _ : Monoid _⇨₁_ ⦄ ⦃ _ : Monoid _⇨₂_ ⦄
          ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
          ⦃ H : Homomorphism _⇨₁_ _⇨₂_ ⦄
-         ⦃ pH : ProductsH obj₁ _⇨₂_ ⦄
-         ⦃ _ : MonoidObjH obj₁ _⇨₂_ ⦄
+         ⦃ pH : ProductsH obj₁ _⇨₂_ ⦄ ⦃ _ : MonoidObjH obj₁ _⇨₂_ ⦄
        : Set (o₁ ⊔ ℓ₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
   field
+    F-⟨ι⟩ : Fₘ ⟨ι⟩ ∘ ε ≈ δ ∘ ⟨ι⟩
     F-⟨∙⟩ : Fₘ ⟨∙⟩ ∘ μ ∘ (δ ⊗ δ) ≈ δ ∘ ⟨∙⟩
 
-  module _
+  module _ 
     ⦃ _ : StrongProductsH obj₁ _⇨₂_ ⦄ ⦃ _ : StrongMonoidObjH obj₁ _⇨₂_ ⦄
     ⦃ _ : L.Category _⇨₂_ ⦄ ⦃ _ : L.Cartesian _⇨₂_ ⦄
     where
+
+    F-⟨ι⟩′ : Fₘ ⟨ι⟩ ≈ δ ∘ ⟨ι⟩ ∘ ε⁻¹
+    F-⟨ι⟩′ = sym (elimʳ ε∘ε⁻¹) ; ∘-assocˡʳ′ F-⟨ι⟩
+
+    -- F-⟨ι⟩′ : Fₘ ⟨ι⟩ ≈ δ ∘ ⟨ι⟩ ∘ ε⁻¹
+    -- F-⟨ι⟩′ =
+    --   begin
+    --     Fₘ ⟨ι⟩
+    --   ≈⟨ sym (elimʳ ε∘ε⁻¹) ⟩
+    --     Fₘ ⟨ι⟩ ∘ ε ∘ ε⁻¹
+    --   ≈⟨ ∘-assocˡʳ′ F-⟨ι⟩ ⟩
+    --     δ ∘ ⟨ι⟩ ∘ ε⁻¹
+    --   ∎
 
     F-⟨∙⟩′ : Fₘ ⟨∙⟩ ≈ δ ∘ ⟨∙⟩ ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
     F-⟨∙⟩′ =
@@ -378,44 +390,6 @@ record SemigroupH
     --     (δ ∘ ⟨∙⟩) ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
     --   ≈⟨ ∘-assocʳ ⟩
     --     δ ∘ ⟨∙⟩ ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
-    --   ∎
-
-open SemigroupH ⦃ … ⦄ public
-
-
--- Monoid homomorphism
-record MonoidH
-         {obj₁ : Set o₁} ⦃ _ : Products obj₁ ⦄ ⦃ _ : MonoidObj obj₁ ⦄
-         {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ ⦃ _ : MonoidObj obj₂ ⦄
-         (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁) ⦃ _ : Category _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₁_ ⦄
-         (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂) ⦃ _ : Category _⇨₂_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄
-         {q} ⦃ _ : Equivalent q _⇨₂_ ⦄
-         ⦃ _ : Semigroup _⇨₁_ ⦄ ⦃ _ : Monoid _⇨₁_ ⦄
-         ⦃ _ : Semigroup _⇨₂_ ⦄ ⦃ _ : Monoid _⇨₂_ ⦄
-         ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
-         ⦃ H : Homomorphism _⇨₁_ _⇨₂_ ⦄
-         ⦃ pH : ProductsH obj₁ _⇨₂_ ⦄ ⦃ _ : MonoidObjH obj₁ _⇨₂_ ⦄
-         ⦃ _ : SemigroupH _⇨₁_ _⇨₂_ ⦄  -- Not strictly necessary
-       : Set (o₁ ⊔ ℓ₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
-  field
-    F-⟨ι⟩ : Fₘ ⟨ι⟩ ∘ ε ≈ δ ∘ ⟨ι⟩
-
-  module _ 
-    ⦃ _ : StrongProductsH obj₁ _⇨₂_ ⦄ ⦃ _ : StrongMonoidObjH obj₁ _⇨₂_ ⦄
-    ⦃ _ : L.Category _⇨₂_ ⦄ ⦃ _ : L.Cartesian _⇨₂_ ⦄
-    where
-
-    F-⟨ι⟩′ : Fₘ ⟨ι⟩ ≈ δ ∘ ⟨ι⟩ ∘ ε⁻¹
-    F-⟨ι⟩′ = sym (elimʳ ε∘ε⁻¹) ; ∘-assocˡʳ′ F-⟨ι⟩
-
-    -- F-⟨ι⟩′ : Fₘ ⟨ι⟩ ≈ δ ∘ ⟨ι⟩ ∘ ε⁻¹
-    -- F-⟨ι⟩′ =
-    --   begin
-    --     Fₘ ⟨ι⟩
-    --   ≈⟨ sym (elimʳ ε∘ε⁻¹) ⟩
-    --     Fₘ ⟨ι⟩ ∘ ε ∘ ε⁻¹
-    --   ≈⟨ ∘-assocˡʳ′ F-⟨ι⟩ ⟩
-    --     δ ∘ ⟨ι⟩ ∘ ε⁻¹
     --   ∎
 
 open MonoidH ⦃ … ⦄ public

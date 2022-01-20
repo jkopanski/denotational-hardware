@@ -8,7 +8,7 @@ open import Function.Equivalence hiding (id; _∘_)
 open import Data.Product using (_,_)
 
 open import Categorical.Raw
-      hiding (Category; Cartesian; Semigroup; Monoid; CartesianClosed; Logic)
+      hiding (Category; Cartesian; Monoid; CartesianClosed; Logic)
 open import Categorical.Laws
 open import Categorical.Equiv
 open import Functions.Raw ℓ public
@@ -63,14 +63,11 @@ module →-laws-instances where
 
     open import HasAlgebra
 
-    semigroup : ∀ {A : Set ℓ} ⦃ _ : HasRawSemigroup A ⦄ ⦃ _ : HasSemigroup A ⦄ → Semigroup Function
-    semigroup = record { ⟨∙⟩-assoc = λ _ → ∙-assoc }
-
-    monoid : ∀ {A : Set ℓ} ⦃ _ : HasRawSemigroup A ⦄ ⦃ _ : HasSemigroup A ⦄
-      ⦃ _ : HasRawMonoid A ⦄ ⦃ _ : HasMonoid A ⦄ → Monoid Function
+    monoid : ∀ {A : Set ℓ} ⦃ _ : HasRawMonoid A ⦄ ⦃ _ : HasMonoid A ⦄ → Monoid Function
     monoid = record
       { ⟨∙⟩-identityˡ = λ (tt , _) → ∙-identityˡ
       ; ⟨∙⟩-identityʳ = λ (_ , tt) → ∙-identityʳ
+      ; ⟨∙⟩-assoc = λ _ → ∙-assoc
       }
 
     logic : Logic Function

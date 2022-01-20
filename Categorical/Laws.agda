@@ -8,7 +8,7 @@ open import Function.Equivalence using (_⇔_; module Equivalence)
 open import Function.Equality using (_⟨$⟩_)
 
 open import Categorical.Raw as R
-       hiding (Category; Cartesian; Semigroup; Monoid {- ; IndexedCartesian -}; CartesianClosed; Logic)
+       hiding (Category; Cartesian; Monoid {- ; IndexedCartesian -}; CartesianClosed; Logic)
 open import Categorical.Equiv
 
 open Equivalence
@@ -208,29 +208,17 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
 open Cartesian ⦃ … ⦄ public
 
 
-record Semigroup {obj : Set o} ⦃ _ : Products obj ⦄ ⦃ _ : MonoidObj obj ⦄
-   (_⇨′_ : obj → obj → Set ℓ) {q} ⦃ equiv : Equivalent q _⇨′_ ⦄
-   ⦃ _ : R.Category _⇨′_ ⦄ ⦃ _ : R.Cartesian _⇨′_ ⦄ ⦃ _ : R.Semigroup _⇨′_ ⦄
-   ⦃ lCat : Category _⇨′_ ⦄ : Set (o ⊔ ℓ ⊔ q) where
-  private infix 0 _⇨_; _⇨_ = _⇨′_
-  field
-    -- ∀ ((x , y) , z) → (x ∙ y) ∙ z ≡ x ∙ (y ∙ z)
-    ⟨∙⟩-assoc : ⟨∙⟩ ∘ first ⟨∙⟩ ≈ ⟨∙⟩ ∘ second ⟨∙⟩ ∘ assocʳ
-
-open Semigroup ⦃ … ⦄ public
-
-
 record Monoid {obj : Set o} ⦃ _ : Products obj ⦄ ⦃ _ : MonoidObj obj ⦄
    (_⇨′_ : obj → obj → Set ℓ) {q} ⦃ equiv : Equivalent q _⇨′_ ⦄
-   ⦃ _ : R.Category _⇨′_ ⦄ ⦃ _ : R.Cartesian _⇨′_ ⦄
-   ⦃ _ : R.Semigroup _⇨′_ ⦄ ⦃ _ : R.Monoid _⇨′_ ⦄
+   ⦃ _ : R.Category _⇨′_ ⦄ ⦃ _ : R.Cartesian _⇨′_ ⦄ ⦃ _ : R.Monoid _⇨′_ ⦄
    ⦃ lCat : Category _⇨′_ ⦄
-   ⦃ _ : Semigroup _⇨′_ ⦄
    : Set (o ⊔ ℓ ⊔ q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
     ⟨∙⟩-identityˡ : ⟨∙⟩ ∘ first  ⟨ι⟩ ≈ unitorᵉˡ  -- ι ∙ y ≡ y
     ⟨∙⟩-identityʳ : ⟨∙⟩ ∘ second ⟨ι⟩ ≈ unitorᵉʳ  -- x ∙ ι ≡ x
+    -- ∀ ((x , y) , z) → (x ∙ y) ∙ z ≡ x ∙ (y ∙ z)
+    ⟨∙⟩-assoc : ⟨∙⟩ ∘ first ⟨∙⟩ ≈ ⟨∙⟩ ∘ second ⟨∙⟩ ∘ assocʳ
 
 open Monoid ⦃ … ⦄ public
 

@@ -5,7 +5,7 @@ open import Level
 open import Categorical.Raw
 open import Categorical.Equiv
 open import Categorical.Laws as L
-       hiding (Category; Cartesian; Semigroup; Monoid; CartesianClosed; Logic)
+       hiding (Category; Cartesian; Monoid; CartesianClosed; Logic)
 open import Categorical.Homomorphism
 open ≈-Reasoning
 open import Categorical.Reasoning
@@ -184,15 +184,37 @@ module comma-semigroups
   ⦃ _ : MonoidObj obj₁ ⦄  ⦃ _ : MonoidObj obj₂ ⦄  ⦃ _ : MonoidObj obj₀ ⦄
   ⦃ _ : MonoidObjH obj₁ _⇨₀_ ⦄  ⦃ _ : MonoidObjH obj₂ _⇨₀_ ⦄
   ⦃ _ : StrongMonoidObjH obj₁ _⇨₀_ ⦄ -- ⦃ _ : StrongMonoidObjH obj₂ _⇨₀_ ⦄
-  ⦃ _ : Semigroup _⇨₁_ ⦄ ⦃ _ : Semigroup _⇨₂_ ⦄ ⦃ _ : Semigroup _⇨₀_ ⦄
-  ⦃ _ : SemigroupH _⇨₁_ _⇨₀_ ⦄ ⦃ _ : SemigroupH  _⇨₂_ _⇨₀_ ⦄
-  ⦃ _ : L.Semigroup _⇨₀_ ⦄
+  ⦃ _ : Monoid _⇨₁_ ⦄ ⦃ _ : Monoid _⇨₂_ ⦄ ⦃ _ : Monoid _⇨₀_ ⦄
+  ⦃ _ : MonoidH _⇨₁_ _⇨₀_ ⦄ ⦃ _ : MonoidH  _⇨₂_ _⇨₀_ ⦄
+  ⦃ _ : L.Monoid _⇨₀_ ⦄
  where
 
   instance
 
     monoidObj : MonoidObj Obj
     monoidObj = record { M = mkO (δ ∘ δ⁻¹) }
+
+    ⟨ι⟩′ : ⊤ ⇨ M
+    ⟨ι⟩′ = mk ⟨ι⟩ ⟨ι⟩
+              ( ∘≈ʳ (F-⟨ι⟩′ ; ∘-assocˡ)
+              ; ∘-assocˡʳ′ (cancelInner δ⁻¹∘δ ; sym F-⟨ι⟩)
+              )
+
+    -- ⟨ι⟩′ : ⊤ ⇨ M
+    -- ⟨ι⟩′ = mk ⟨ι⟩ ⟨ι⟩
+    --   (begin
+    --      h M ∘ Fₘ ⟨ι⟩
+    --    ≡⟨⟩
+    --      (δ ∘ δ⁻¹) ∘ Fₘ ⟨ι⟩
+    --    ≈⟨ ∘≈ʳ F-⟨ι⟩′ ⟩
+    --      (δ ∘ δ⁻¹) ∘ δ ∘ ⟨ι⟩ ∘ ε⁻¹
+    --    ≈⟨ (∘≈ʳ ∘-assocˡ ; ∘-assocˡʳ′ (cancelInner δ⁻¹∘δ)) ⟩
+    --      δ ∘ ⟨ι⟩ ∘ ε⁻¹
+    --    ≈⟨ ∘-assocˡʳ′ (sym F-⟨ι⟩) ⟩
+    --      Fₘ ⟨ι⟩ ∘ ε ∘ ε⁻¹
+    --    ≡⟨⟩
+    --      Fₘ ⟨ι⟩ ∘ h ⊤
+    --    ∎)
 
     ⟨∙⟩′ : M × M ⇨ M
     ⟨∙⟩′ = mk ⟨∙⟩ ⟨∙⟩
@@ -227,39 +249,8 @@ module comma-semigroups
     --     Fₘ ⟨∙⟩ ∘ h (M × M)
     --   ∎)
 
-    semigroup : Semigroup _⇨_
-    semigroup = record { ⟨∙⟩ = ⟨∙⟩′ }
-
-    module _
-      ⦃ _ : Monoid _⇨₁_ ⦄ ⦃ _ : Monoid _⇨₂_ ⦄ ⦃ _ : Monoid _⇨₀_ ⦄
-      ⦃ _ : MonoidH _⇨₁_ _⇨₀_ ⦄ ⦃ _ : MonoidH  _⇨₂_ _⇨₀_ ⦄
-      ⦃ _ : L.Monoid _⇨₀_ ⦄
-     where
-
-      ⟨ι⟩′ : ⊤ ⇨ M
-      ⟨ι⟩′ = mk ⟨ι⟩ ⟨ι⟩
-                ( ∘≈ʳ (F-⟨ι⟩′ ; ∘-assocˡ)
-                ; ∘-assocˡʳ′ (cancelInner δ⁻¹∘δ ; sym F-⟨ι⟩)
-                )
-
-      -- ⟨ι⟩′ : ⊤ ⇨ M
-      -- ⟨ι⟩′ = mk ⟨ι⟩ ⟨ι⟩
-      --   (begin
-      --      h M ∘ Fₘ ⟨ι⟩
-      --    ≡⟨⟩
-      --      (δ ∘ δ⁻¹) ∘ Fₘ ⟨ι⟩
-      --    ≈⟨ ∘≈ʳ F-⟨ι⟩′ ⟩
-      --      (δ ∘ δ⁻¹) ∘ δ ∘ ⟨ι⟩ ∘ ε⁻¹
-      --    ≈⟨ (∘≈ʳ ∘-assocˡ ; ∘-assocˡʳ′ (cancelInner δ⁻¹∘δ)) ⟩
-      --      δ ∘ ⟨ι⟩ ∘ ε⁻¹
-      --    ≈⟨ ∘-assocˡʳ′ (sym F-⟨ι⟩) ⟩
-      --      Fₘ ⟨ι⟩ ∘ ε ∘ ε⁻¹
-      --    ≡⟨⟩
-      --      Fₘ ⟨ι⟩ ∘ h ⊤
-      --    ∎)
-
-      monoid : Monoid _⇨_
-      monoid = record { ⟨ι⟩ = ⟨ι⟩′ }
+    monoid : Monoid _⇨_
+    monoid = record { ⟨ι⟩ = ⟨ι⟩′ ; ⟨∙⟩ = ⟨∙⟩′ }
 
 
 module comma-booleans

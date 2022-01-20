@@ -33,27 +33,17 @@ module _ {a} (A : Set a) where
   Zeroʳ _*_ 0# = ∀ {x} → x * 0# ≡ 0#
 
 
-  record HasRawSemigroup : Set a where
+  record HasRawMonoid : Set a where
     infixl 7 _∙_
     field
       _∙_ : Bop
-
-  open HasRawSemigroup ⦃ … ⦄ public
-
-  record HasSemigroup ⦃ _ : HasRawSemigroup ⦄ : Set a where
-    field
-      ∙-assoc : Assoc _∙_
-
-  open HasSemigroup ⦃ … ⦄ public
-
-  record HasRawMonoid ⦃ _ : HasRawSemigroup ⦄ : Set a where
-    field
       ι : A
 
   open HasRawMonoid ⦃ … ⦄ public
 
-  record HasMonoid ⦃ _ : HasRawSemigroup ⦄ ⦃ _ : HasRawMonoid ⦄ : Set a where
+  record HasMonoid ⦃ _ : HasRawMonoid ⦄ : Set a where
     field
+      ∙-assoc : Assoc _∙_
       ∙-identityˡ : Identityˡ _∙_ ι
       ∙-identityʳ : Identityʳ _∙_ ι
 
