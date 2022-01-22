@@ -8,7 +8,7 @@ open import Function.Equivalence hiding (id; _∘_)
 open import Data.Product using (_,_)
 
 open import Categorical.Raw
-      hiding (Category; Cartesian; Monoid; CartesianClosed; Logic)
+     hiding (Category; Cartesian; Monoid; CartesianClosed; Logic)
 open import Categorical.Laws
 open import Categorical.Equiv
 open import Functions.Raw ℓ public
@@ -63,12 +63,12 @@ module →-laws-instances where
 
     open import HasAlgebra
 
-    monoid : ∀ {A : Set ℓ} ⦃ _ : HasMonoid A ⦄ → Monoid Function
-    monoid = record
-      { ⟨∙⟩-identityˡ = λ (tt , _) → ∙-identityˡ
-      ; ⟨∙⟩-identityʳ = λ (_ , tt) → ∙-identityʳ
-      ; ⟨∙⟩-assoc = λ _ → ∙-assoc
-      }
+    -- monoid : ∀ {A : Set ℓ} ⦃ _ : HasMonoid A ⦄ → Monoid Function
+    -- monoid = record
+    --   { ⟨∙⟩-identityˡ = λ (tt , _) → ∙-identityˡ
+    --   ; ⟨∙⟩-identityʳ = λ (_ , tt) → ∙-identityʳ
+    --   ; ⟨∙⟩-assoc = λ _ → ∙-assoc 
+    --   }
 
     logic : Logic Function
     logic = record { f∘cond = λ { (𝕗 , _) → refl≡ ; (𝕥 , _) → refl≡ } }

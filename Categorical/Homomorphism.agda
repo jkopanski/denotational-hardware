@@ -293,66 +293,71 @@ id-CartesianH = record
   ; F-exr = identityʳ
   }
 
+open import HasAlgebra
 
+-- Monoid object homomorphism
 record MonoidObjH
-    (obj₁ : Set o₁) ⦃ _ : Products obj₁ ⦄ ⦃ _ : MonoidObj obj₁ ⦄
-    {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ ⦃ _ : MonoidObj obj₂ ⦄
+    {i} {I : Set i} ⦃ _ : HasRawMonoid I ⦄
+    {obj₁ : Set o₁} ⦃ _ : Products obj₁ ⦄ (M₁ : I → obj₁)
+    {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ (M₂ : I → obj₂)
     (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂)
-    ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄ : Set (o₁ ⊔ o₂ ⊔ ℓ₂) where
+    ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄ : Set (i ⊔ o₁ ⊔ o₂ ⊔ ℓ₂) where
   private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
   field
-    δ   : M ⇨₂ Fₒ M
-    δ⁻¹ : Fₒ M ⇨₂ M
+    δ   : ∀ {p : I} → M₂ p ⇨₂ Fₒ (M₁ p)
+    δ⁻¹ : ∀ {p : I} → Fₒ (M₁ p) ⇨₂ M₂ p
+    -- TODO: p as implicit vs explicit argument here and elsewhere.
 
 open MonoidObjH ⦃ … ⦄ public
 
-id-MonoidObjH : ∀ {obj : Set o} ⦃ _ : Products obj ⦄ ⦃ _ : MonoidObj obj ⦄
-                   {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
-               → MonoidObjH obj _⇨_ ⦃ Hₒ = id-Hₒ ⦄
-id-MonoidObjH = record { δ = id ; δ⁻¹ = id }
+id-MonoidObjH :
+  ∀ {obj : Set o} ⦃ _ : Products obj ⦄ {i} {I : Set i} (M : I → obj)
+  ⦃ _ : HasRawMonoid I ⦄ {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄ →
+  MonoidObjH M M _⇨_ ⦃ Hₒ = id-Hₒ ⦄
+id-MonoidObjH M = record { δ = id ; δ⁻¹ = id }
 
 record StrongMonoidObjH
-   (obj₁ : Set o₁) ⦃ _ : Products obj₁ ⦄ ⦃ _ : MonoidObj obj₁ ⦄
-   {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ ⦃ _ : MonoidObj obj₂ ⦄
-   (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂) ⦃ _ : Category _⇨₂′_ ⦄
-   {q} ⦃ _ : Equivalent q _⇨₂′_ ⦄
-   ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄ ⦃ pH : MonoidObjH obj₁ _⇨₂′_ ⦄
-   : Set (o₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
+    {i} {I : Set i} ⦃ _ : HasRawMonoid I ⦄
+    {obj₁ : Set o₁} ⦃ _ : Products obj₁ ⦄ (M₁ : I → obj₁)
+    {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ (M₂ : I → obj₂)
+    (_⇨₂′_ : obj₂ → obj₂ → Set ℓ₂) ⦃ _ : Category _⇨₂′_ ⦄
+    {q} ⦃ _ : Equivalent q _⇨₂′_ ⦄
+    ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄ ⦃ pH : MonoidObjH M₁ M₂ _⇨₂′_ ⦄
+    : Set (i ⊔ o₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
   private infix 0 _⇨₂_; _⇨₂_ = _⇨₂′_
   field
-    δ⁻¹∘δ : δ⁻¹ ∘ δ ≈ id
-    δ∘δ⁻¹ : δ ∘ δ⁻¹ ≈ id
+    δ⁻¹∘δ : ∀ {p : I} → δ⁻¹ {p = p} ∘ δ {p = p} ≈ id
+    δ∘δ⁻¹ : ∀ {p : I} → δ {p = p} ∘ δ⁻¹ {p = p} ≈ id
 
 open StrongMonoidObjH ⦃ … ⦄ public
 
 id-StrongMonoidObjH :
-    ∀ {obj : Set o} ⦃ _ : Products obj ⦄ ⦃ _ : MonoidObj obj ⦄
+    ∀ {obj : Set o} ⦃ _ : Products obj ⦄ {i} {I : Set i}
+    ⦃ _ : HasRawMonoid I ⦄ (M : I → obj)
     {_⇨_ : obj → obj → Set ℓ} ⦃ _ : Category _⇨_ ⦄
     {q} ⦃ _ : Equivalent q _⇨_ ⦄ ⦃ _ : L.Category _⇨_ ⦄ →
-  StrongMonoidObjH obj _⇨_ ⦃ Hₒ = id-Hₒ ⦄ ⦃ pH = id-MonoidObjH ⦄
-id-StrongMonoidObjH = record { δ⁻¹∘δ = L.identityˡ ; δ∘δ⁻¹ = L.identityˡ }
+  StrongMonoidObjH M M _⇨_ ⦃ Hₒ = id-Hₒ ⦄ ⦃ pH = id-MonoidObjH M ⦄
+id-StrongMonoidObjH M = record { δ⁻¹∘δ = L.identityˡ ; δ∘δ⁻¹ = L.identityˡ }
 
--- TODO: explicit vs implicit M in id-StrongMonoidObjH & id-StrongMonoidObjH?
-
-
--- Monoid homomorphism
+-- Categorical monoid homomorphism
 record MonoidH
-         {obj₁ : Set o₁} ⦃ _ : Products obj₁ ⦄ ⦃ _ : MonoidObj obj₁ ⦄
-         {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ ⦃ _ : MonoidObj obj₂ ⦄
+         {i} {I : Set i} ⦃ _ : HasMonoid I ⦄
+         {obj₁ : Set o₁} ⦃ _ : Products obj₁ ⦄ (M₁ : I → obj₁)
+         {obj₂ : Set o₂} ⦃ _ : Products obj₂ ⦄ (M₂ : I → obj₂)
          (_⇨₁_ : obj₁ → obj₁ → Set ℓ₁) ⦃ _ : Category _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₁_ ⦄
          (_⇨₂_ : obj₂ → obj₂ → Set ℓ₂) ⦃ _ : Category _⇨₂_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄
          {q} ⦃ _ : Equivalent q _⇨₂_ ⦄
-         ⦃ _ : Monoid _⇨₁_ ⦄ ⦃ _ : Monoid _⇨₂_ ⦄
+         ⦃ _ : Monoid M₁ _⇨₁_ ⦄ ⦃ _ : Monoid M₂ _⇨₂_ ⦄
          ⦃ Hₒ : Homomorphismₒ obj₁ obj₂ ⦄
          ⦃ H : Homomorphism _⇨₁_ _⇨₂_ ⦄
-         ⦃ pH : ProductsH obj₁ _⇨₂_ ⦄ ⦃ _ : MonoidObjH obj₁ _⇨₂_ ⦄
-       : Set (o₁ ⊔ ℓ₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
+         ⦃ pH : ProductsH obj₁ _⇨₂_ ⦄ ⦃ _ : MonoidObjH M₁ M₂ _⇨₂_ ⦄
+       : Set (i ⊔ o₁ ⊔ ℓ₁ ⊔ o₂ ⊔ ℓ₂ ⊔ q) where
   field
     F-⟨ι⟩ : Fₘ ⟨ι⟩ ∘ ε ≈ δ ∘ ⟨ι⟩
-    F-⟨∙⟩ : Fₘ ⟨∙⟩ ∘ μ ∘ (δ ⊗ δ) ≈ δ ∘ ⟨∙⟩
+    F-⟨∙⟩ : ∀ {p q : I} → Fₘ ⟨∙⟩ ∘ μ ∘ (δ ⊗ δ) ≈ δ ∘ ⟨∙⟩ {p = p} {q}
 
   module _ 
-    ⦃ _ : StrongProductsH obj₁ _⇨₂_ ⦄ ⦃ _ : StrongMonoidObjH obj₁ _⇨₂_ ⦄
+    ⦃ _ : StrongProductsH obj₁ _⇨₂_ ⦄ ⦃ _ : StrongMonoidObjH M₁ M₂ _⇨₂_ ⦄
     ⦃ _ : L.Category _⇨₂_ ⦄ ⦃ _ : L.Cartesian _⇨₂_ ⦄
     where
 
@@ -369,7 +374,7 @@ record MonoidH
     --     δ ∘ ⟨ι⟩ ∘ ε⁻¹
     --   ∎
 
-    F-⟨∙⟩′ : Fₘ ⟨∙⟩ ≈ δ ∘ ⟨∙⟩ ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
+    F-⟨∙⟩′ : ∀ {p q : I} → Fₘ ⟨∙⟩ ≈ δ ∘ ⟨∙⟩ {p = p} {q} ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
     F-⟨∙⟩′ =
       ( sym (cancelInner (⊗-inverse δ∘δ⁻¹ δ∘δ⁻¹) ; ∘-assoc-elimʳ μ∘μ⁻¹)
       ; ∘≈ˡ (∘-assocʳ ; F-⟨∙⟩)

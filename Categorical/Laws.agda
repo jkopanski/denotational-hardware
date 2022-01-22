@@ -208,17 +208,34 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
 open Cartesian ⦃ … ⦄ public
 
 
-record Monoid {obj : Set o} ⦃ _ : Products obj ⦄ ⦃ _ : MonoidObj obj ⦄
+open import HasAlgebra
+
+record Monoid {obj : Set o} ⦃ _ : Products obj ⦄
+   {i} {I : Set i} ⦃ _ : HasMonoid I ⦄ (M : I → obj)
    (_⇨′_ : obj → obj → Set ℓ) {q} ⦃ equiv : Equivalent q _⇨′_ ⦄
-   ⦃ _ : R.Category _⇨′_ ⦄ ⦃ _ : R.Cartesian _⇨′_ ⦄ ⦃ _ : R.Monoid _⇨′_ ⦄
+   ⦃ _ : R.Category _⇨′_ ⦄ ⦃ _ : R.Cartesian _⇨′_ ⦄
+   ⦃ _ : R.Monoid M _⇨′_ ⦄
    ⦃ lCat : Category _⇨′_ ⦄
-   : Set (o ⊔ ℓ ⊔ q) where
+   : Set (o ⊔ i ⊔ ℓ ⊔ q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
-    ⟨∙⟩-identityˡ : ⟨∙⟩ ∘ first  ⟨ι⟩ ≈ unitorᵉˡ  -- ι ∙ y ≡ y
-    ⟨∙⟩-identityʳ : ⟨∙⟩ ∘ second ⟨ι⟩ ≈ unitorᵉʳ  -- x ∙ ι ≡ x
+    ∙-identityˡ : ∀ {q : I} → M (ι ∙ q) ⇨ M q
+    ∙-identityʳ : ∀ {p : I} → M (p ∙ ι) ⇨ M p
+    ∙-assoc : ∀ {p q r : I} → M ((p ∙ q) ∙ r) ⇨ M (p ∙ (q ∙ r))
+
+    ∙-identityˡ⁻¹ : ∀ {q : I} → M q ⇨ M (ι ∙ q)
+    ∙-identityʳ⁻¹ : ∀ {p : I} → M p ⇨ M (p ∙ ι)
+    ∙-assoc⁻¹ : ∀ {p q r : I} → M (p ∙ (q ∙ r)) ⇨ M ((p ∙ q) ∙ r)
+
+    -- ι ∙ y ≡ y
+    ⟨∙⟩-identityˡ : ∀ {q} → ∙-identityˡ {q} ∘ ⟨∙⟩ ∘ first  ⟨ι⟩ ≈ unitorᵉˡ
+    -- x ∙ ι ≡ x
+    ⟨∙⟩-identityʳ : ∀ {p} → ∙-identityʳ {p} ∘ ⟨∙⟩ ∘ second ⟨ι⟩ ≈ unitorᵉʳ
     -- ∀ ((x , y) , z) → (x ∙ y) ∙ z ≡ x ∙ (y ∙ z)
-    ⟨∙⟩-assoc : ⟨∙⟩ ∘ first ⟨∙⟩ ≈ ⟨∙⟩ ∘ second ⟨∙⟩ ∘ assocʳ
+    ⟨∙⟩-assoc : ∀ {p q r : I} →
+      ∙-assoc {p} {q} {r} ∘ ⟨∙⟩ ∘ first ⟨∙⟩ ≈ ⟨∙⟩ ∘ second ⟨∙⟩ ∘ assocʳ
+
+    -- I'll probably need the inverse properties for the three isomorphisms.
 
 open Monoid ⦃ … ⦄ public
 

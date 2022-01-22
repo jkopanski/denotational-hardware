@@ -8,8 +8,9 @@ import HasAlgebra
 import Categorical.Object
 import Categorical.Equiv
 import Categorical.Raw
-import Categorical.Homomorphism
 import Categorical.Laws
+import Categorical.Reasoning
+import Categorical.Homomorphism
 import Categorical.MakeLawful
 import Categorical.Subcategory
 import Categorical.Comma

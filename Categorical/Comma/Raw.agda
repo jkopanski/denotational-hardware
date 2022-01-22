@@ -174,27 +174,66 @@ module comma-products
     cartesian = record { ! = !′ ; _▵_ = fork ; exl = exl′ ; exr = exr′ }
 
 
-module comma-semigroups
+open import HasAlgebra
+
+module comma-monoids
+  {i} {I : Set i} ⦃ _ : HasMonoid I ⦄
   ⦃ _ : Products obj₁ ⦄  ⦃ _ : Products obj₂ ⦄  ⦃ _ : Products obj₀ ⦄
   ⦃ _ : Cartesian _⇨₁_ ⦄ ⦃ _ : Cartesian _⇨₂_ ⦄ ⦃ _ : Cartesian _⇨₀_ ⦄
   ⦃ _ : L.Cartesian _⇨₀_ ⦄
   ⦃ _ : ProductsH obj₁ _⇨₀_ ⦄  ⦃ _ : ProductsH obj₂ _⇨₀_ ⦄
   ⦃ _ : StrongProductsH obj₁ _⇨₀_ ⦄ ⦃ _ : StrongProductsH obj₂ _⇨₀_ ⦄
   ⦃ _ : CartesianH _⇨₁_ _⇨₀_ ⦄ ⦃ _ : CartesianH _⇨₂_ _⇨₀_ ⦄
-  ⦃ _ : MonoidObj obj₁ ⦄  ⦃ _ : MonoidObj obj₂ ⦄  ⦃ _ : MonoidObj obj₀ ⦄
-  ⦃ _ : MonoidObjH obj₁ _⇨₀_ ⦄  ⦃ _ : MonoidObjH obj₂ _⇨₀_ ⦄
-  ⦃ _ : StrongMonoidObjH obj₁ _⇨₀_ ⦄ -- ⦃ _ : StrongMonoidObjH obj₂ _⇨₀_ ⦄
-  ⦃ _ : Monoid _⇨₁_ ⦄ ⦃ _ : Monoid _⇨₂_ ⦄ ⦃ _ : Monoid _⇨₀_ ⦄
-  ⦃ _ : MonoidH _⇨₁_ _⇨₀_ ⦄ ⦃ _ : MonoidH  _⇨₂_ _⇨₀_ ⦄
-  ⦃ _ : L.Monoid _⇨₀_ ⦄
+  (M₁ : I → obj₁) (M₂ : I → obj₂) (M₀ : I → obj₀)
+  ⦃ _ : MonoidObjH M₁ M₀ _⇨₀_ ⦄  ⦃ _ : MonoidObjH M₂ M₀ _⇨₀_ ⦄
+  ⦃ _ : StrongMonoidObjH M₁ M₀ _⇨₀_ ⦄
+  ⦃ _ : Monoid M₁ _⇨₁_ ⦄ ⦃ _ : Monoid M₂ _⇨₂_ ⦄ ⦃ _ : Monoid M₀ _⇨₀_ ⦄
+  ⦃ _ : MonoidH M₁ M₀ _⇨₁_ _⇨₀_ ⦄ ⦃ _ : MonoidH M₂ M₀  _⇨₂_ _⇨₀_ ⦄
+  ⦃ _ : L.Monoid M₀ _⇨₀_ ⦄
  where
+
+  private
+
+    M : I → Obj
+    M p = mkO (δ {p = p} ∘ δ⁻¹)
 
   instance
 
-    monoidObj : MonoidObj Obj
-    monoidObj = record { M = mkO (δ ∘ δ⁻¹) }
+    ⟨∙⟩′ : ∀ {p q : I} → M p × M q ⇨ M (p ∙ q)
+    ⟨∙⟩′ = mk ⟨∙⟩ ⟨∙⟩
+              ( ∘≈ʳ F-⟨∙⟩′
+              ; ∘-assocˡ³
+              ; ∘≈ˡ (cancelInner δ⁻¹∘δ ; sym F-⟨∙⟩)
+              ; ∘-assocʳ³
+              ; ∘≈ʳ² (∘-assocˡ′ ⊗∘⊗)
+              )
 
-    ⟨ι⟩′ : ⊤ ⇨ M
+    -- ⟨∙⟩′ : ∀ {p q : I} → M p × M q ⇨ M (p ∙ q)
+    -- ⟨∙⟩′ {p = p} {q} =
+    --   mk ⟨∙⟩ ⟨∙⟩
+    --      (begin
+    --        h (M (p ∙ q)) ∘ Fₘ ⟨∙⟩
+    --      ≡⟨⟩
+    --        (δ ∘ δ⁻¹) ∘ Fₘ ⟨∙⟩
+    --      ≈⟨ ∘≈ʳ F-⟨∙⟩′ ⟩
+    --        (δ ∘ δ⁻¹) ∘ δ ∘ ⟨∙⟩ ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
+    --      ≈⟨ ∘-assocˡ³ ⟩
+    --        ((δ ∘ δ⁻¹) ∘ δ ∘ ⟨∙⟩) ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
+    --      ≈⟨ ∘≈ˡ (cancelInner δ⁻¹∘δ) ⟩
+    --        (δ ∘ ⟨∙⟩) ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
+    --      ≈⟨ ∘≈ˡ (sym F-⟨∙⟩) ⟩
+    --        (Fₘ ⟨∙⟩ ∘ μ ∘ (δ ⊗ δ)) ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
+    --      ≈⟨ ( ∘-assocʳ³ ; ∘≈ʳ² ∘-assocˡ) ⟩
+    --        Fₘ ⟨∙⟩ ∘ μ ∘ ((δ ⊗ δ) ∘ (δ⁻¹ ⊗ δ⁻¹)) ∘ μ⁻¹
+    --      ≈⟨ ∘≈ʳ² (∘≈ˡ ⊗∘⊗) ⟩
+    --        Fₘ ⟨∙⟩ ∘ μ ∘ (δ ∘ δ⁻¹ ⊗ δ ∘ δ⁻¹) ∘ μ⁻¹
+    --      ≡⟨⟩
+    --        Fₘ ⟨∙⟩ ∘ μ ∘ (h (M p) ⊗ h (M q)) ∘ μ⁻¹
+    --      ≡⟨⟩
+    --        Fₘ ⟨∙⟩ ∘ h (M p × M q)
+    --      ∎)
+
+    ⟨ι⟩′ : ⊤ ⇨ M ι
     ⟨ι⟩′ = mk ⟨ι⟩ ⟨ι⟩
               ( ∘≈ʳ (F-⟨ι⟩′ ; ∘-assocˡ)
               ; ∘-assocˡʳ′ (cancelInner δ⁻¹∘δ ; sym F-⟨ι⟩)
@@ -216,41 +255,8 @@ module comma-semigroups
     --      Fₘ ⟨ι⟩ ∘ h ⊤
     --    ∎)
 
-    ⟨∙⟩′ : M × M ⇨ M
-    ⟨∙⟩′ = mk ⟨∙⟩ ⟨∙⟩
-              ( ∘≈ʳ F-⟨∙⟩′
-              ; ∘-assocˡ³
-              ; ∘≈ˡ (cancelInner δ⁻¹∘δ ; sym F-⟨∙⟩)
-              ; ∘-assocʳ³
-              ; ∘≈ʳ² (∘-assocˡ′ ⊗∘⊗)
-              )
-
-    -- ⟨∙⟩′ : M × M ⇨ M
-    -- ⟨∙⟩′ = mk ⟨∙⟩ ⟨∙⟩
-    --   (begin
-    --     h M ∘ Fₘ ⟨∙⟩
-    --   ≡⟨⟩
-    --     (δ ∘ δ⁻¹) ∘ Fₘ ⟨∙⟩
-    --   ≈⟨ ∘≈ʳ F-⟨∙⟩′ ⟩
-    --     (δ ∘ δ⁻¹) ∘ δ ∘ ⟨∙⟩ ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
-    --   ≈⟨ ∘-assocˡ³ ⟩
-    --     ((δ ∘ δ⁻¹) ∘ δ ∘ ⟨∙⟩) ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
-    --   ≈⟨ ∘≈ˡ (cancelInner δ⁻¹∘δ) ⟩
-    --     (δ ∘ ⟨∙⟩) ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
-    --   ≈⟨ ∘≈ˡ (sym F-⟨∙⟩) ⟩
-    --     (Fₘ ⟨∙⟩ ∘ μ ∘ (δ ⊗ δ)) ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹
-    --   ≈⟨ ( ∘-assocʳ³ ; ∘≈ʳ² ∘-assocˡ) ⟩
-    --     Fₘ ⟨∙⟩ ∘ μ ∘ ((δ ⊗ δ) ∘ (δ⁻¹ ⊗ δ⁻¹)) ∘ μ⁻¹
-    --   ≈⟨ ∘≈ʳ² (∘≈ˡ ⊗∘⊗) ⟩
-    --     Fₘ ⟨∙⟩ ∘ μ ∘ (δ ∘ δ⁻¹ ⊗ δ ∘ δ⁻¹) ∘ μ⁻¹
-    --   ≡⟨⟩
-    --     Fₘ ⟨∙⟩ ∘ μ ∘ (h M ⊗ h M) ∘ μ⁻¹
-    --   ≡⟨⟩
-    --     Fₘ ⟨∙⟩ ∘ h (M × M)
-    --   ∎)
-
-    monoid : Monoid _⇨_
-    monoid = record { ⟨ι⟩ = ⟨ι⟩′ ; ⟨∙⟩ = ⟨∙⟩′ }
+    monoid : Monoid M _⇨_
+    monoid = record { ⟨∙⟩ = ⟨∙⟩′; ⟨ι⟩ = ⟨ι⟩′ }
 
 
 module comma-booleans

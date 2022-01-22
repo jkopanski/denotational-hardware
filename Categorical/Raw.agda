@@ -3,7 +3,7 @@
 module Categorical.Raw where
 
 open import Level
-open import Function using (const) renaming (_∘_ to _∙_)
+open import Function using (const) renaming (_∘_ to _∘′_)
 
 open import Categorical.Object public
 
@@ -75,13 +75,13 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   inAssocˡ′ f = assocʳ ∘ f ∘ assocˡ
 
   inAssocˡ : (a × b ⇨ a′ × b′) → (a × (b × c) ⇨ a′ × (b′ × c))
-  inAssocˡ = inAssocˡ′ ∙ first
+  inAssocˡ = inAssocˡ′ ∘′ first
 
   inAssocʳ′ : (a × (b × c) ⇨ a′ × (b′ × c′)) → ((a × b) × c ⇨ (a′ × b′) × c′)
   inAssocʳ′ f = assocˡ ∘ f ∘ assocʳ
 
   inAssocʳ : (b × c ⇨ b′ × c′) → ((a × b) × c ⇨ (a × b′) × c′)
-  inAssocʳ = inAssocʳ′ ∙ second
+  inAssocʳ = inAssocʳ′ ∘′ second
 
   swap : a × b ⇨ b × a
   swap = exr ▵ exl
@@ -132,13 +132,16 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
 
 open Cartesian ⦃ … ⦄ public
 
-record Monoid {obj : Set o} ⦃ _ : Products obj ⦄ ⦃ _ : MonoidObj obj ⦄
+open import HasAlgebra
+
+record Monoid {obj : Set o} ⦃ _ : Products obj ⦄
+    {i} {I : Set i} ⦃ _ : HasRawMonoid I ⦄ (M : I → obj)
     (_⇨′_ : obj → obj → Set ℓ) ⦃ _ : Category _⇨′_ ⦄
-   : Set (o ⊔ ℓ) where
+   : Set (o ⊔ i ⊔ ℓ) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
-    ⟨ι⟩ : ⊤ ⇨ M
-    ⟨∙⟩ : M × M ⇨ M
+    ⟨ι⟩ : ⊤ ⇨ M ι
+    ⟨∙⟩ : ∀ {p q : I} → M p × M q ⇨ M (p ∙ q)
 
 open Monoid ⦃ … ⦄ public
 

@@ -10,15 +10,15 @@ open import Categorical.Laws as L
 open import Categorical.Reasoning
 
 module Categorical.Subcategory
-  {i} (I : Set i)
+  {j} (J : Set j)
   {o ℓ} {obj : Set o}
   (_↠_ : obj → obj → Set ℓ) (let infix 0 _↠_; _↠_ = _↠_)
   ⦃ _ : Category _↠_ ⦄ {q : Level} ⦃ _ : Equivalent q _↠_ ⦄
-  ⦃ _ : Homomorphismₒ I obj ⦄
+  ⦃ _ : Homomorphismₒ J obj ⦄
  where
 
 infix 0 _⇨_
-record _⇨_ (a b : I) : Set ℓ where
+record _⇨_ (a b : J) : Set ℓ where
   constructor mk
   field
     un : Fₒ a ↠ Fₒ b
@@ -34,7 +34,7 @@ module subcategory-instances where
     category = record { id = mk id ; _∘_ = λ (mk g) (mk f) → mk (g ∘ f) }
 
     cartesian : ⦃ _ : Products obj ⦄ ⦃ _ : Cartesian _↠_ ⦄
-                ⦃ _ : Products I ⦄ ⦃ _ : ProductsH I _↠_ ⦄ →
+                ⦃ _ : Products J ⦄ ⦃ _ : ProductsH J _↠_ ⦄ →
                 Cartesian _⇨_
     cartesian = record { !   = mk (ε ∘ !)
                        ; _▵_ = λ (mk f) (mk g) → mk (μ ∘ (f ▵ g))
@@ -42,19 +42,25 @@ module subcategory-instances where
                        ; exr = mk (exr ∘ μ⁻¹)
                        }
 
-    monoid : ⦃ _ : Products obj ⦄ ⦃ _ : MonoidObj obj ⦄
-             ⦃ _ : Products I   ⦄ ⦃ _ : MonoidObj I ⦄
-             ⦃ _ : ProductsH I _↠_ ⦄ ⦃ _ : MonoidObjH I _↠_ ⦄
-             ⦃ _ : Cartesian _↠_ ⦄ ⦃ _ : Monoid _↠_ ⦄ →
-             Monoid _⇨_
-    monoid = record { ⟨ι⟩ = mk (δ ∘ ⟨ι⟩ ∘ ε⁻¹)
-                    ; ⟨∙⟩ = mk (δ ∘ ⟨∙⟩ ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹)
-                    }
+    module _ where
+
+      open import HasAlgebra
+
+      monoid : {i : Level} {I : Set i} ⦃ _ : HasRawMonoid I ⦄
+               ⦃ _ : Products obj ⦄ (M : I → obj)
+               ⦃ _ : Products  J  ⦄ (N : I →  J )
+               ⦃ _ : ProductsH J _↠_ ⦄ ⦃ _ : MonoidObjH N M _↠_ ⦄
+               ⦃ _ : Cartesian _↠_ ⦄ ⦃ _ : Monoid M _↠_ ⦄ →
+               Monoid N _⇨_
+      monoid M N = record
+        { ⟨ι⟩ = mk (δ ∘ ⟨ι⟩ ∘ ε⁻¹)
+        ; ⟨∙⟩ = mk (δ ∘ ⟨∙⟩ ∘ (δ⁻¹ ⊗ δ⁻¹) ∘ μ⁻¹)
+        }
 
     logic : ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄
             ⦃ _ : Cartesian _↠_ ⦄ ⦃ _ : Logic _↠_ ⦄
-            ⦃ _ : Products I ⦄  ⦃ _ : Boolean I ⦄ ⦃ _ : ProductsH I _↠_ ⦄
-            ⦃ _ : BooleanH I _↠_ ⦄
+            ⦃ _ : Products J ⦄  ⦃ _ : Boolean J ⦄ ⦃ _ : ProductsH J _↠_ ⦄
+            ⦃ _ : BooleanH J _↠_ ⦄
           → Logic _⇨_
     logic = record
               { false = mk (β ∘ false ∘ ε⁻¹)
@@ -77,7 +83,7 @@ module subcategory-instances where
 
     cartesianH :
       ⦃ _ : Products obj ⦄ ⦃ _ : Cartesian _↠_ ⦄ ⦃ _ : L.Category _↠_ ⦄
-      ⦃ _ : Products I ⦄ ⦃ _ : ProductsH I _↠_ ⦄ ⦃ _ : StrongProductsH I _↠_ ⦄
+      ⦃ _ : Products J ⦄ ⦃ _ : ProductsH J _↠_ ⦄ ⦃ _ : StrongProductsH J _↠_ ⦄
       → CartesianH _⇨_ _↠_
     cartesianH = record { F-! = refl↠
                         ; F-▵ = refl↠
@@ -89,9 +95,9 @@ module subcategory-instances where
              ⦃ _ : Products obj ⦄ ⦃ _ : Boolean obj ⦄
              ⦃ _ : Cartesian _↠_ ⦄ ⦃ _ : Logic _↠_ ⦄
              ⦃ _ : L.Category _↠_ ⦄ ⦃ _ : L.Cartesian _↠_ ⦄
-             ⦃ _ : Boolean I ⦄ ⦃ _ : Products I ⦄
-             ⦃ _ : ProductsH I _↠_ ⦄ ⦃ _ : StrongProductsH I _↠_ ⦄
-             ⦃ _ : BooleanH I _↠_ ⦄ ⦃ _ : StrongBooleanH I _↠_ ⦄ →
+             ⦃ _ : Boolean J ⦄ ⦃ _ : Products J ⦄
+             ⦃ _ : ProductsH J _↠_ ⦄ ⦃ _ : StrongProductsH J _↠_ ⦄
+             ⦃ _ : BooleanH J _↠_ ⦄ ⦃ _ : StrongBooleanH J _↠_ ⦄ →
              LogicH _⇨_ _↠_
     logicH = record
                { F-false = F-0
@@ -137,7 +143,7 @@ module subcategory-instances where
               --             β ∘ f
               --           ∎
 
-              F-c  : ∀ {a : I} →
+              F-c  : ∀ {a : J} →
                 (cond ∘ (β⁻¹ ⊗ μ⁻¹) ∘ μ⁻¹) ∘ μ ∘ (β ⊗ μ {a = a}) ≈ cond
               F-c = ∘-assocˡ′ (∘-assocʳ³ ; ∘≈ʳ (elimʳ μ⁻¹∘μ))
                   ; ∘-assoc-elimʳ (⊗-inverse β⁻¹∘β μ⁻¹∘μ)

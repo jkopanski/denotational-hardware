@@ -39,12 +39,6 @@ record IndexedProducts (obj : Set o) {ℓᵢ} (I : Set ℓᵢ) : Set (o ⊔ ℓ�
 open IndexedProducts ⦃ … ⦄ public
 -}
 
-record MonoidObj (obj : Set o) : Set o where
-  field
-    M : obj
-
-open MonoidObj ⦃ … ⦄ public
-
 record Exponentials (obj : Set o) : Set o where
   infixr 1 _⇛_
   field

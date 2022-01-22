@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --without-K #-}
+{-# OPTIONS --safe --without-K #-}  -- K needed for Algebra.Indexed
 
 open import Level
 
@@ -32,10 +32,21 @@ module →-raw-instances where
     cartesianClosed : CartesianClosed Function
     cartesianClosed = record { curry = ×.curry ; apply = ×.uncurry id }
 
-    open import HasAlgebra
+    -- open import HasAlgebra
 
-    monoid : ∀ {A : Set ℓ} ⦃ _ : HasRawMonoid A ⦄ → Monoid Function
-    monoid = record { ⟨ι⟩ = λ { tt → ι } ; ⟨∙⟩ = uncurry _∙_ }
+    -- semigroup : ∀ {A : Set ℓ} ⦃ _ : HasRawSemigroup A ⦄ → Semigroup Function
+    -- semigroup = record { ⟨∙⟩ = uncurry _∙_ }
+
+    -- monoid : ∀ {A : Set ℓ} ⦃ _ : HasRawSemigroup A ⦄ ⦃ _ : HasRawMonoid A ⦄ →
+    --   Monoid Function
+    -- monoid = record { ⟨ι⟩ = λ { tt → ι } }
+
+    -- import Algebra.Nonindexed as N
+    -- open import Algebra.Indexed
+
+    -- monoid : ∀ {i} {I : Set i} ⦃ _ : N.HasRawMonoid I ⦄
+    --          {M : I → Set ℓ} ⦃ _ : HasRawMonoid M ⦄ → Monoid M Function
+    -- monoid = record { ⟨ι⟩ = λ { tt → ι } ; ⟨∙⟩ = λ (x , y) → x ∙ y }
 
     logic : Logic Function
     logic = record
