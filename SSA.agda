@@ -53,9 +53,6 @@ mutual
   stat : ∀ {i}{o} → ℕ → (i ⇨ₚ o) → Ref i → Statement
   stat {i}{o} comp# p r = mk comp# (show p) r o
 
-  mk′ : ∀ {i}{o} → ℕ → (i ⇨ₚ o) → Ref i → Statement × ℕ
-  mk′ {i}{o} comp# p r = first (λ op → mk comp# (show p) r o) (p , suc comp#)
-
   refs : ℕ → Ref b
   refs comp# = tabulate′ (mk comp#)
 

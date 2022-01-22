@@ -4,7 +4,7 @@ open import Categorical.Homomorphism
 
 module Linearize.Raw {o}{objₘ : Set o} ⦃ _ : Products objₘ ⦄ ⦃ _ : Exponentials objₘ ⦄
              {ℓₘ}(_⇨ₘ_ : objₘ → objₘ → Set ℓₘ) (let infix 0 _⇨ₘ_; _⇨ₘ_ = _⇨ₘ_)
-             {ℓ}{obj : Set ℓ} ⦃ _ : Products obj ⦄ ⦃ _ : Exponentials obj ⦄
+             {ℓ}{obj : Set ℓ} ⦃ _ : Products obj ⦄
              (_⇨ₚ_ : obj → obj → Set ℓ) (let infix 0 _⇨ₚ_; _⇨ₚ_ = _⇨ₚ_)
              (_⇨ᵣ_ : obj → obj → Set ℓ) (let infix 0 _⇨ᵣ_; _⇨ᵣ_ = _⇨ᵣ_)
              ⦃ _ : Category _⇨ₘ_ ⦄ ⦃ _ : Cartesian _⇨ₘ_ ⦄
@@ -15,18 +15,16 @@ module Linearize.Raw {o}{objₘ : Set o} ⦃ _ : Products objₘ ⦄ ⦃ _ : Exp
              ⦃ Hₚ : Homomorphism _⇨ₚ_ _⇨ₘ_ ⦄
              ⦃ Hᵣ : Homomorphism _⇨ᵣ_ _⇨ₘ_ ⦄
              {q} ⦃ _ : Equivalent q _⇨ₘ_ ⦄
-             ⦃ _ : ProductsH obj _⇨ₘ_ ⦄ ⦃ _ : ExponentialsH obj _⇨ₘ_ ⦄
+             ⦃ _ : ProductsH obj _⇨ₘ_ ⦄
   where
 
 private variable a b c d : obj
 
 open import Linearize.Type _⇨ₘ_ _⇨ₚ_ _⇨ᵣ_ public
 
-mutual
-
-  ⟦_⟧ₖ : (a ⇨ b) → (Fₒ a ⇨ₘ Fₒ b)
-  ⟦ ⌞ r ⌟ ⟧ₖ = Fₘ r
-  ⟦ f ∘·first p ∘ r ⟧ₖ = ⟦ f ⟧ₖ ∘ μ ∘ first (Fₘ p) ∘ μ⁻¹ ∘ Fₘ r
+⟦_⟧ₖ : (a ⇨ b) → (Fₒ a ⇨ₘ Fₒ b)
+⟦ ⌞ r ⌟ ⟧ₖ = Fₘ r
+⟦ f ∘·first p ∘ r ⟧ₖ = ⟦ f ⟧ₖ ∘ μ ∘ first (Fₘ p) ∘ μ⁻¹ ∘ Fₘ r
 
 -- TODO: Maybe parenthesize `μ ∘ first (Fₘ p) ∘ μ⁻¹`
 

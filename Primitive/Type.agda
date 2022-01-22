@@ -18,7 +18,6 @@ module primitive-type-instance where
   instance
 
     open import Show
-    open import Data.String
 
     show′ : ∀ {a b} → Show (a ⇨ b)
     show′ = record { show = λ { `false → "false"

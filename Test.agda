@@ -12,7 +12,7 @@ open import IO
 
 open import Show
 open import Categorical.Raw
-open import Functions.Laws (0ℓ)
+open import Functions.Laws 0ℓ
 open import Ty
 open import Index
 open import Primitive.Raw Function renaming (_⇨_ to _⇨ₚ_)
