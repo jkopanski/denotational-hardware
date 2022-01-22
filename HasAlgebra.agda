@@ -46,10 +46,9 @@ module _ {a} (A : Set a) where
       ⦃ raw ⦄ : HasRawMonoid
       ∙-identityˡ : Identityˡ _∙_ ι
       ∙-identityʳ : Identityʳ _∙_ ι
-      ∙-assoc : Assoc _∙_
+      ∙-assoc     : Assoc _∙_
 
   open HasMonoid ⦃ … ⦄ public
-
 
   record HasRawSemiring : Set a where
     infixl 6 _+_
@@ -82,26 +81,49 @@ module _ {a} (A : Set a) where
 
   open import Algebra.Structures (_≡_ {A = A}) public
 
+  module monoid {_∙̂_ ι̂} (is : IsMonoid _∙̂_ ι̂) where
+   instance
+    has-raw-monoid : HasRawMonoid
+    has-raw-monoid = record { ι = ι̂ ; _∙_ = _∙̂_ }
+
+    has-monoid : HasMonoid
+    has-monoid = record
+      { ∙-assoc     = is.assoc _ _ _
+      ; ∙-identityˡ = is.identityˡ _
+      ; ∙-identityʳ = is.identityʳ _
+      } where module is = IsMonoid is
+
   module semiring {_+̂_ _*̂_ 0̂ 1̂} (is : IsSemiring _+̂_ _*̂_ 0̂ 1̂) where
    instance
-    hasRaw : HasRawSemiring
-    hasRaw = record { 0# = 0̂ ; 1# = 1̂ ; _+_ = _+̂_ ; _*_ = _*̂_ }
+    has-raw-semiring : HasRawSemiring
+    has-raw-semiring = record { 0# = 0̂ ; 1# = 1̂ ; _+_ = _+̂_ ; _*_ = _*̂_ }
 
-    has : HasSemiring
-    has = record
-            { +-assoc     = is.+-assoc _ _ _
-            ; +-identityˡ = is.+-identityˡ _
-            ; +-identityʳ = is.+-identityʳ _
-            ; *-assoc     = is.*-assoc _ _ _
-            ; *-identityˡ = is.*-identityˡ _
-            ; *-identityʳ = is.*-identityʳ _
-            ; *-distribˡ  = is.distribʳ _ _ _   -- note swap
-            ; *-distribʳ  = is.distribˡ _ _ _
-            ; *-zeroˡ     = is.zeroˡ _
-            ; *-zeroʳ     = is.zeroʳ _
-            } where module is = IsSemiring is
+    has-semiring : HasSemiring
+    has-semiring = record
+      { +-assoc     = is.+-assoc _ _ _
+      ; +-identityˡ = is.+-identityˡ _
+      ; +-identityʳ = is.+-identityʳ _
+      ; *-assoc     = is.*-assoc _ _ _
+      ; *-identityˡ = is.*-identityˡ _
+      ; *-identityʳ = is.*-identityʳ _
+      ; *-distribˡ  = is.distribʳ _ _ _   -- note swap
+      ; *-distribʳ  = is.distribˡ _ _ _
+      ; *-zeroˡ     = is.zeroˡ _
+      ; *-zeroʳ     = is.zeroʳ _
+      } where module is = IsSemiring is
 
+
+-- Some instances. WIP. How to make convenient?
 
 module nat-algebra where
   open import Data.Nat.Properties
+  open monoid   _ +-0-isMonoid   public
   open semiring _ +-*-isSemiring public
+
+module ∧-algebra where
+  open import Data.Bool.Properties
+  open monoid _ ∧-isMonoid public
+
+module ∨-algebra where
+  open import Data.Bool.Properties
+  open monoid _ ∨-isMonoid public
