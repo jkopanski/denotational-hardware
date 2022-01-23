@@ -208,37 +208,27 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
 open Cartesian ⦃ … ⦄ public
 
 
-open import HasAlgebra
+import HasAlgebra as N
 
 record Monoid {obj : Set o} ⦃ _ : Products obj ⦄
-   {i} {I : Set i} ⦃ _ : HasMonoid I ⦄ (M : I → obj)
+   {i} {I : Set i} ⦃ _ : N.HasMonoid I ⦄ (M : I → obj)
    (_⇨′_ : obj → obj → Set ℓ) {q} ⦃ equiv : Equivalent q _⇨′_ ⦄
    ⦃ _ : R.Category _⇨′_ ⦄ ⦃ _ : R.Cartesian _⇨′_ ⦄
-   ⦃ _ : R.Monoid M _⇨′_ ⦄
-   ⦃ lCat : Category _⇨′_ ⦄
+   ⦃ _ : R.Monoid M _⇨′_ ⦄ ⦃ _ : R.MonoidIndices M _⇨′_ ⦄
    : Set (o ⊔ i ⊔ ℓ ⊔ q) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
-    ∙-identityˡ : ∀ {q : I} → M (ι ∙ q) ⇨ M q
-    ∙-identityʳ : ∀ {p : I} → M (p ∙ ι) ⇨ M p
-    ∙-assoc : ∀ {p q r : I} → M ((p ∙ q) ∙ r) ⇨ M (p ∙ (q ∙ r))
-
-    ∙-identityˡ⁻¹ : ∀ {q : I} → M q ⇨ M (ι ∙ q)
-    ∙-identityʳ⁻¹ : ∀ {p : I} → M p ⇨ M (p ∙ ι)
-    ∙-assoc⁻¹ : ∀ {p q r : I} → M (p ∙ (q ∙ r)) ⇨ M ((p ∙ q) ∙ r)
-
     -- ι ∙ y ≡ y
-    ⟨∙⟩-identityˡ : ∀ {q} → ∙-identityˡ {q} ∘ ⟨∙⟩ ∘ first  ⟨ι⟩ ≈ unitorᵉˡ
+    ⟨∙⟩-identityˡ : ∀ {q : I} → ∙-identityˡ {q = q} ∘ ⟨∙⟩ ∘ first  ⟨ι⟩ ≈ unitorᵉˡ
     -- x ∙ ι ≡ x
-    ⟨∙⟩-identityʳ : ∀ {p} → ∙-identityʳ {p} ∘ ⟨∙⟩ ∘ second ⟨ι⟩ ≈ unitorᵉʳ
+    ⟨∙⟩-identityʳ : ∀ {p : I} → ∙-identityʳ {p = p} ∘ ⟨∙⟩ ∘ second ⟨ι⟩ ≈ unitorᵉʳ
     -- ∀ ((x , y) , z) → (x ∙ y) ∙ z ≡ x ∙ (y ∙ z)
     ⟨∙⟩-assoc : ∀ {p q r : I} →
-      ∙-assoc {p} {q} {r} ∘ ⟨∙⟩ ∘ first ⟨∙⟩ ≈ ⟨∙⟩ ∘ second ⟨∙⟩ ∘ assocʳ
-
-    -- I'll probably need the inverse properties for the three isomorphisms.
+      ∙-assoc {p = p} {q} {r} ∘ ⟨∙⟩ ∘ first ⟨∙⟩ ≈ ⟨∙⟩ ∘ second ⟨∙⟩ ∘ assocʳ
 
 open Monoid ⦃ … ⦄ public
 
+-- I'll probably also need the inverse properties for MonoidIndices.
 
 {-
 record IndexedCartesian

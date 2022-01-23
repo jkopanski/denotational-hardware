@@ -145,6 +145,54 @@ record Monoid {obj : Set o} ⦃ _ : Products obj ⦄
 
 open Monoid ⦃ … ⦄ public
 
+record MonoidIndices {obj : Set o} ⦃ _ : Products obj ⦄
+    {i} {I : Set i} ⦃ _ : HasRawMonoid I ⦄ (M : I → obj)
+    (_⇨′_ : obj → obj → Set ℓ) ⦃ _ : Category _⇨′_ ⦄
+   : Set (o ⊔ i ⊔ ℓ) where
+  private infix 0 _⇨_; _⇨_ = _⇨′_
+  field
+    ∙-identityˡ : ∀ {q : I} → M (ι ∙ q) ⇨ M q
+    ∙-identityʳ : ∀ {p : I} → M (p ∙ ι) ⇨ M p
+    ∙-assoc : ∀ {p q r : I} → M ((p ∙ q) ∙ r) ⇨ M (p ∙ (q ∙ r))
+
+    ∙-identityˡ⁻¹ : ∀ {q : I} → M q ⇨ M (ι ∙ q)
+    ∙-identityʳ⁻¹ : ∀ {p : I} → M p ⇨ M (p ∙ ι)
+    ∙-assoc⁻¹ : ∀ {p q r : I} → M (p ∙ (q ∙ r)) ⇨ M ((p ∙ q) ∙ r)
+
+open MonoidIndices ⦃ … ⦄ public
+
+-- TODO: Consider recombining Monoid and MonoidIndices when ready (e.g., Comma).
+
+
+record SemiringIndices {obj : Set o} ⦃ _ : Products obj ⦄
+    {i} {I : Set i} ⦃ _ : HasRawSemiring I ⦄ (R : I → obj)
+    (_⇨′_ : obj → obj → Set ℓ) ⦃ _ : Category _⇨′_ ⦄
+   : Set (o ⊔ i ⊔ ℓ) where
+  private infix 0 _⇨_; _⇨_ = _⇨′_
+  field
+    +-identityˡ : ∀ {q : I} → R (0# + q) ⇨ R q
+    +-identityʳ : ∀ {p : I} → R (p + 0#) ⇨ R p
+    +-assoc : ∀ {p q r : I} → R ((p + q) + r) ⇨ R (p + (q + r))
+
+    +-identityˡ⁻¹ : ∀ {q : I} → R q ⇨ R (0# + q)
+    +-identityʳ⁻¹ : ∀ {p : I} → R p ⇨ R (p + 0#)
+    +-assoc⁻¹ : ∀ {p q r : I} → R (p + (q + r)) ⇨ R ((p + q) + r)
+
+    *-identityˡ : ∀ {q : I} → R (1# * q) ⇨ R q
+    *-identityʳ : ∀ {p : I} → R (p * 1#) ⇨ R p
+    *-assoc : ∀ {p q r : I} → R ((p * q) * r) ⇨ R (p * (q * r))
+
+    *-identityˡ⁻¹ : ∀ {q : I} → R q ⇨ R (1# * q)
+    *-identityʳ⁻¹ : ∀ {p : I} → R p ⇨ R (p * 1#)
+    *-assoc⁻¹ : ∀ {p q r : I} → R (p * (q * r)) ⇨ R ((p * q) * r)
+
+    *-distribˡ : ∀ {p q r : I} → R ((p + q) * r) ⇨ R ((p * r) + (q * r))
+    *-distribʳ : ∀ {p q r : I} → R (p * (q + r)) ⇨ R ((p * q) + (p * r))
+    *-zeroˡ    : ∀ {q : I} → R (0# * q) ⇨ R 0#
+    *-zeroʳ    : ∀ {p : I} → R (p * 0#) ⇨ R 0#
+
+open SemiringIndices ⦃ … ⦄ public
+
 
 {-
 record IndexedCartesian
