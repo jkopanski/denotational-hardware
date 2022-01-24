@@ -2,7 +2,7 @@
 
 module Categorical.Raw where
 
-open import Level
+open import Level hiding (suc)
 open import Function using (const) renaming (_∘_ to _∘′_)
 
 open import Categorical.Object public
@@ -19,6 +19,11 @@ record Category {obj : Set o} (_⇨_ : obj → obj → Set ℓ) : Set (o ⊔ ℓ
   field
     id  : a ⇨ a
     _∘_ : {a b c : obj} → (g : b ⇨ c) (f : a ⇨ b) → (a ⇨ c)
+
+  open import Relation.Binary.PropositionalEquality
+
+  sub : ∀ {i} {I : Set i} {m n : I} (f : I → obj) → m ≡ n → f m ⇨ f n
+  sub f refl = id
 
 open Category ⦃ … ⦄ public
 
@@ -112,6 +117,17 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   replicateⱽ zero    = !
   replicateⱽ (suc n) = id ▵ replicateⱽ n
 
+  -- headⱽ : ∀ n → V a (suc n) ⇨ a
+  -- headⱽ _ = exl
+
+  lastⱽ : ∀ n → V a (suc n) ⇨ a
+  lastⱽ  zero   = unitorᵉʳ
+  lastⱽ (suc n) = lastⱽ n ∘ exr
+
+  ⟨++⟩ : ∀ m {n} → V a m × V a n ⇨ V a (m + n)
+  ⟨++⟩  zero   = unitorᵉˡ
+  ⟨++⟩ (suc m) = second (⟨++⟩ m) ∘ assocʳ
+
   -- (a × b) × (V a n × V b n) ⇨ (a × V a n) × (b × V b n)
 
   mapᵀ : ∀ n → (a ⇨ b) → (T a n ⇨ T b n)
@@ -132,6 +148,7 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
 
 open Cartesian ⦃ … ⦄ public
 
+
 open import HasAlgebra
 
 record Monoid {obj : Set o} ⦃ _ : Products obj ⦄
@@ -144,55 +161,6 @@ record Monoid {obj : Set o} ⦃ _ : Products obj ⦄
     ⟨∙⟩ : ∀ {p q : I} → M p × M q ⇨ M (p ∙ q)
 
 open Monoid ⦃ … ⦄ public
-
-record MonoidIndices {obj : Set o} ⦃ _ : Products obj ⦄
-    {i} {I : Set i} ⦃ _ : HasRawMonoid I ⦄ (M : I → obj)
-    (_⇨′_ : obj → obj → Set ℓ) ⦃ _ : Category _⇨′_ ⦄
-   : Set (o ⊔ i ⊔ ℓ) where
-  private infix 0 _⇨_; _⇨_ = _⇨′_
-  field
-    ∙-identityˡ : ∀ {q : I} → M (ι ∙ q) ⇨ M q
-    ∙-identityʳ : ∀ {p : I} → M (p ∙ ι) ⇨ M p
-    ∙-assoc : ∀ {p q r : I} → M ((p ∙ q) ∙ r) ⇨ M (p ∙ (q ∙ r))
-
-    ∙-identityˡ⁻¹ : ∀ {q : I} → M q ⇨ M (ι ∙ q)
-    ∙-identityʳ⁻¹ : ∀ {p : I} → M p ⇨ M (p ∙ ι)
-    ∙-assoc⁻¹ : ∀ {p q r : I} → M (p ∙ (q ∙ r)) ⇨ M ((p ∙ q) ∙ r)
-
-open MonoidIndices ⦃ … ⦄ public
-
--- TODO: Consider recombining Monoid and MonoidIndices when ready (e.g., Comma).
-
-
-record SemiringIndices {obj : Set o} ⦃ _ : Products obj ⦄
-    {i} {I : Set i} ⦃ _ : HasRawSemiring I ⦄ (R : I → obj)
-    (_⇨′_ : obj → obj → Set ℓ) ⦃ _ : Category _⇨′_ ⦄
-   : Set (o ⊔ i ⊔ ℓ) where
-  private infix 0 _⇨_; _⇨_ = _⇨′_
-  field
-    +-identityˡ : ∀ {q : I} → R (0# + q) ⇨ R q
-    +-identityʳ : ∀ {p : I} → R (p + 0#) ⇨ R p
-    +-assoc : ∀ {p q r : I} → R ((p + q) + r) ⇨ R (p + (q + r))
-
-    +-identityˡ⁻¹ : ∀ {q : I} → R q ⇨ R (0# + q)
-    +-identityʳ⁻¹ : ∀ {p : I} → R p ⇨ R (p + 0#)
-    +-assoc⁻¹ : ∀ {p q r : I} → R (p + (q + r)) ⇨ R ((p + q) + r)
-
-    *-identityˡ : ∀ {q : I} → R (1# * q) ⇨ R q
-    *-identityʳ : ∀ {p : I} → R (p * 1#) ⇨ R p
-    *-assoc : ∀ {p q r : I} → R ((p * q) * r) ⇨ R (p * (q * r))
-
-    *-identityˡ⁻¹ : ∀ {q : I} → R q ⇨ R (1# * q)
-    *-identityʳ⁻¹ : ∀ {p : I} → R p ⇨ R (p * 1#)
-    *-assoc⁻¹ : ∀ {p q r : I} → R (p * (q * r)) ⇨ R ((p * q) * r)
-
-    *-distribˡ : ∀ {p q r : I} → R ((p + q) * r) ⇨ R ((p * r) + (q * r))
-    *-distribʳ : ∀ {p q r : I} → R (p * (q + r)) ⇨ R ((p * q) + (p * r))
-    *-zeroˡ    : ∀ {q : I} → R (0# * q) ⇨ R 0#
-    *-zeroʳ    : ∀ {p : I} → R (p * 0#) ⇨ R 0#
-
-open SemiringIndices ⦃ … ⦄ public
-
 
 {-
 record IndexedCartesian

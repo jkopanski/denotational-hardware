@@ -188,7 +188,6 @@ module comma-monoids
   ⦃ _ : MonoidObjH M₁ M₀ _⇨₀_ ⦄  ⦃ _ : MonoidObjH M₂ M₀ _⇨₀_ ⦄
   ⦃ _ : StrongMonoidObjH M₁ M₀ _⇨₀_ ⦄
   ⦃ _ : Monoid M₁ _⇨₁_ ⦄ ⦃ _ : Monoid M₂ _⇨₂_ ⦄ ⦃ _ : Monoid M₀ _⇨₀_ ⦄
-  ⦃ _ : MonoidIndices M₁ _⇨₁_ ⦄ ⦃ _ : MonoidIndices M₂ _⇨₂_ ⦄ ⦃ _ : MonoidIndices M₀ _⇨₀_ ⦄
   ⦃ _ : MonoidH M₁ M₀ _⇨₁_ _⇨₀_ ⦄ ⦃ _ : MonoidH M₂ M₀  _⇨₂_ _⇨₀_ ⦄
   ⦃ _ : L.Monoid M₀ _⇨₀_ ⦄
  where
