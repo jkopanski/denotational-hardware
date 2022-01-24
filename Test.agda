@@ -47,7 +47,7 @@ lfsr₅ = lfsr 5 (𝕥 , 𝕗 , 𝕗 , 𝕥 , 𝕗 , 𝕥 , tt)
 
 example : ∀ {i o : Ty} → String → (i ⇨ o) → IO {0ℓ} _
 example name f =
-  do putStrLn name
+  do putStrLn ("⟹ " ++ name ++ ".dot")
      save ".ssa" (show s)
      save ".dot" d
  where
