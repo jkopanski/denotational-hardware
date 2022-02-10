@@ -19,6 +19,9 @@ module _ {a} (A : Set a) where
   Assoc : Bop → Set a
   Assoc _∙_ = ∀ {x y z} → (x ∙ y) ∙ z ≡ x ∙ (y ∙ z)
 
+  Commutative : Bop → Set a
+  Commutative _∙_ = ∀ {x y} → x ∙ y ≡ y ∙ x
+
   Identityˡ Identityʳ : Bop → A → Set a
   Identityˡ _∙_ ι = ∀ {y : A} → ι ∙ y ≡ y
   Identityʳ _∙_ ι = ∀ {x : A} → x ∙ ι ≡ x
@@ -65,11 +68,12 @@ module _ {a} (A : Set a) where
       +-assoc : Assoc _+_
       +-identityˡ : Identityˡ _+_ 0#
       +-identityʳ : Identityʳ _+_ 0#
+      +-comm : Commutative _+_
       -- Multiplicative monoid
       *-assoc : Assoc _*_
       *-identityˡ : Identityˡ _*_ 1#
       *-identityʳ : Identityʳ _*_ 1#
-      -- Connection (distributivity) 
+      -- Connection (distributivity)
       *-distribˡ : Distribˡ _*_ _+_
       *-distribʳ : Distribʳ _*_ _+_
       *-zeroˡ : Zeroˡ _*_ 0#
@@ -103,6 +107,7 @@ module _ {a} (A : Set a) where
       { +-assoc     = is.+-assoc _ _ _
       ; +-identityˡ = is.+-identityˡ _
       ; +-identityʳ = is.+-identityʳ _
+      ; +-comm      = is.+-comm _ _
       ; *-assoc     = is.*-assoc _ _ _
       ; *-identityˡ = is.*-identityˡ _
       ; *-identityʳ = is.*-identityʳ _
