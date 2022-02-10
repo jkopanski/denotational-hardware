@@ -9,7 +9,8 @@
 module HasAlgebra where
 
 open import Level using (Level)
-open import Relation.Binary.PropositionalEquality using (_≡_)
+open import Relation.Binary.PropositionalEquality renaming (trans to _;_)
+open ≡-Reasoning
 
 module _ {a} (A : Set a) where
 
@@ -112,7 +113,6 @@ module _ {a} (A : Set a) where
       ; *-zeroʳ     = is.zeroʳ _
       } where module is = IsSemiring is
 
-
 -- Some instances. WIP. How to make convenient?
 
 module nat-algebra where
@@ -127,3 +127,75 @@ module ∧-algebra where
 module ∨-algebra where
   open import Data.Bool.Properties
   open monoid _ ∨-isMonoid public
+
+
+open import Data.Nat using (ℕ; zero; suc)
+
+module _ {a} {A : Set a} ⦃ _ : HasRawMonoid A ⦄ where
+  -- What to call this one? For an additive interpretation, i'd like to use "0̂",
+  -- "+", and "·".
+  times : ℕ → A → A
+  times zero x = ι
+  times (suc n) x = x ∙ times n x
+
+module _ where
+  private
+    timesℕ : ∀ m {n : ℕ} → times m n ≡ m * n
+    timesℕ  zero   {n} = refl
+    timesℕ (suc m) {n} = cong (n +_) (timesℕ m)
+
+    -- timesℕ (suc m) {n} =
+    --   begin
+    --     times (suc m) n
+    --   ≡⟨⟩
+    --     n + times m n
+    --   ≡⟨ cong (n +_) (timesℕ m) ⟩
+    --     n + m * n
+    --   ≡⟨⟩
+    --     suc m * n
+    --   ∎
+
+  times-1 : ∀ {n} → times n 1 ≡ n
+  times-1 {n} = timesℕ n ; *-identityʳ
+
+module _ {a} {A : Set a} ⦃ _ : HasMonoid A ⦄ where
+
+  times-distrib : ∀ m {n} {x : A} → times (m + n) x ≡ times m x ∙ times n x
+  -- times-distrib  zero   = sym ∙-identityˡ
+  times-distrib zero {n} {x} =
+    begin
+      times (zero + n) x
+    ≡⟨⟩
+      times n x
+    ≡˘⟨ ∙-identityˡ ⟩
+      ι ∙ times n x
+    ≡⟨⟩
+      times zero x ∙ times n x
+    ∎
+  times-distrib (suc m) {n} {x} =
+    begin
+      times (suc m + n) x
+    ≡⟨⟩
+      x ∙ times (m + n) x
+    ≡⟨ cong (x ∙_) (times-distrib m) ⟩
+      x ∙ (times m x ∙ times n x)
+    ≡˘⟨ ∙-assoc ⟩
+      (x ∙ times m x) ∙ times n x
+    ≡⟨⟩
+      times (suc m) x ∙ times n x
+    ∎
+
+  times-assoc : ∀ m {n} {x : A} → times (m * n) x ≡ times m (times n x)
+  times-assoc zero = refl
+  times-assoc (suc m) {n} {x} =
+    begin
+      times (suc m * n) x
+    ≡⟨⟩
+      times (n + m * n) x
+    ≡⟨ times-distrib n ⟩
+      times n x ∙ times (m * n) x
+    ≡⟨ cong (times n x ∙_) (times-assoc m) ⟩
+      times n x ∙ times m (times n x)
+    ≡⟨⟩
+      times (suc m) (times n x)
+    ∎
