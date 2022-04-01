@@ -25,8 +25,8 @@ record Category {obj : Set o} (_⇨_ : obj → obj → Set ℓ) : Set (o ⊔ ℓ
   sub : ∀ {i} {I : Set i} {m n : I} (f : I → obj) → m ≡ n → f m ⇨ f n
   sub f refl = id
 
-  id≡ : a ≡ b → a ⇨ b
-  id≡ = sub id′
+  sub≡ : a ≡ b → a ⇨ b
+  sub≡ = sub id′
 
 open Category ⦃ … ⦄ public
 
