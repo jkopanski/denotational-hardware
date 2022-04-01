@@ -3,7 +3,7 @@
 module Categorical.Raw where
 
 open import Level hiding (suc)
-open import Function using (const) renaming (_∘_ to _∘′_)
+open import Function using (const) renaming (_∘_ to _∘′_; id to id′)
 
 open import Categorical.Object public
 
@@ -24,6 +24,9 @@ record Category {obj : Set o} (_⇨_ : obj → obj → Set ℓ) : Set (o ⊔ ℓ
 
   sub : ∀ {i} {I : Set i} {m n : I} (f : I → obj) → m ≡ n → f m ⇨ f n
   sub f refl = id
+
+  id≡ : a ≡ b → a ⇨ b
+  id≡ = sub id′
 
 open Category ⦃ … ⦄ public
 
