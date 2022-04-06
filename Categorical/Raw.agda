@@ -94,8 +94,15 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   swap : a × b ⇨ b × a
   swap = exr ▵ exl
 
+  inSwap : (b × a ⇨ b′ × a′) → (a × b ⇨ a′ × b′)
+  inSwap f = swap ∘ f ∘ swap
+
   transpose : (a × b) × (c × d) ⇨ (a × c) × (b × d)
   transpose = inAssocʳ (inAssocˡ swap)
+
+  inTranspose : ((a × c) × (b × d) ⇨ (a′ × c′) × (b′ × d′))
+              → ((a × b) × (c × d) ⇨ (a′ × b′) × (c′ × d′))
+  inTranspose f = transpose ∘ f ∘ transpose
 
   infixr 4 _⦂_
   -- _⦂_ : ⌞ a ⌟ → ⌞ b ⌟ → ⌞ a × b ⌟
