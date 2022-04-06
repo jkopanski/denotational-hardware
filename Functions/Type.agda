@@ -18,6 +18,9 @@ import Data.Bool as B
 Function : Set ℓ → Set ℓ → Set ℓ
 Function = ⟨→⟩
 
+LBool : Set ℓ
+LBool = Lift ℓ B.Bool
+
 pattern 𝕗 = lift B.false
 pattern 𝕥 = lift B.true
 
@@ -25,11 +28,11 @@ pattern tt = lift U.tt
 
 infix  0 if_then_else_
 
-if_then_else_ :  ∀ {a}{A : Set a} → Lift ℓ B.Bool → A → A → A
+if_then_else_ :  ∀ {a}{A : Set a} → LBool → A → A → A
 if 𝕥 then t else f = t
 if 𝕗 then t else f = f
 
-bool : ∀ {a}{A : Set a} → A → A → Lift ℓ B.Bool → A
+bool : ∀ {a}{A : Set a} → A → A → LBool → A
 bool e t c = if c then t else e
 
 two : ∀ {a}{A : Set a} → A → A → (Fin 2 → A)
@@ -78,4 +81,4 @@ module →-instances where
     exponentials = record { _⇛_ = Function }
 
     boolean : Boolean (Set ℓ)
-    boolean = record { Bool = Lift ℓ B.Bool }
+    boolean = record { Bool = LBool }
