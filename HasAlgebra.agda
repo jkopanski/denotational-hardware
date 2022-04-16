@@ -136,6 +136,11 @@ module ∨-algebra where
 
 open import Data.Nat using (ℕ; zero; suc)
 
+
+-- Oops: I found times etc below in Algebra.Definitions.RawMonoid and
+-- Algebra.Properties.Monoid.Mult in agda-stdlib. I'll remove the redundant
+-- functionality here.
+
 module _ {a} {A : Set a} ⦃ _ : HasRawMonoid A ⦄ where
   -- What to call this one? For an additive interpretation, i'd like to use "0̂",
   -- "+", and "·".
