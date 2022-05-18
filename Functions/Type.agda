@@ -18,6 +18,11 @@ import Data.Bool as B
 Function : Set ℓ → Set ℓ → Set ℓ
 Function = ⟨→⟩
 
+-- TODO: phase out "⟨→⟩" and "Function" in favor of _⇾_
+infixr 0 _⇾_
+_⇾_ : Set ℓ → Set ℓ → Set ℓ
+A ⇾ B = A → B
+
 LBool : Set ℓ
 LBool = Lift ℓ B.Bool
 
