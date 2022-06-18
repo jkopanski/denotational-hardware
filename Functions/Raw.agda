@@ -17,38 +17,38 @@ module →-raw-instances where
 
   instance
 
-    category : Category Function
+    category : Category _⇾_
     category = record { id = F.id ; _∘_ = F._∘′_ }
 
-    cartesian : Cartesian Function
+    cartesian : Cartesian _⇾_
     cartesian = record { _▵_ = <_,_> ; exl = proj₁ ; exr = proj₂ }
 
-    -- indexedCartesian : ∀ {I : Set ℓ} → IndexedCartesian I Function
+    -- indexedCartesian : ∀ {I : Set ℓ} → IndexedCartesian I _⇾_
     -- indexedCartesian = record
     --   { △  = λ fs x i → fs i x
     --   ; ex = λ i xs → xs i
     --   }
 
-    cartesianClosed : CartesianClosed Function
+    cartesianClosed : CartesianClosed _⇾_
     cartesianClosed = record { curry = ×.curry ; apply = ×.uncurry id }
 
     -- open import HasAlgebra
 
-    -- semigroup : ∀ {A : Set ℓ} ⦃ _ : HasRawSemigroup A ⦄ → Semigroup Function
+    -- semigroup : ∀ {A : Set ℓ} ⦃ _ : HasRawSemigroup A ⦄ → Semigroup _⇾_
     -- semigroup = record { ⟨∙⟩ = uncurry _∙_ }
 
     -- monoid : ∀ {A : Set ℓ} ⦃ _ : HasRawSemigroup A ⦄ ⦃ _ : HasRawMonoid A ⦄ →
-    --   Monoid Function
+    --   Monoid _⇾_
     -- monoid = record { ⟨ι⟩ = λ { tt → ι } }
 
     -- import Algebra.Nonindexed as N
     -- open import Algebra.Indexed
 
     -- monoid : ∀ {i} {I : Set i} ⦃ _ : N.HasRawMonoid I ⦄
-    --          {M : I → Set ℓ} ⦃ _ : HasRawMonoid M ⦄ → Monoid M Function
+    --          {M : I → Set ℓ} ⦃ _ : HasRawMonoid M ⦄ → Monoid M _⇾_
     -- monoid = record { ⟨ι⟩ = λ { tt → ι } ; ⟨∙⟩ = λ (x , y) → x ∙ y }
 
-    logic : Logic Function
+    logic : Logic _⇾_
     logic = record
               { false = λ tt → 𝕗
               ; true  = λ tt → 𝕥
@@ -62,7 +62,7 @@ module →-raw-instances where
     open import Relation.Binary.PropositionalEquality as ≡ using (_≡_; _≗_)
 
     -- TODO: move to Relation.Binary.PropositionalEquality.Properties as a PR
-    equivalent : Equivalent ℓ Function
+    equivalent : Equivalent ℓ _⇾_
     equivalent = record
       { _≈_ = _≗_
       ; equiv = record

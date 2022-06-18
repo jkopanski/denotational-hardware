@@ -34,7 +34,7 @@ open _⇨_ public
 
 instance
 
-  homomorphism : Homomorphism _⇨_ Function
+  homomorphism : Homomorphism _⇨_ _⇾_
   homomorphism = record { Fₘ = swizzle ∘ unMk }
   -- homomorphism = record { Fₘ = λ (mk r) → swizzle r }
 

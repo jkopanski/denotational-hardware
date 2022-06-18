@@ -9,7 +9,7 @@ open import Data.Nat
 open import Categorical.Equiv
 open import Categorical.Raw
 open import Functions.Laws 0ℓ
-open import Categorical.Arrow Function
+open import Categorical.Arrow _⇾_
 
 open import Examples.Add
 

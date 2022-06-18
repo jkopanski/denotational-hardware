@@ -19,10 +19,10 @@ module equality-homomorphism-subst where
    Hₒ : Homomorphismₒ A (Set p)
    Hₒ = record { Fₒ = P }
 
-   H : Homomorphism _⇨_ Function
+   H : Homomorphism _⇨_ _⇾_
    H = record { Fₘ = subst P  }
 
-   categoryH : CategoryH _⇨_ Function
+   categoryH : CategoryH _⇨_ _⇾_
    categoryH = record
      { F-id = λ _ → ≡.refl
      ; F-∘  = λ { {f = x≡y} _ → ≡.sym (subst-subst x≡y) }

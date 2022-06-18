@@ -65,13 +65,13 @@ swizzle-∘ g f x =
 
 instance
 
-  categoryH : CategoryH _⇨_ Function
+  categoryH : CategoryH _⇨_ _⇾_
   categoryH = record
     { F-id = λ {a} → swizzle-id a
     ; F-∘  = λ { {g = mk g} {mk f} → swizzle-∘ g f }
     }
 
-  cartesianH : CartesianH _⇨_ Function
+  cartesianH : CartesianH _⇨_ _⇾_
   cartesianH = record
     { F-!   = λ _ → ≡-refl
     ; F-exl = λ {a b} (x , y) → tabulate∘lookup {a = a} x

@@ -24,7 +24,7 @@ module →-laws-instances where
 
   instance
 
-    category : Category Function
+    category : Category _⇾_
     category = record
       { identityˡ = λ _ → refl≡
       ; identityʳ = λ _ → refl≡
@@ -33,7 +33,7 @@ module →-laws-instances where
                       trans≡ (h≈k (f x)) (cong k (f≈g x)) }
       }
 
-    cartesian : Cartesian Function
+    cartesian : Cartesian _⇾_
     cartesian = record
       { ∀⊤ = λ _ → refl≡
       ; ∀× = equivalence
@@ -43,7 +43,7 @@ module →-laws-instances where
       }
 
     -- -- I don't think this one can be proved without extensionality.
-    -- indexedCartesian : ∀ {I : Set ℓ} → IndexedCartesian I Function
+    -- indexedCartesian : ∀ {I : Set ℓ} → IndexedCartesian I _⇾_
     -- indexedCartesian = record
     --   { ∀Π = equivalence
     --       (λ k≈△fs i x → cong (λ f → f i) (k≈△fs x))
@@ -53,7 +53,7 @@ module →-laws-instances where
 
     module ccc (extensionality : Extensionality _ _) where
 
-      cartesianClosed : CartesianClosed Function
+      cartesianClosed : CartesianClosed _⇾_
       cartesianClosed = record
         { ∀⇛ = equivalence
             (λ g≈f (x , y) → sym≡ (cong (λ h → h y) (g≈f x)))
@@ -63,12 +63,12 @@ module →-laws-instances where
 
     open import HasAlgebra
 
-    -- monoid : ∀ {A : Set ℓ} ⦃ _ : HasMonoid A ⦄ → Monoid Function
+    -- monoid : ∀ {A : Set ℓ} ⦃ _ : HasMonoid A ⦄ → Monoid _⇾_
     -- monoid = record
     --   { ⟨∙⟩-identityˡ = λ (tt , _) → ∙-identityˡ
     --   ; ⟨∙⟩-identityʳ = λ (_ , tt) → ∙-identityʳ
     --   ; ⟨∙⟩-assoc = λ _ → ∙-assoc 
     --   }
 
-    logic : Logic Function
+    logic : Logic _⇾_
     logic = record { f∘cond = λ { (𝕗 , _) → refl≡ ; (𝕥 , _) → refl≡ } }

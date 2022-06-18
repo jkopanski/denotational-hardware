@@ -133,7 +133,6 @@ module ∨-algebra where
   open import Data.Bool.Properties
   open monoid _ ∨-isMonoid public
 
-
 open import Data.Nat using (ℕ; zero; suc)
 
 

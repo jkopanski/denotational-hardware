@@ -15,9 +15,9 @@ open import Categorical.Raw
 open import Functions.Laws 0ℓ
 open import Ty
 open import Index
-open import Primitive.Raw Function renaming (_⇨_ to _⇨ₚ_)
+open import Primitive.Raw _⇾_ renaming (_⇨_ to _⇨ₚ_)
 open import Routing.Raw renaming (_⇨_ to _⇨ᵣ_)
-open import Linearize.Raw Function _⇨ₚ_ _⇨ᵣ_
+open import Linearize.Raw _⇾_ _⇨ₚ_ _⇨ᵣ_
 
 open import SSA
 open import Dot
@@ -47,12 +47,14 @@ lfsr₅ = lfsr 5 (𝕥 , 𝕗 , 𝕗 , 𝕥 , 𝕗 , 𝕥 , tt)
 
 example : ∀ {i o : Ty} → String → (i ⇨ o) → IO {0ℓ} _
 example name f =
-  do putStrLn ("⟹ " ++ name ++ ".dot")
-     save ".ssa" (show s)
-     save ".dot" d
+  do -- save "ssa" (show s)
+     save "dot" d
  where
    save : String → String → IO {0ℓ} _
-   save ext str = writeFile ("Figures/" ++ name ++ ext) str
+   save ext str = do
+     let file = "Figures/" ++ ext ++ "/" ++ name ++ "." ++ ext
+     putStrLn ("⟹ " ++ name) -- file
+     writeFile file str
    s = ssa f
    d = dot s
 

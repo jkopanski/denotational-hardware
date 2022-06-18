@@ -15,9 +15,6 @@ import Data.Bool as B
 ⟨→⟩ : Set ℓ → Set ℓ → Set ℓ
 ⟨→⟩ a b = a → b
 
-Function : Set ℓ → Set ℓ → Set ℓ
-Function = ⟨→⟩
-
 -- TODO: phase out "⟨→⟩" and "Function" in favor of _⇾_
 infixr 0 _⇾_
 _⇾_ : Set ℓ → Set ℓ → Set ℓ
@@ -83,7 +80,7 @@ module →-instances where
     -- indexedProducts {I = I} = record { Π = λ f → ∀ i → f i }
 
     exponentials : Exponentials (Set ℓ)
-    exponentials = record { _⇛_ = Function }
+    exponentials = record { _⇛_ = _⇾_ }
 
     boolean : Boolean (Set ℓ)
     boolean = record { Bool = LBool }
