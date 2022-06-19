@@ -28,4 +28,4 @@ tags: $(SOURCES)
 
 
 clean:
-	rm -rf Test html MAlonzo _build
+	rm -rf Test html MAlonzo _build Figures/*.{ssa,dot,pdf,jpg,png,svg}

@@ -52,7 +52,7 @@ example name f =
  where
    save : String → String → IO {0ℓ} _
    save ext str = do
-     let file = "Figures/" ++ ext ++ "/" ++ name ++ "." ++ ext
+     let file = "Figures/" ++ name ++ "." ++ ext
      putStrLn ("⟹ " ++ name) -- file
      writeFile file str
    s = ssa f
