@@ -2,7 +2,7 @@
 
 module Categorical.Raw where
 
-open import Level hiding (suc)
+open import Level renaming (suc to lsuc)
 open import Function using (const) renaming (_∘_ to _∘′_; id to id′)
 
 open import Categorical.Object public
@@ -11,7 +11,7 @@ private
   variable
     o ℓ o₁ ℓ₁ o₂ ℓ₂ : Level
     obj obj₁ obj₂ : Set o
-    a b c d e : obj
+    a b c d e s : obj
     a′ b′ c′ d′ e′ : obj
 
 record Category {obj : Set o} (_⇨_ : obj → obj → Set ℓ) : Set (o ⊔ ℓ) where
@@ -157,6 +157,18 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   replicateᵀ (suc n) = replicateᵀ n ▵ replicateᵀ n
 
 open Cartesian ⦃ … ⦄ public
+
+
+record Traced {obj : Set o} ⦃ _ : Products obj ⦄ {ℓ′}
+         (_⇨′_ : obj → obj → Set ℓ)
+         ⦃ _ : Category _⇨′_ ⦄
+    : Set (o ⊔ ℓ ⊔ lsuc ℓ′) where
+  private infix 0 _⇨_; _⇨_ = _⇨′_
+  field
+    WF : (a × s ⇨ b × s) → Set ℓ′
+    trace : (f : a × s ⇨ b × s) → WF f → (a ⇨ b)
+
+open Traced ⦃ … ⦄ public
 
 
 open import HasAlgebra

@@ -39,6 +39,14 @@ module subcategory-instances where
                        ; exr = mk (exr ∘ μ⁻¹)
                        }
 
+    traced : ⦃ _ : Products obj ⦄ {ℓ′ : Level} ⦃ _ : Traced {ℓ′ = ℓ′} _↠_ ⦄
+             ⦃ _ : Products J ⦄ ⦃ _ : ProductsH J _↠_ ⦄ →
+             Traced _⇨_
+    traced = record
+      { WF = λ (mk f) → WF (μ⁻¹ ∘ f ∘ μ)
+      ; trace = λ (mk f) wf → mk (trace (μ⁻¹ ∘ f ∘ μ) wf)
+      }
+
     module _ where
 
       open import HasAlgebra
