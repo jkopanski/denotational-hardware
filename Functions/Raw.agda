@@ -5,7 +5,7 @@ open import Level
 module Functions.Raw (ℓ : Level) where
 
 import Function as F
-open import Data.Product as × using (_,_; proj₁; proj₂; <_,_>)
+open import Data.Product as × using (_,_; proj₁; proj₂; <_,_>; ∃)
 import Data.Bool as B
 
 open import Categorical.Raw
@@ -28,6 +28,13 @@ module →-raw-instances where
     --   { △  = λ fs x i → fs i x
     --   ; ex = λ i xs → xs i
     --   }
+
+    traced : Traced _⇾_
+    traced = record
+      { WF = λ {a} {s} {b} f → ∃ λ (g : a → b × s) → ∀ (x : a) →
+               let y , s = g x in (y , s) ≡ f (x , s)
+      ; trace = λ f (g , _) → exl ∘ g
+      } where open import Relation.Binary.PropositionalEquality
 
     cartesianClosed : CartesianClosed _⇾_
     cartesianClosed = record { curry = ×.curry ; apply = ×.uncurry id }
