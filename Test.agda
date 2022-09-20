@@ -1,3 +1,4 @@
+{-# OPTIONS --guardedness #-}
 -- Miscellaneous circuit examples
 {-# OPTIONS --guardedness #-}
 
