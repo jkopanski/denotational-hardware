@@ -12,13 +12,14 @@ module Categorical.Product
  where
 
 open import Level using (_⊔_)
-open import Data.Product using (_,_; proj₁; proj₂) renaming (_×_ to _×′_)
+open import Data.Product using (_,_; proj₁; proj₂) renaming (_×_ to _×̇_)
 
 Obj : Set (o₁ ⊔ o₂)
-Obj = obj₁ ×′ obj₂
+Obj = obj₁ ×̇ obj₂
 
+infix 0 _⇨_
 _⇨_ : Obj → Obj → Set (ℓ₁ ⊔ ℓ₂)
-(a₁ , a₂) ⇨ (b₁ , b₂) = (a₁ ⇨₁ b₁) ×′ (a₂ ⇨₂ b₂)
+(a₁ , a₂) ⇨ (b₁ , b₂) = (a₁ ⇨₁ b₁) ×̇ (a₂ ⇨₂ b₂)
 
 module product-instances where
 
@@ -38,6 +39,14 @@ module product-instances where
     ; _▵_ = λ (f₁ , f₂) (g₁ , g₂) → f₁ ▵ g₁ , f₂ ▵ g₂
     ; exl = exl , exl
     ; exr = exr , exr
+    }
+
+  traced : ⦃ _ : Products  obj₁ ⦄ ⦃ _ : Products  obj₂ ⦄
+           ⦃ _ : Traced _⇨₁_ ⦄ ⦃ _ : Traced _⇨₂_ ⦄ →
+           Traced _⇨_
+  traced = record
+    { WF = λ (f₁ , f₂) → WF f₁ ×̇ WF f₂
+    ; trace = λ { (f₁ , f₂) (wf₁ , wf₂) → trace f₁ wf₁ , trace f₂ wf₂ }
     }
 
   boolean : ⦃ _ : Boolean obj₁ ⦄ ⦃ _ : Boolean obj₂ ⦄ → Boolean Obj
@@ -60,7 +69,7 @@ module product-instances where
   equivalent : ∀ {q₁} ⦃ _ : Equivalent q₁ _⇨₁_ ⦄ {q₂} ⦃ _ : Equivalent q₂ _⇨₂_ ⦄
              → Equivalent (q₁ ⊔ q₂) _⇨_
   equivalent = record
-    { _≈_ = λ (f₁ , f₂) (g₁ , g₂) → f₁ ≈ g₁ ×′ f₂ ≈ g₂  -- Does this construction already exist?
+    { _≈_ = λ (f₁ , f₂) (g₁ , g₂) → f₁ ≈ g₁ ×̇ f₂ ≈ g₂  -- Does this construction already exist?
     ; equiv = record
        { refl  = refl , refl
        ; sym   = λ (eq₁ , eq₂) → sym eq₁ , sym eq₂

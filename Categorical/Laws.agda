@@ -205,6 +205,12 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
   -- TODO: redefine first f and second g via ▵ to avoid id ∘ exr and id ∘ exl.
   -- There many be broad consequences.
 
+  -- unitorᵉˡ∘unitorⁱˡ : unitorᵉˡ ∘ unitorⁱˡ ≈ id
+  -- unitorᵉˡ∘unitorⁱˡ = exr∘▵
+
+  -- unitorᵉʳ∘unitorⁱʳ : unitorᵉʳ ∘ unitorⁱʳ ≈ id
+  -- unitorᵉʳ∘unitorⁱʳ = exl∘▵
+
 open Cartesian ⦃ … ⦄ public
 
 

@@ -2,7 +2,7 @@
 
 module Categorical.Raw where
 
-open import Level renaming (suc to lsuc)
+open import Level using (Level; _⊔_) renaming (suc to lsuc)
 open import Function using (const) renaming (_∘_ to _∘′_; id to id′)
 
 open import Categorical.Object public
@@ -140,6 +140,20 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
 
   -- (a × b) × (V a n × V b n) ⇨ (a × V a n) × (b × V b n)
 
+  splitAtⱽ : ∀ m {n} → V a (m + n) ⇨ V a m × V a n
+  splitAtⱽ zero = unitorⁱˡ
+  splitAtⱽ (suc m) = assocˡ ∘ second (splitAtⱽ m)
+
+  -- a × V a (m + n)
+  -- a × (V a m × V a n)
+  -- (a × V a m) × V a n
+
+  takeⱽ : ∀ m {n} → V a (m + n) ⇨ V a m
+  takeⱽ m = exl ∘ splitAtⱽ m
+
+  dropⱽ : ∀ m {n} → V a (m + n) ⇨ V a n
+  dropⱽ m = exr ∘ splitAtⱽ m
+
   mapᵀ : ∀ n → (a ⇨ b) → (T a n ⇨ T b n)
   mapᵀ  zero   f = f
   mapᵀ (suc n) f = mapᵀ n f ⊗ mapᵀ n f
@@ -159,13 +173,13 @@ record Cartesian {obj : Set o} ⦃ _ : Products obj ⦄
 open Cartesian ⦃ … ⦄ public
 
 
-record Traced {obj : Set o} ⦃ _ : Products obj ⦄ {ℓ′}
+record Traced {obj : Set o} ⦃ _ : Products obj ⦄
          (_⇨′_ : obj → obj → Set ℓ)
          ⦃ _ : Category _⇨′_ ⦄
-    : Set (o ⊔ ℓ ⊔ lsuc ℓ′) where
+    : Set (o ⊔ lsuc ℓ) where
   private infix 0 _⇨_; _⇨_ = _⇨′_
   field
-    WF : (a × s ⇨ b × s) → Set ℓ′
+    WF : (a × s ⇨ b × s) → Set ℓ
     trace : (f : a × s ⇨ b × s) → WF f → (a ⇨ b)
 
 open Traced ⦃ … ⦄ public
