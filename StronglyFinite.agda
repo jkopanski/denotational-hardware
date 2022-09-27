@@ -39,7 +39,7 @@ private
 
     -- Like mk↔′ but for matching
     pattern mk↔ f f⁻¹ f∘f⁻¹ f⁻¹∘f =
-      record { f = f ; f⁻¹ = f⁻¹ ; inverse = f∘f⁻¹ , f⁻¹∘f }
+      record { to = f ; from = f⁻¹ ; inverse = f∘f⁻¹ , f⁻¹∘f }
 
 module StronglyFinite-Set-instances where
 
@@ -196,7 +196,7 @@ module StronglyFinite-ℕ-instances where
       ; F-∨     = cong (un↠  ∨ ) ∘′ μ∘μ⁻¹ {a = 2} {2}
       ; F-xor   = cong (un↠ xor) ∘′ μ∘μ⁻¹ {a = 2} {2}
       ; F-cond  = λ { a@{mkO {A} {n} (mk↔ fin fin⁻¹ fin∘fin⁻¹ fin⁻¹∘fin)} x →
-          let fin⁻¹-𝔹×a×a = Inverse.f⁻¹ (Obj.iso (𝔹 × a × a))
+          let fin⁻¹-𝔹×a×a = Inverse.from (Obj.iso (𝔹 × a × a))
               Fₘ-cond : 𝔹 × n × n ↠ n
               Fₘ-cond = mk↠ (fin ∘ cond ∘ fin⁻¹-𝔹×a×a)
               c , pq = μ𝔽⁻¹ {𝔹} {n × n} x

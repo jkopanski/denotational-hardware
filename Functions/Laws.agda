@@ -14,7 +14,6 @@ open import Categorical.Equiv
 open import Functions.Raw ℓ public
 open import Axiom.Extensionality.Propositional
 open import Relation.Binary.PropositionalEquality
-     hiding (Extensionality)
      renaming ( refl to refl≡
               ; trans to trans≡
               ; sym to sym≡
